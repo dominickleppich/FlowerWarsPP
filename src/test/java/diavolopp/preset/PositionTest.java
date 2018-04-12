@@ -87,4 +87,40 @@ public class PositionTest {
         Position b = new Position(4, 4);
         assertNotEquals(a, b);
     }
+
+    @Test
+    public void equalsOnNullReturnsFalse() {
+        Position a = new Position(3, 4);
+        assertNotEquals(a, null);
+    }
+
+    @Test
+    public void equalsOnWrongTypeReturnsFalse() {
+        Position a = new Position(3, 4);
+        assertNotEquals(a, new Object());
+    }
+
+    // ------------------------------------------------------------
+    // * Other stuff *
+
+    @Test
+    public void equalPositionsReturnSameHashCode() {
+        Position a = new Position(3, 4);
+        Position b = new Position(3, 4);
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    public void toStringMethodContainsColumn() {
+        Position p = new Position(3, 7);
+        assertNotNull(p.toString());
+        assertTrue(p.toString().contains("3"));
+    }
+
+    @Test
+    public void toStringMethodContainsRow() {
+        Position p = new Position(3, 7);
+        assertNotNull(p.toString());
+        assertTrue(p.toString().contains("7"));
+    }
 }
