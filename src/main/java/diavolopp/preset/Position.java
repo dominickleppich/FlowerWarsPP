@@ -4,6 +4,8 @@ public class Position {
     public static final int MAX_COLUMN = 20;
     public static final int MAX_ROW = 20;
 
+    // ------------------------------------------------------------
+
     private int column, row;
 
     // ------------------------------------------------------------
