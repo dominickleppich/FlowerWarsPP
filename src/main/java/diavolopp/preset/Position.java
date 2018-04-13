@@ -45,7 +45,7 @@ public class Position {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (o == null)
             return false;
         if (!(o instanceof Position))
