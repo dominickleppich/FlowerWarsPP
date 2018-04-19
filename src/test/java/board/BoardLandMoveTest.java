@@ -64,7 +64,7 @@ public class BoardLandMoveTest {
                 {new Land(new Position(5, 5), new Position(5, 6), new
                         Position(4, 6)), Status.Ok},
                 {new Land(new Position(5, 5), new Position(6, 4), new
-                        Position(4, 5)), Status.Ok},
+                        Position(6, 5)), Status.Ok},
                 // Invalid (one distance too wide)
                 {new Land(new Position(5, 5), new Position(6, 5), new
                         Position(6, 6)), Status.Illegal},
