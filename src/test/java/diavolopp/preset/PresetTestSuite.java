@@ -7,7 +7,8 @@ import org.junit.runners.*;
 @Suite.SuiteClasses({
         PositionTest.class,
         BridgeTest.class,
-        LandTest.class
+        LandTest.class,
+        MoveTest.class
 })
 public class PresetTestSuite {
 }
