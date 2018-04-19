@@ -1,6 +1,8 @@
 package diavolopp.preset;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable, Comparable<Position> {
     public static final int MAX_COLUMN = 20;
     public static final int MAX_ROW = 20;
 
@@ -42,6 +44,13 @@ public class Position {
     @Override
     public int hashCode() {
         return getColumn() * MAX_COLUMN + getRow();
+    }
+
+    @Override
+    public int compareTo(Position p) {
+        if (getColumn() != p.getColumn())
+            return getColumn()- p.getColumn();
+        return getRow() - p.getRow();
     }
 
     @Override

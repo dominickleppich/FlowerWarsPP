@@ -2,6 +2,7 @@ package diavolopp.preset;
 
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class PositionTest {
@@ -102,6 +103,41 @@ public class PositionTest {
 
     // ------------------------------------------------------------
     // * Other stuff *
+
+    @Test
+    public void compareToOnEqualPositionsReturnsZero() {
+        Position a = new Position(3, 4);
+        Position b = new Position(3, 4);
+        assertThat(a.compareTo(b), is(0));
+    }
+
+    @Test
+    public void compareToDeterminesCorrectOrderingForUnequalPositions1() {
+        Position a = new Position(3, 4);
+        Position b = new Position(3, 3);
+        assertThat(a, greaterThan(b));
+    }
+
+    @Test
+    public void compareToDeterminesCorrectOrderingForUnequalPositions2() {
+        Position a = new Position(3, 3);
+        Position b = new Position(3, 4);
+        assertThat(a, lessThan(b));
+    }
+
+    @Test
+    public void compareToDeterminesCorrectOrderingForUnequalPositions3() {
+        Position a = new Position(4, 4);
+        Position b = new Position(3, 4);
+        assertThat(a, greaterThan(b));
+    }
+
+    @Test
+    public void compareToDeterminesCorrectOrderingForUnequalPositions4() {
+        Position a = new Position(3, 4);
+        Position b = new Position(4, 4);
+        assertThat(a, lessThan(b));
+    }
 
     @Test
     public void equalPositionsReturnSameHashCode() {
