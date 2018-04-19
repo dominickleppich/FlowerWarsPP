@@ -14,6 +14,8 @@ public class BridgeTest {
         end = new Position(6, 6);
     }
 
+    // ------------------------------------------------------------
+
     @Test
     public void creatingNewBridgeWithValidValuesWorks() {
         Bridge b = new Bridge(start, end);
