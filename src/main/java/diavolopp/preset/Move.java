@@ -26,4 +26,35 @@ public class Move implements Serializable {
     }
 
     // ------------------------------------------------------------
+
+    public MoveType getType() {
+        return type;
+    }
+
+    public Land[] getLands() {
+        if (getType() != MoveType.Land)
+            throw new IllegalStateException("cannot be called on type " + type);
+        return lands.clone();
+    }
+
+    public Bridge getBridge() {
+        if (getType() != MoveType.Bridge)
+            throw new IllegalStateException("cannot be called on type " + type);
+        return bridge;
+    }
+
+    // ------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        switch (getType()) {
+            case Land:
+                return "{" + lands[0].toString() + ", " + lands[1].toString()
+                        + "}";
+            case Bridge:
+                return bridge.toString();
+        }
+        // The following should be unreachable code
+        throw new IllegalStateException("move is neither a land nor a bridge");
+    }
 }
