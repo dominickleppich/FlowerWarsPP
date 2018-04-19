@@ -1,6 +1,6 @@
-import diavolopp.preset.PresetTestSuite;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import diavolopp.preset.*;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

@@ -1,6 +1,6 @@
 package diavolopp.preset;
 
-import java.io.Serializable;
+import java.io.*;
 
 public class Position implements Serializable, Comparable<Position> {
     public static final int MAX_COLUMN = 20;
