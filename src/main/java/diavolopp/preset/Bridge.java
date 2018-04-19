@@ -1,13 +1,16 @@
 package diavolopp.preset;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Bridge implements Serializable {
-    private Position start, end;
+    private Position[] positions;
 
     // ------------------------------------------------------------
 
     public Bridge(final Position start, final Position end) {
+        positions = new Position[2];
+
         setStart(start);
         setEnd(end);
 
@@ -15,40 +18,37 @@ public class Bridge implements Serializable {
     }
 
     private void updateOrder() {
-        if (getStart().compareTo(getEnd()) > 0) {
-            Position tmp = getStart();
-            setStart(getEnd());
-            setEnd(tmp);
-        }
+        Arrays.sort(positions);
     }
 
     // ------------------------------------------------------------
 
     public Position getStart() {
-        return start;
+        return positions[0];
     }
 
     private void setStart(final Position start) {
         if (start == null)
             throw new IllegalArgumentException("start cannot be null");
-        this.start = start;
+        positions[0] = start;
     }
 
     public Position getEnd() {
-        return end;
+        return positions[1];
     }
 
     private void setEnd(final Position end) {
         if (end == null)
             throw new IllegalArgumentException("end cannot be null");
-        this.end = end;
+        positions[1] = end;
     }
 
     // ------------------------------------------------------------
 
     @Override
     public int hashCode() {
-        return start.hashCode() * Position.MAX_COLUMN * Position.MAX_ROW + end.hashCode();
+        return getStart().hashCode() * Position.MAX_COLUMN * Position.MAX_ROW
+                + getEnd().hashCode();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class Bridge implements Serializable {
         if (!(o instanceof Bridge))
             return false;
         Bridge b = (Bridge) o;
-        return getStart().equals(b.getStart()) && getEnd().equals(b.getEnd());
+        return Arrays.equals(positions, b.positions);
     }
 
     @Override

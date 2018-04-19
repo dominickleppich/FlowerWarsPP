@@ -25,7 +25,8 @@ public class Position implements Serializable, Comparable<Position> {
 
     private void setColumn(final int column) {
         if (column <= 0 || column > MAX_COLUMN)
-            throw new IllegalArgumentException("illegal column value: " + column);
+            throw new IllegalArgumentException("illegal column value: " +
+                    column);
         this.column = column;
     }
 
@@ -49,7 +50,7 @@ public class Position implements Serializable, Comparable<Position> {
     @Override
     public int compareTo(Position p) {
         if (getColumn() != p.getColumn())
-            return getColumn()- p.getColumn();
+            return getColumn() - p.getColumn();
         return getRow() - p.getRow();
     }
 
