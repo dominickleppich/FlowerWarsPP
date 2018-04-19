@@ -1,12 +1,13 @@
 package diavolopp.preset;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.runner.*;
+import org.junit.runners.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         PositionTest.class,
-        BridgeTest.class
+        BridgeTest.class,
+        LandTest.class
 })
 public class PresetTestSuite {
 }
