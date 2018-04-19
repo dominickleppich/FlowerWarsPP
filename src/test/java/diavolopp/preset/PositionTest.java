@@ -83,9 +83,16 @@ public class PositionTest {
     }
 
     @Test
-    public void equalsOnUnequalPositionsReturnsFalse() {
+    public void equalsOnUnequalColumnReturnsFalse() {
         Position a = new Position(3, 4);
         Position b = new Position(4, 4);
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    public void equalsOnUnequalRowReturnsFalse() {
+        Position a = new Position(3, 4);
+        Position b = new Position(3, 3);
         assertNotEquals(a, b);
     }
 
