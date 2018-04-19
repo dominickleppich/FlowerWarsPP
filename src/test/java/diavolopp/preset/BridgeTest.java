@@ -1,6 +1,7 @@
 package diavolopp.preset;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
@@ -49,22 +50,29 @@ public class BridgeTest {
 
     @Test
     public void equalsOnEqualBridgesReturnsTrue() {
-        Bridge  a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge  b = new Bridge(new Position(3, 4), new Position(5, 6));
+        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
+        Bridge b = new Bridge(new Position(3, 4), new Position(5, 6));
         assertEquals(a, b);
     }
 
     @Test
     public void equalsOnInvertedBridgesReturnsTrue() {
-        Bridge  a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge  b = new Bridge(new Position(5, 6), new Position(3, 4));
+        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
+        Bridge b = new Bridge(new Position(5, 6), new Position(3, 4));
         assertEquals(a, b);
     }
 
     @Test
-    public void equalsOnUnequalBridgesReturnsFalse() {
-        Bridge  a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge  b = new Bridge(new Position(3, 5), new Position(5, 6));
+    public void equalsOnUnequalStartPositionReturnsFalse() {
+        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
+        Bridge b = new Bridge(new Position(3, 5), new Position(5, 6));
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    public void equalsOnUnequalEndPositionReturnsFalse() {
+        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
+        Bridge b = new Bridge(new Position(3, 4), new Position(5, 7));
         assertNotEquals(a, b);
     }
 
@@ -85,15 +93,15 @@ public class BridgeTest {
 
     @Test
     public void equalBridgesReturnSameHashCode() {
-        Bridge  a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge  b = new Bridge(new Position(3, 4), new Position(5, 6));
+        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
+        Bridge b = new Bridge(new Position(3, 4), new Position(5, 6));
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void equalInvertedBridgesReturnSameHashCode() {
-        Bridge  a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge  b = new Bridge(new Position(5, 6), new Position(3, 4));
+        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
+        Bridge b = new Bridge(new Position(5, 6), new Position(3, 4));
         assertEquals(a.hashCode(), b.hashCode());
     }
 
