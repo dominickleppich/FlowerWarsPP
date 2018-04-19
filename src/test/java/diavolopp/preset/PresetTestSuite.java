@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        PositionTest.class
+        PositionTest.class,
+        BridgeTest.class
 })
 public class PresetTestSuite {
 }
