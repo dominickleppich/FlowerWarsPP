@@ -15,6 +15,18 @@ public class PositionTest {
         assertNotNull(p);
     }
 
+    @Test
+    public void creatingNewPositionWithOneColumnValuesWorks() {
+        Position p = new Position(1, 5);
+        assertNotNull(p);
+    }
+
+    @Test
+    public void creatingNewPositionWithOneRowValuesWorks() {
+        Position p = new Position(5, 1);
+        assertNotNull(p);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void creatingNewPositionWithZeroColumnValueThrowsException() {
         new Position(0, 5);
