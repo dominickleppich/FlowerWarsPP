@@ -3,8 +3,8 @@ package diavolopp.preset;
 import java.io.*;
 
 public class Position implements Serializable, Comparable<Position> {
-    public static final int MAX_COLUMN = 20;
-    public static final int MAX_ROW = 20;
+    public static final int MAX_COLUMN = 100;
+    public static final int MAX_ROW = 100;
 
     // ------------------------------------------------------------
 
