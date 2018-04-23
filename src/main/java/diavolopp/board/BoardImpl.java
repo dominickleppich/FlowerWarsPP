@@ -1,9 +1,11 @@
 package diavolopp.board;
 
 import diavolopp.preset.*;
-import javafx.geometry.*;
 
 import java.util.*;
+import java.util.stream.*;
+
+import static java.util.stream.Collectors.*;
 
 public class BoardImpl implements Board {
     private final int size;
@@ -257,5 +259,91 @@ public class BoardImpl implements Board {
                 return BoardImpl.this.status;
             }
         };
+    }
+
+    // ------------------------------------------------------------
+
+    @Override
+    public String toString() {
+        Stack<String> st = new Stack<>();
+
+        String firstLine = "   ";
+        for (int c = 1; c <= size; c++)
+            firstLine += String.format("%2d          ", c);
+        firstLine += (size + 1);
+        st.add(firstLine);
+
+        Set<Land> whiteLands = getLandSet(PlayerColor.White);
+        Set<Land> redLands = getLandSet(PlayerColor.Red);
+
+        String indent = "";
+        for (int r = 1; r <= size; r++) {
+            for (int l = 0; l < 6; l++) {
+                String s = indent;
+                if (l == 0)
+                    s += String.format("%3d ", r);
+                else
+                    s += "    ";
+                for (int c = 1; c <= size - r + 1; c++) {
+                    s += "/";
+                    if (l == 0)
+                        s += Stream.generate(() -> "__").limit(5 - l).collect
+                                (joining());
+                    else {
+                        String inner = Stream.generate(() -> "  ").limit(5 -
+                                l).collect
+                                (joining());
+
+                        Land land = new Land(new Position(c, r), new
+                                Position(c + 1, r), new Position(c, r + 1));
+                        if (l == 1) {
+                            if (whiteLands.contains(land))
+                                inner = "  ++++  ";
+                            else if (redLands.contains(land))
+                                inner = "  ****  ";
+                        } else if (l == 2) {
+                            if (whiteLands.contains(land))
+                                inner = "  ++  ";
+                            else if (redLands.contains(land))
+                                inner = "  **  ";
+                        }
+
+                        s += inner;
+                    }
+                    s += "\\";
+                    String inner = Stream.generate(() -> "  ").limit(l)
+                            .collect(joining());
+
+                    if (c > 1) {
+                        Land land = new Land(new Position(c + 1, r), new
+                                Position(c , r + 1), new Position(c + 1, r + 1));
+
+                        if (l == 3) {
+                            if (whiteLands.contains(land))
+                                inner = "  ++  ";
+                            else if (redLands.contains(land))
+                                inner = "  **  ";
+                        } else if (l == 4) {
+                            if (whiteLands.contains(land))
+                                inner = "  ++++  ";
+                            else if (redLands.contains(land))
+                                inner = "  ****  ";
+                        }
+                    }
+
+                    s += inner;
+                }
+
+                st.add(s);
+                indent += " ";
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        while (!st.isEmpty()) {
+            sb.append(st.pop()).append("\n");
+        }
+//        st.stream().forEach(s -> sb.append(s).append("\n"));
+        return sb.toString();
     }
 }
