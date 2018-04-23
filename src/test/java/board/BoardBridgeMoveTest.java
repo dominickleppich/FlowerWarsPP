@@ -24,14 +24,15 @@ public class BoardBridgeMoveTest {
         // Place three lands to make 6 bridges possible
         // White lands
         Land w1, w2, w3, w4;
-        w1 = new Land(new Position(5, 5), new Position(4, 6), new Position(5,
+        w1 = new Land(new Position(5, 5), new Position(6, 5), new Position(5,
                 6));
-        w2 = new Land(new Position(4, 6), new Position(5, 6), new Position(4,
-                7));
-        w3 = new Land(new Position(4, 5), new Position(4, 4), new Position(5,
-                4));
-        w4 = new Land(new Position(6, 5), new Position(6, 4), new Position(7,
-                4));
+        w2 = new Land(new Position(4, 4), new Position(5, 4), new Position(4,
+                5));
+        w3 = new Land(new Position(7, 4), new Position(8, 4), new Position(7,
+                5));
+        w4 = new Land(new Position(4, 7), new Position(5, 7), new Position(4,
+                8));
+
         // Red lands
         Land r1, r2, r3, r4;
         r1 = new Land(new Position(2, 2), new Position(3, 2), new Position(2,
@@ -72,37 +73,48 @@ public class BoardBridgeMoveTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 // Valid briges (length 1)
-                {new Bridge(new Position(5, 5), new Position(6, 5)), Status.Ok},
-                {new Bridge(new Position(5, 5), new Position(6, 4)), Status.Ok},
-                {new Bridge(new Position(5, 5), new Position(5, 4)), Status.Ok},
                 {new Bridge(new Position(5, 5), new Position(4, 5)), Status.Ok},
-                {new Bridge(new Position(5, 5), new Position(4, 6)), Status.Ok},
-                {new Bridge(new Position(5, 5), new Position(5, 6)), Status.Ok},
-                // Invalid bridges (length == 2)
-                {new Bridge(new Position(5, 5), new Position(7, 5)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(7, 4)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(7, 3)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(6, 3)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(5, 3)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(4, 4)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(3, 5)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(3, 6)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(3, 7)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(4, 7)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(5, 7)), Status
-                        .Illegal},
-                {new Bridge(new Position(5, 5), new Position(6, 6)), Status
-                        .Illegal},
+                {new Bridge(new Position(5, 5), new Position(5, 4)), Status.Ok},
+                {new Bridge(new Position(6, 5), new Position(7, 5)), Status.Ok},
+                {new Bridge(new Position(6, 5), new Position(7, 4)), Status.Ok},
+                {new Bridge(new Position(5, 6), new Position(5, 7)), Status.Ok},
+                {new Bridge(new Position(5, 6), new Position(4, 7)), Status.Ok},
+
+                // Invalid bridge (length 1)
+                {new Bridge(new Position(5, 5), new Position(4, 6)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(5, 6)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(6, 5)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(6, 4)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(6, 4)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(5, 6)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(6, 6)), Status.Illegal},
+                {new Bridge(new Position(5, 6), new Position(4, 6)), Status.Illegal},
+                {new Bridge(new Position(5, 6), new Position(6, 6)), Status.Illegal},
+
+                // Invalid bridges (length 2)
+                {new Bridge(new Position(5, 5), new Position(4, 4)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(7, 4)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(8, 4)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(7, 5)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(4, 7)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(5, 7)), Status.Illegal},
+                {new Bridge(new Position(5, 5), new Position(4, 8)), Status.Illegal},
+
+                {new Bridge(new Position(6, 5), new Position(4, 4)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(5, 4)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(4, 5)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(8, 4)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(4, 7)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(5, 7)), Status.Illegal},
+                {new Bridge(new Position(6, 5), new Position(4, 8)), Status.Illegal},
+
+                {new Bridge(new Position(5, 6), new Position(4, 4)), Status.Illegal},
+                {new Bridge(new Position(5, 6), new Position(5, 4)), Status.Illegal},
+                {new Bridge(new Position(5, 6), new Position(4, 5)), Status.Illegal},
+                {new Bridge(new Position(5, 6), new Position(7, 4)), Status.Illegal},
+                {new Bridge(new Position(5, 6), new Position(8, 4)), Status.Illegal},
+                {new Bridge(new Position(5, 6), new Position(7, 5)), Status.Illegal},
+                {new Bridge(new Position(5, 6), new Position(4, 8)), Status.Illegal}
 
         });
     }

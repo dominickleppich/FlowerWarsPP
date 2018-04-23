@@ -7,7 +7,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class BoardLogicTest {
-    private static final int BOARD_SIZE = 10;
+    private static final int BOARD_SIZE = 3;
     private Board board;
     private Viewer viewer;
 
@@ -45,8 +45,9 @@ public class BoardLogicTest {
     @Test
     public void changeTurnAfterValidLandMove() {
         Move m = new Move(new Land(new Position(2, 2), new Position(3, 2),
-                new Position(2, 3)), new Land(new Position(4, 4), new
-                Position(5, 4), new Position(4, 5)));
+                new Position(2, 3)),
+                new Land(new Position(3, 2), new Position(2, 3), new Position
+                        (3, 3)));
         board.make(m);
         assertEquals(PlayerColor.Red, viewer.getTurn());
     }
