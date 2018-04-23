@@ -98,7 +98,8 @@ public class BoardImpl implements Board {
                     return false;
                 break;
             default:
-                return false;
+                throw new IllegalArgumentException("illegal move type: " + move
+                        .getType());
         }
         return true;
     }
@@ -143,7 +144,7 @@ public class BoardImpl implements Board {
                 getBridgeSet(turn).add(move.getBridge());
                 break;
             default:
-                throw new IllegalStateException("illegal move type: " + move
+                throw new IllegalArgumentException("illegal move type: " + move
                         .getType());
         }
     }
@@ -258,6 +259,16 @@ public class BoardImpl implements Board {
             public Status getStatus() {
                 return BoardImpl.this.status;
             }
+
+            @Override
+            public Iterable<Land> getLands(PlayerColor color) {
+                return new HashSet<>(BoardImpl.this.getLandSet(color));
+            }
+
+            @Override
+            public Iterable<Bridge> getBridges(PlayerColor color) {
+                return new HashSet<>(BoardImpl.this.getBridgeSet(color));
+            }
         };
     }
 
@@ -316,7 +327,7 @@ public class BoardImpl implements Board {
 
                     if (c > 1) {
                         Land land = new Land(new Position(c + 1, r), new
-                                Position(c , r + 1), new Position(c + 1, r + 1));
+                                Position(c, r + 1), new Position(c + 1, r + 1));
 
                         if (l == 3) {
                             if (whiteLands.contains(land))
