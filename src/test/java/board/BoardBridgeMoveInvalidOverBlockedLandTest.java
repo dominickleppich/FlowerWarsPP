@@ -63,7 +63,7 @@ public class BoardBridgeMoveInvalidOverBlockedLandTest {
     @Test
     public void testBridgeMove() {
         board.make(new Move(bridge));
-        assertEquals("Invalid bridge to no target land " + bridge.toString(), expectedStatus, viewer
+        assertEquals("Invalid bridge over blocked land " + bridge.toString(), expectedStatus, viewer
                 .getStatus());
     }
 

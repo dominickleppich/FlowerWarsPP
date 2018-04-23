@@ -63,7 +63,7 @@ public class BoardBridgeMoveInvalidToNoLandTest {
     @Test
     public void testBridgeMove() {
         board.make(new Move(bridge));
-        assertEquals("Bridge " + bridge.toString(), expectedStatus, viewer
+        assertEquals("Invalid bridge to no land  " + bridge.toString(), expectedStatus, viewer
                 .getStatus());
     }
 

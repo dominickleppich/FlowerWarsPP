@@ -63,7 +63,7 @@ public class BoardBridgeMoveInvalidTooLongTest {
     @Test
     public void testBridgeMove() {
         board.make(new Move(bridge));
-        assertEquals("Bridge " + bridge.toString(), expectedStatus, viewer
+        assertEquals("Invalid bridge too long " + bridge.toString(), expectedStatus, viewer
                 .getStatus());
     }
 
