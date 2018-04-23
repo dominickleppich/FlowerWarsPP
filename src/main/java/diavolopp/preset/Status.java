@@ -3,5 +3,5 @@ package diavolopp.preset;
 import java.io.*;
 
 public enum Status implements Serializable {
-    Ok, WhiteWin, RedWin, Illegal
+    Ok, WhiteWin, RedWin, Draw, Illegal
 }
