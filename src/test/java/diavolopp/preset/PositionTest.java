@@ -6,8 +6,8 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class PositionTest {
-    public static final int MAX_COLUMN = 20;
-    public static final int MAX_ROW = 20;
+    public static final int MAX_COLUMN = 100;
+    public static final int MAX_ROW = 100;
 
     @Test
     public void creatingNewPositionWithValidValuesWorks() {
