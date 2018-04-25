@@ -6,8 +6,8 @@ import org.junit.runners.*;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         BoardLogicTest.class,
-        BoardLandMoveTest.class,
-        BoardBridgeMoveTest.class
+        BoardLandMoveTests.class,
+        BoardBridgeMoveTests.class
 })
-public class BoardTest {
+public class BoardTests {
 }

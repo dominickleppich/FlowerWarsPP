@@ -7,5 +7,5 @@ import org.junit.runners.*;
 @Suite.SuiteClasses({
         BoardLandMoveFormatTest.class
 })
-public class BoardLandMoveTest {
+public class BoardLandMoveTests {
 }

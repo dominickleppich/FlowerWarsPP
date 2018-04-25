@@ -10,5 +10,5 @@ import org.junit.runners.*;
         LandTest.class,
         MoveTest.class
 })
-public class PresetTestSuite {
+public class PresetTests {
 }

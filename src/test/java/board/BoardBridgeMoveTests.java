@@ -10,5 +10,5 @@ import org.junit.runners.*;
         BoardBridgeMoveInvalidOverBlockedLandTest.class,
         BoardBridgeMoveInvalidTooLongTest.class
 })
-public class BoardBridgeMoveTest {
+public class BoardBridgeMoveTests {
 }
