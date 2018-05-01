@@ -58,18 +58,24 @@ public class BoardImpl implements Board {
                 // Land needs to be placed on the board!
                 Land[] lands = move.getLands();
 
-                // Land is on the board, if all the Positions are on the
-                // board ;)
-                // A Position is on the board, if and only if
-                // column + row <= size + 2
+                // Land needs to be on the board
                 for (Land l : lands) {
                     if (!isPositionOnBoard(l.getFirst()) | !isPositionOnBoard
                             (l.getSecond()) | !isPositionOnBoard(l.getThird()))
                         return false;
                 }
 
+                // Land cannot be placed on other land
                 Set<Land> landSet = getLandSet(null);
                 if (landSet.contains(lands[0]) || landSet.contains(lands[1]))
+                    return false;
+
+                // Land cannot be placed on bridge blocked fields
+                Set<Land> bridgeBlocked = new HashSet<>();
+                for (Bridge b : getBridgeSet(null))
+                    for (Land l : getBridgeBlockedLands(b))
+                        bridgeBlocked.add(l);
+                if (bridgeBlocked.contains(lands[0]) || bridgeBlocked.contains(lands[1]))
                     return false;
 
                 break;
