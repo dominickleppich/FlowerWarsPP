@@ -1,6 +1,7 @@
 package diavolopp.board;
 
 import diavolopp.preset.*;
+import javafx.geometry.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -84,6 +85,11 @@ public class BoardImpl implements Board {
                 Position start, end;
                 start = b.getStart();
                 end = b.getEnd();
+
+                // Bridge cannot be build on blocked position
+                Set<Position> blockedPositionSet = getBridgePositionSet(null);
+                if (blockedPositionSet.contains(start) || blockedPositionSet.contains(end))
+                    return false;
 
                 // Bridge needs to be build on own land position
                 Set<Position> landPositionSet = getLandPositionSet(turn);

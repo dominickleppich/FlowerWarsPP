@@ -11,7 +11,7 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class BoardBridgeMoveFormatTest {
+public class BoardBridgeMoveInvalidSameStartAndEndTest {
     private static final int BOARD_SIZE = 10;
     private Board board;
     private Viewer viewer;
@@ -55,7 +55,7 @@ public class BoardBridgeMoveFormatTest {
     private Bridge bridge;
     private Status expectedStatus;
 
-    public BoardBridgeMoveFormatTest(Bridge bridge, Status expected) {
+    public BoardBridgeMoveInvalidSameStartAndEndTest(Bridge bridge, Status expected) {
         this.bridge = bridge;
         this.expectedStatus = expected;
     }
@@ -63,7 +63,7 @@ public class BoardBridgeMoveFormatTest {
     @Test
     public void testBridgeMove() {
         board.make(new Move(bridge));
-        assertEquals("Valid bridge " + bridge.toString(), expectedStatus, viewer
+        assertEquals("Invalid bridge (start == end) " + bridge.toString(), expectedStatus, viewer
                 .getStatus());
     }
 
@@ -72,13 +72,6 @@ public class BoardBridgeMoveFormatTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                // Normal valid bridges
-                {new Bridge(new Position(5, 5), new Position(4, 5)), Status.Ok},
-                {new Bridge(new Position(5, 5), new Position(5, 4)), Status.Ok},
-                {new Bridge(new Position(6, 5), new Position(7, 5)), Status.Ok},
-                {new Bridge(new Position(6, 5), new Position(7, 4)), Status.Ok},
-                {new Bridge(new Position(5, 6), new Position(5, 7)), Status.Ok},
-                {new Bridge(new Position(5, 6), new Position(4, 7)), Status.Ok},
                 // Invalid bridge (start == end)
                 {new Bridge(new Position(5, 5), new Position(5, 5)), Status.Illegal},
                 {new Bridge(new Position(6, 5), new Position(6, 5)), Status.Illegal},
