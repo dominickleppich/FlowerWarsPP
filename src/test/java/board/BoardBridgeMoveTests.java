@@ -5,7 +5,7 @@ import org.junit.runners.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        BoardBridgeMoveValidTest.class,
+        BoardBridgeMoveFormatTest.class,
         BoardBridgeMoveInvalidToNoLandTest.class,
         BoardBridgeMoveInvalidOverBlockedLandTest.class,
         BoardBridgeMoveInvalidTooLongTest.class

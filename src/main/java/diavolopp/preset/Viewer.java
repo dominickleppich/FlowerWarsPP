@@ -1,9 +1,11 @@
 package diavolopp.preset;
 
+import java.util.*;
+
 public interface Viewer {
     PlayerColor getTurn();
     int getSize();
     Status getStatus();
-    Iterable<Land> getLands(PlayerColor color);
-    Iterable<Bridge> getBridges(PlayerColor color);
+    Collection<Land> getLands(PlayerColor color);
+    Collection<Bridge> getBridges(PlayerColor color);
 }

@@ -42,26 +42,22 @@ public class BoardLogicTest {
 
     @Test
     public void newBoardHasNoLandsForWhitePlayer() {
-        for (Land l : viewer.getLands(PlayerColor.White))
-            fail("Land for white player found on empty board");
+        assertTrue(viewer.getLands(PlayerColor.White).isEmpty());
     }
 
     @Test
     public void newBoardHasNoLandsForRedPlayer() {
-        for (Land l : viewer.getLands(PlayerColor.Red))
-            fail("Land for red player found on empty board");
+        assertTrue(viewer.getLands(PlayerColor.Red).isEmpty());
     }
 
     @Test
     public void newBoardHasNoBridgesForWhitePlayer() {
-        for (Bridge b : viewer.getBridges(PlayerColor.White))
-            fail("Bridge for white player found on empty board");
+        assertTrue(viewer.getBridges(PlayerColor.White).isEmpty());
     }
 
     @Test
     public void newBoardHasNoBridgesForRedPlayer() {
-        for (Bridge b : viewer.getBridges(PlayerColor.Red))
-            fail("Bridge for red player found on empty board");
+        assertTrue(viewer.getBridges(PlayerColor.Red).isEmpty());
     }
 
     // ------------------------------------------------------------
@@ -70,8 +66,9 @@ public class BoardLogicTest {
     public void changeTurnAfterValidLandMove() {
         Land landA = new Land(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 2), new Position(2, 3), new Position
-                (3, 3));
+        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+                Position
+                (3, 2));
         Move m = new Move(landA, landB);
 
         board.make(m);
@@ -79,25 +76,92 @@ public class BoardLogicTest {
     }
 
     @Test
-    public void firstMoveIsDoneByWhitePlayer() {
+    public void firstMoveIsHasStatusOk() {
         Land landA = new Land(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 2), new Position(2, 3), new Position
-                (3, 3));
+        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+                Position
+                (3, 2));
         Move m = new Move(landA, landB);
 
         board.make(m);
 
-        boolean firstContained = false;
-        boolean secondContained = false;
-        for (Land l : viewer.getLands(PlayerColor.White)) {
-            if (l.equals(landA))
-                firstContained = true;
-            if (l.equals(landB))
-                secondContained = true;
-        }
+        assertEquals(Status.Ok, viewer.getStatus());
+    }
+
+    @Test
+    public void firstMoveIsDoneByWhitePlayer() {
+        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+                new Position(2, 3));
+        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+                Position
+                (3, 2));
+        Move m = new Move(landA, landB);
+
+        board.make(m);
+
+        boolean firstContained = viewer.getLands(PlayerColor.White).contains
+                (landA);
+        boolean secondContained = viewer.getLands(PlayerColor.White).contains
+                (landB);
 
         assertEquals("First land is contained", true, firstContained);
         assertEquals("Second land is contained", true, secondContained);
+    }
+
+    @Test
+    public void firstMoveDoesNotSetAnyWhiteBridges() {
+        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+                new Position(2, 3));
+        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+                Position
+                (3, 2));
+        Move m = new Move(landA, landB);
+
+        board.make(m);
+
+        assertTrue(viewer.getBridges(PlayerColor.White).isEmpty());
+    }
+
+    @Test
+    public void firstMoveDoesNotSetAnyRedBridges() {
+        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+                new Position(2, 3));
+        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+                Position
+                (3, 2));
+        Move m = new Move(landA, landB);
+
+        board.make(m);
+
+        assertTrue(viewer.getBridges(PlayerColor.Red).isEmpty());
+    }
+
+    @Test
+    public void firstMoveDoesNotAddRedLands() {
+        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+                new Position(2, 3));
+        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+                Position
+                (3, 2));
+        Move m = new Move(landA, landB);
+
+        board.make(m);
+
+        assertTrue(viewer.getLands(PlayerColor.Red).isEmpty());
+    }
+
+    @Test
+    public void firstMoveDoesOnlyAddTwoWhiteLands() {
+        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+                new Position(2, 3));
+        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+                Position
+                (3, 2));
+        Move m = new Move(landA, landB);
+
+        board.make(m);
+
+        assertEquals(2, viewer.getLands(PlayerColor.White).size());
     }
 }

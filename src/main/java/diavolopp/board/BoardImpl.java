@@ -55,7 +55,22 @@ public class BoardImpl implements Board {
     private boolean isValidMove(Move move) {
         switch (move.getType()) {
             case Land:
-                // TODO test land on empty field
+                // Land needs to be placed on the board!
+                Land[] lands = move.getLands();
+
+                // Land is on the board, if all the Positions are on the
+                // board ;)
+                // A Position is on the board, if and only if
+                // column + row <= size + 2
+                for (Land l : lands) {
+                    if (!isPositionOnBoard(l.getFirst()) | !isPositionOnBoard
+                            (l.getSecond()) | !isPositionOnBoard(l.getThird()))
+                        return false;
+                }
+
+                Set<Land> landSet = getLandSet(null);
+                if (landSet.contains(lands[0]) || landSet.contains(lands[1]))
+                    return false;
 
                 break;
             case Bridge:
@@ -88,6 +103,9 @@ public class BoardImpl implements Board {
         switch (move.getType()) {
             case Land:
                 Land[] lands = move.getLands();
+                if (lands[0].equals(lands[1]))
+                    return false;
+
                 for (Land land : lands)
                     if (!isValidLandFormat(land))
                         return false;
@@ -125,6 +143,17 @@ public class BoardImpl implements Board {
         Position a = bridge.getStart();
         Position b = bridge.getEnd();
         return getNeighborPositions(a).contains(b);
+    }
+
+    /**
+     * Test if a given {@link Position} is located on the board. A position
+     * is on the board if and only if {@code column + row <= 2 + size}
+     *
+     * @param position - {@link Position} to test
+     * @return true, if the position is on the board
+     */
+    private boolean isPositionOnBoard(Position position) {
+        return position.getColumn() + position.getRow() <= size + 2;
     }
 
     private void nextPlayer() {
@@ -231,12 +260,20 @@ public class BoardImpl implements Board {
         int c = position.getColumn();
         int r = position.getRow();
         Set<Position> neighbors = new HashSet<>();
-        neighbors.add(new Position(c + 1, r));
-        neighbors.add(new Position(c + 1, r - 1));
-        neighbors.add(new Position(c, r - 1));
-        neighbors.add(new Position(c - 1, r));
-        neighbors.add(new Position(c - 1, r + 1));
-        neighbors.add(new Position(c, r + 1));
+        if (c < Position.MAX_COLUMN) {
+            neighbors.add(new Position(c + 1, r));
+            if (r > 1)
+                neighbors.add(new Position(c + 1, r - 1));
+        }
+        if (c > 1) {
+            neighbors.add(new Position(c - 1, r));
+            if (r < Position.MAX_ROW)
+                neighbors.add(new Position(c - 1, r + 1));
+        }
+        if (r > 1)
+            neighbors.add(new Position(c, r - 1));
+        if (r < Position.MAX_ROW)
+            neighbors.add(new Position(c, r + 1));
         return neighbors;
     }
 
@@ -261,12 +298,12 @@ public class BoardImpl implements Board {
             }
 
             @Override
-            public Iterable<Land> getLands(PlayerColor color) {
+            public Collection<Land> getLands(PlayerColor color) {
                 return new HashSet<>(BoardImpl.this.getLandSet(color));
             }
 
             @Override
-            public Iterable<Bridge> getBridges(PlayerColor color) {
+            public Collection<Bridge> getBridges(PlayerColor color) {
                 return new HashSet<>(BoardImpl.this.getBridgeSet(color));
             }
         };

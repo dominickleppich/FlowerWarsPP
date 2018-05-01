@@ -37,13 +37,13 @@ public class BoardLandMoveFormatTest {
     @Test
     public void testLandMovesFirstLand() {
         board.make(new Move(land, VALID_LAND));
-        assertEquals("Land " + land.toString(), expectedStatus, viewer.getStatus());
+        assertEquals("First land " + land.toString(), expectedStatus, viewer.getStatus());
     }
 
     @Test
     public void testLandMovesSecondLand() {
         board.make(new Move(VALID_LAND, land));
-        assertEquals("Land " + land.toString(), expectedStatus, viewer.getStatus());
+        assertEquals("Second land " + land.toString(), expectedStatus, viewer.getStatus());
     }
 
     // ------------------------------------------------------------
@@ -107,7 +107,9 @@ public class BoardLandMoveFormatTest {
                         Position(4, 6)), Status.Illegal},
                 // Invalid arbitrary
                 {new Land(new Position(5, 5), new Position(5, 8), new
-                        Position(7, 2)), Status.Illegal}
+                        Position(7, 2)), Status.Illegal},
+                // Invalid same land
+                {VALID_LAND, Status.Illegal}
         });
     }
 
