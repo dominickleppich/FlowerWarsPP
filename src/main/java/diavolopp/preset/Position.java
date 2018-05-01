@@ -49,9 +49,9 @@ public class Position implements Serializable, Comparable<Position> {
 
     @Override
     public int compareTo(Position p) {
-        if (getColumn() != p.getColumn())
-            return getColumn() - p.getColumn();
-        return getRow() - p.getRow();
+        if (getRow() != p.getRow())
+            return getRow() - p.getRow();
+        return getColumn() - p.getColumn();
     }
 
     @Override
