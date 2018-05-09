@@ -23,11 +23,12 @@ public class UIPanel extends JPanel {
     private static final Color RED_PLAYER_COLOR = new Color(173, 69, 29);
     private static final Color GREEN_PLAYER_COLOR = new Color(22, 173, 47);
 
-    private static final double GRID_DOT_SIZE = 15.0;
-    private static final float GRID_NEUTRAL_LINE_STRENGTH = 5.0f;
-    private static final float GRID_DITCH_LINE_STRENGTH = 2.5f;
+    private static final double GRID_DOT_SIZE = 0.3;
+    private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
+    private static final float GRID_DITCH_LINE_STRENGTH = 0.05f;
     private static final double BORDER = 30.0;
     private int WIDTH, HEIGHT;
+    private float UNIT;
 
     private Map<Position, Point2D> positionPoints;
 
@@ -35,6 +36,7 @@ public class UIPanel extends JPanel {
 
     public UIPanel(UIWindow parentWindow) {
         this.parentWindow = parentWindow;
+        setDoubleBuffered(true);
         update();
     }
 
@@ -55,6 +57,7 @@ public class UIPanel extends JPanel {
         double fieldWidth = Math.min((WIDTH - 2 * BORDER) / boardSize, (
                 (HEIGHT - 2 * BORDER) /
                         boardSize) / Math.sin(Math.toRadians(60)));
+        UNIT = (float) fieldWidth;
         double fieldHeight = Math.sin(Math.toRadians(60)) * fieldWidth;
 
         double xOffset = (WIDTH - boardSize * fieldWidth - 2 * BORDER) / 2 +
@@ -161,7 +164,7 @@ public class UIPanel extends JPanel {
                         (neighbor)));
             }
         }*/
-        g.setStroke(new BasicStroke(GRID_NEUTRAL_LINE_STRENGTH));
+        g.setStroke(new BasicStroke(UNIT * GRID_NEUTRAL_LINE_STRENGTH));
         g.setColor(Color.BLACK);
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
             for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(),
@@ -171,7 +174,7 @@ public class UIPanel extends JPanel {
             }
         }
 
-        g.setStroke(new BasicStroke(GRID_DITCH_LINE_STRENGTH));
+        g.setStroke(new BasicStroke(UNIT * GRID_DITCH_LINE_STRENGTH));
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
             for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(),
                     boardSize)) {
@@ -191,9 +194,10 @@ public class UIPanel extends JPanel {
 
         g.setColor(Color.BLACK);
         // Draw grid points
+        double dotSize = UNIT * GRID_DOT_SIZE;
         for (Point2D p : positionPoints.values()) {
-            g.fill(new Ellipse2D.Double(p.getX() - GRID_DOT_SIZE / 2, p.getY() -
-                    GRID_DOT_SIZE / 2, GRID_DOT_SIZE, GRID_DOT_SIZE));
+            g.fill(new Ellipse2D.Double(p.getX() - dotSize / 2, p.getY() -
+                    dotSize / 2, dotSize, dotSize));
         }
     }
 
