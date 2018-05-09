@@ -75,7 +75,7 @@ public class Flower {
 
     @Override
     public String toString() {
-        return getFirst().toString() + "+" + getSecond().toString() + "+" +
-                getThird().toString();
+        return "{" + getFirst().toString() + "," + getSecond().toString() + "," +
+                getThird().toString() + "}";
     }
 }

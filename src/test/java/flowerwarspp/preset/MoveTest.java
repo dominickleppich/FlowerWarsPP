@@ -134,12 +134,12 @@ public class MoveTest {
     @Test
     public void toStringForSurrenderMoveReturnsCorrectValue() {
         Move m = new Move(MoveType.Surrender);
-        assertEquals(m.toString(), "Surrender");
+        assertEquals(m.toString(), "{Surrender}");
     }
 
     @Test
     public void toStringForEndMoveReturnsCorrectValue() {
         Move m = new Move(MoveType.End);
-        assertEquals(m.toString(), "End");
+        assertEquals(m.toString(), "{End}");
     }
 }

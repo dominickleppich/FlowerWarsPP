@@ -62,15 +62,18 @@ public class Move implements Serializable {
 
     @Override
     public String toString() {
+        String s = "{";
         switch (getType()) {
             case Flower:
-                return "{" + getFirstFlower().toString() + ", " +
-                        getSecondFlower().toString()
-                        + "}";
+                s += getFirstFlower().toString() + ", " +
+                        getSecondFlower().toString();
+                break;
             case Ditch:
-                return ditch.toString();
+                s += ditch.toString();
+                break;
             default:
-                return type.toString();
+                s += type.toString();
         }
+        return s + "}";
     }
 }
