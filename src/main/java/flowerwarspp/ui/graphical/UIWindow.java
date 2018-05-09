@@ -4,6 +4,7 @@ import flowerwarspp.preset.*;
 import flowerwarspp.ui.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class UIWindow extends JFrame implements UserInterface {
@@ -25,6 +26,7 @@ public class UIWindow extends JFrame implements UserInterface {
         });
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(320, 240));
 
         setSize(800, 600);
         setVisible(true);
