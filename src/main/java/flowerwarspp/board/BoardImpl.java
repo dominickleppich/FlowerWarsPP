@@ -3,35 +3,36 @@ package flowerwarspp.board;
 import flowerwarspp.preset.*;
 import org.slf4j.*;
 
-
 import java.util.*;
 import java.util.stream.*;
 
 import static java.util.stream.Collectors.*;
 
 public class BoardImpl implements Board {
-    private static final Logger logger = LoggerFactory.getLogger(BoardImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(BoardImpl
+            .class);
 
     private final int size;
     private PlayerColor turn;
     private Status status;
 
-    private Set<Land> whiteLands, redLands;
-    private Set<Bridge> whiteBridges, redBridges;
+    private Set<Flower> redFlowers, greenFlowers;
+    private Set<Ditch> redDitches, greenDitches;
 
     // ------------------------------------------------------------
 
     public BoardImpl(final int size) {
         this.size = size;
 
-        turn = PlayerColor.White;
+        turn = PlayerColor.Red;
         status = Status.Ok;
 
-        whiteLands = new HashSet<>();
-        redLands = new HashSet<>();
-        whiteBridges = new HashSet<>();
-        redBridges = new HashSet<>();
+        redFlowers = new HashSet<>();
+        greenFlowers = new HashSet<>();
+        redDitches = new HashSet<>();
+        greenDitches = new HashSet<>();
 
+        logger.debug("New board instantiated");
     }
 
     // ------------------------------------------------------------
@@ -58,52 +59,57 @@ public class BoardImpl implements Board {
 
     private boolean isValidMove(Move move) {
         switch (move.getType()) {
-            case Land:
-                // Land needs to be placed on the board!
-                Land[] lands = move.getLands();
+            case Flower:
+                // Flower needs to be placed on the board!
+                Flower[] flowers = new Flower[]{move.getFirstFlower(), move
+                        .getSecondFlower()};
 
-                // Land needs to be on the board
-                for (Land l : lands) {
+                // Flower needs to be on the board
+                for (Flower l : flowers) {
                     if (!isPositionOnBoard(l.getFirst()) | !isPositionOnBoard
                             (l.getSecond()) | !isPositionOnBoard(l.getThird()))
                         return false;
                 }
 
-                // Land cannot be placed on other land
-                Set<Land> landSet = getLandSet(null);
-                if (landSet.contains(lands[0]) || landSet.contains(lands[1]))
+                // Flower cannot be placed on other land
+                Set<Flower> flowerSet = getLandSet(null);
+                if (flowerSet.contains(flowers[0]) || flowerSet.contains
+                        (flowers[1]))
                     return false;
 
-                // Land cannot be placed on bridge blocked fields
-                Set<Land> bridgeBlocked = new HashSet<>();
-                for (Bridge b : getBridgeSet(null))
-                    for (Land l : getBridgeBlockedLands(b))
+                // Flower cannot be placed on bridge blocked fields
+                Set<Flower> bridgeBlocked = new HashSet<>();
+                for (Ditch b : getBridgeSet(null))
+                    for (Flower l : getBridgeBlockedLands(b))
                         bridgeBlocked.add(l);
-                if (bridgeBlocked.contains(lands[0]) || bridgeBlocked.contains(lands[1]))
+                if (bridgeBlocked.contains(flowers[0]) || bridgeBlocked
+                        .contains(flowers[1]))
                     return false;
 
                 break;
-            case Bridge:
-                Bridge b = move.getBridge();
+            case Ditch:
+                Ditch b = move.getDitch();
                 Position start, end;
-                start = b.getStart();
-                end = b.getEnd();
+                start = b.getFirst();
+                end = b.getSecond();
 
-                // Bridge cannot be build on blocked position
+                // Ditch cannot be build on blocked position
                 Set<Position> blockedPositionSet = getBridgePositionSet(null);
-                if (blockedPositionSet.contains(start) || blockedPositionSet.contains(end))
+                if (blockedPositionSet.contains(start) || blockedPositionSet
+                        .contains(end))
                     return false;
 
-                // Bridge needs to be build on own land position
+                // Ditch needs to be build on own land position
                 Set<Position> landPositionSet = getLandPositionSet(turn);
                 if (!landPositionSet.contains(start) || !landPositionSet
                         .contains(end))
                     return false;
 
-                // Bridge cannot be build over land
-                Set<Land> blockedLandIntersection = getBridgeBlockedLands(b);
-                blockedLandIntersection.retainAll(getLandSet(null));
-                if (!blockedLandIntersection.isEmpty())
+                // Ditch cannot be build over land
+                Set<Flower> blockedFlowerIntersection = getBridgeBlockedLands
+                        (b);
+                blockedFlowerIntersection.retainAll(getLandSet(null));
+                if (!blockedFlowerIntersection.isEmpty())
                     return false;
 
                 break;
@@ -116,18 +122,20 @@ public class BoardImpl implements Board {
 
     private boolean isValidMoveFormat(Move move) {
         switch (move.getType()) {
-            case Land:
-                Land[] lands = move.getLands();
-                if (lands[0].equals(lands[1]))
+            case Flower:
+                Flower[] flowers = new Flower[]{move.getFirstFlower(), move
+                        .getSecondFlower()};
+
+                if (flowers[0].equals(flowers[1]))
                     return false;
 
-                for (Land land : lands)
-                    if (!isValidLandFormat(land))
+                for (Flower flower : flowers)
+                    if (!isValidLandFormat(flower))
                         return false;
                 break;
-            case Bridge:
-                Bridge bridge = move.getBridge();
-                if (!isValidBridgeFormat(bridge))
+            case Ditch:
+                Ditch ditch = move.getDitch();
+                if (!isValidBridgeFormat(ditch))
                     return false;
                 break;
             default:
@@ -137,10 +145,10 @@ public class BoardImpl implements Board {
         return true;
     }
 
-    private boolean isValidLandFormat(Land land) {
-        Position a = land.getFirst();
-        Position b = land.getSecond();
-        Position c = land.getThird();
+    private boolean isValidLandFormat(Flower flower) {
+        Position a = flower.getFirst();
+        Position b = flower.getSecond();
+        Position c = flower.getThird();
 
         Set<Position> aNeighbors = getNeighborPositions(a);
         Set<Position> bNeighbors = getNeighborPositions(b);
@@ -154,9 +162,9 @@ public class BoardImpl implements Board {
         return true;
     }
 
-    private boolean isValidBridgeFormat(Bridge bridge) {
-        Position a = bridge.getStart();
-        Position b = bridge.getEnd();
+    private boolean isValidBridgeFormat(Ditch ditch) {
+        Position a = ditch.getFirst();
+        Position b = ditch.getSecond();
         return getNeighborPositions(a).contains(b);
     }
 
@@ -172,20 +180,20 @@ public class BoardImpl implements Board {
     }
 
     private void nextPlayer() {
-        if (turn == PlayerColor.White)
-            turn = PlayerColor.Red;
+        if (turn == PlayerColor.Red)
+            turn = PlayerColor.Green;
         else
-            turn = PlayerColor.White;
+            turn = PlayerColor.Red;
     }
 
     private void setMoveOnBoard(Move move) {
         switch (move.getType()) {
-            case Land:
-                for (Land l : move.getLands())
-                    getLandSet(turn).add(l);
+            case Flower:
+                getLandSet(turn).add(move.getFirstFlower());
+                getLandSet(turn).add(move.getSecondFlower());
                 break;
-            case Bridge:
-                getBridgeSet(turn).add(move.getBridge());
+            case Ditch:
+                getBridgeSet(turn).add(move.getDitch());
                 break;
             default:
                 throw new IllegalArgumentException("illegal move type: " + move
@@ -195,33 +203,33 @@ public class BoardImpl implements Board {
 
     // ------------------------------------------------------------
 
-    private Set<Land> getLandSet(PlayerColor color) {
+    private Set<Flower> getLandSet(PlayerColor color) {
         if (color == null) {
-            Set<Land> resultSet = new HashSet<>();
-            resultSet.addAll(whiteLands);
-            resultSet.addAll(redLands);
+            Set<Flower> resultSet = new HashSet<>();
+            resultSet.addAll(redFlowers);
+            resultSet.addAll(greenFlowers);
             return resultSet;
-        } else if (color == PlayerColor.White)
-            return whiteLands;
+        } else if (color == PlayerColor.Red)
+            return redFlowers;
         else
-            return redLands;
+            return greenFlowers;
     }
 
-    private Set<Bridge> getBridgeSet(PlayerColor color) {
+    private Set<Ditch> getBridgeSet(PlayerColor color) {
         if (color == null) {
-            Set<Bridge> resultSet = new HashSet<>();
-            resultSet.addAll(whiteBridges);
-            resultSet.addAll(redBridges);
+            Set<Ditch> resultSet = new HashSet<>();
+            resultSet.addAll(redDitches);
+            resultSet.addAll(greenDitches);
             return resultSet;
-        } else if (color == PlayerColor.White)
-            return whiteBridges;
+        } else if (color == PlayerColor.Red)
+            return redDitches;
         else
-            return redBridges;
+            return greenDitches;
     }
 
     private Set<Position> getLandPositionSet(PlayerColor color) {
         Set<Position> resultSet = new HashSet<>();
-        for (Land l : getLandSet(color)) {
+        for (Flower l : getLandSet(color)) {
             resultSet.add(l.getFirst());
             resultSet.add(l.getSecond());
             resultSet.add(l.getThird());
@@ -231,17 +239,17 @@ public class BoardImpl implements Board {
 
     private Set<Position> getBridgePositionSet(PlayerColor color) {
         Set<Position> resultSet = new HashSet<>();
-        for (Bridge b : getBridgeSet(color)) {
-            resultSet.add(b.getStart());
-            resultSet.add(b.getEnd());
+        for (Ditch b : getBridgeSet(color)) {
+            resultSet.add(b.getFirst());
+            resultSet.add(b.getSecond());
         }
         return resultSet;
     }
 
-    private Set<Land> getBridgeBlockedLands(Bridge bridge) {
+    private Set<Flower> getBridgeBlockedLands(Ditch ditch) {
         Position start, end;
-        start = bridge.getStart();
-        end = bridge.getEnd();
+        start = ditch.getFirst();
+        end = ditch.getSecond();
         int minCol, maxCol, minRow, maxRow;
         minCol = Math.min(start.getColumn(), end.getColumn());
         maxCol = Math.max(start.getColumn(), end.getColumn());
@@ -262,33 +270,39 @@ public class BoardImpl implements Board {
             posB = new Position(maxCol, maxRow);
         }
 
-        Set<Land> resultLands = new HashSet<>();
-        resultLands.add(new Land(start, end, posA));
-        resultLands.add(new Land(start, end, posB));
+        Set<Flower> resultFlowers = new HashSet<>();
+        resultFlowers.add(new Flower(start, end, posA));
+        resultFlowers.add(new Flower(start, end, posB));
 
-        return resultLands;
+        return resultFlowers;
     }
 
     // ------------------------------------------------------------
 
-    public static Set<Position> getNeighborPositions(Position position) {
+    private Set<Position> getNeighborPositions(Position position) {
+        return getNeighborPositions(position, size);
+    }
+
+    public static Set<Position> getNeighborPositions(Position position, int
+            boardSize) {
         int c = position.getColumn();
         int r = position.getRow();
         Set<Position> neighbors = new HashSet<>();
-        if (c < Position.MAX_COLUMN) {
+        // Try to add all 6 neighbors, beginning with the neighbor to the right
+        // continuing counter clockwise
+        if (c + r <= boardSize + 1) {
             neighbors.add(new Position(c + 1, r));
-            if (r > 1)
-                neighbors.add(new Position(c + 1, r - 1));
+            neighbors.add(new Position(c, r + 1));
         }
         if (c > 1) {
             neighbors.add(new Position(c - 1, r));
-            if (r < Position.MAX_ROW)
-                neighbors.add(new Position(c - 1, r + 1));
+            neighbors.add(new Position(c - 1, r + 1));
         }
-        if (r > 1)
+        if (r > 1) {
             neighbors.add(new Position(c, r - 1));
-        if (r < Position.MAX_ROW)
-            neighbors.add(new Position(c, r + 1));
+            neighbors.add(new Position(c + 1, r - 1));
+        }
+
         return neighbors;
     }
 
@@ -313,12 +327,12 @@ public class BoardImpl implements Board {
             }
 
             @Override
-            public Collection<Land> getLands(PlayerColor color) {
+            public Collection<Flower> getFlowers(PlayerColor color) {
                 return new HashSet<>(BoardImpl.this.getLandSet(color));
             }
 
             @Override
-            public Collection<Bridge> getBridges(PlayerColor color) {
+            public Collection<Ditch> getDitches(PlayerColor color) {
                 return new HashSet<>(BoardImpl.this.getBridgeSet(color));
             }
         };
@@ -336,8 +350,8 @@ public class BoardImpl implements Board {
         firstLine += (size + 1);
         st.add(firstLine);
 
-        Set<Land> whiteLands = getLandSet(PlayerColor.White);
-        Set<Land> redLands = getLandSet(PlayerColor.Red);
+        Set<Flower> whiteFlowers = getLandSet(PlayerColor.Red);
+        Set<Flower> redFlowers = getLandSet(PlayerColor.Green);
 
         String indent = "";
         for (int r = 1; r <= size; r++) {
@@ -357,17 +371,17 @@ public class BoardImpl implements Board {
                                 l).collect
                                 (joining());
 
-                        Land land = new Land(new Position(c, r), new
+                        Flower flower = new Flower(new Position(c, r), new
                                 Position(c + 1, r), new Position(c, r + 1));
                         if (l == 1) {
-                            if (whiteLands.contains(land))
+                            if (whiteFlowers.contains(flower))
                                 inner = "  ++++  ";
-                            else if (redLands.contains(land))
+                            else if (redFlowers.contains(flower))
                                 inner = "  ****  ";
                         } else if (l == 2) {
-                            if (whiteLands.contains(land))
+                            if (whiteFlowers.contains(flower))
                                 inner = "  ++  ";
-                            else if (redLands.contains(land))
+                            else if (redFlowers.contains(flower))
                                 inner = "  **  ";
                         }
 
@@ -378,18 +392,18 @@ public class BoardImpl implements Board {
                             .collect(joining());
 
                     if (c > 1) {
-                        Land land = new Land(new Position(c + 1, r), new
+                        Flower flower = new Flower(new Position(c + 1, r), new
                                 Position(c, r + 1), new Position(c + 1, r + 1));
 
                         if (l == 3) {
-                            if (whiteLands.contains(land))
+                            if (whiteFlowers.contains(flower))
                                 inner = "  ++  ";
-                            else if (redLands.contains(land))
+                            else if (redFlowers.contains(flower))
                                 inner = "  **  ";
                         } else if (l == 4) {
-                            if (whiteLands.contains(land))
+                            if (whiteFlowers.contains(flower))
                                 inner = "  ++++  ";
-                            else if (redLands.contains(land))
+                            else if (redFlowers.contains(flower))
                                 inner = "  ****  ";
                         }
                     }
