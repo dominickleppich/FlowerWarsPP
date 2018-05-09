@@ -4,25 +4,34 @@ import java.io.*;
 
 public class Move implements Serializable {
     private MoveType type;
-    private Land[] lands;
-    private Bridge bridge;
+    private Flower flowerA, flowerB;
+    private Ditch ditch;
 
     // ------------------------------------------------------------
 
-    public Move(final Land a, final Land b) {
-        type = MoveType.Land;
+    public Move(final MoveType type) {
+        if (type == MoveType.Flower || type == MoveType.Ditch)
+            throw new IllegalArgumentException("flower and ditch moves have " +
+                    "separate constructors");
 
-        if (a == null || b == null)
-            throw new IllegalArgumentException("lands cannot be null");
-        lands = new Land[]{a, b};
+        this.type = type;
     }
 
-    public Move(final Bridge b) {
-        type = MoveType.Bridge;
+    public Move(final Flower a, final Flower b) {
+        type = MoveType.Flower;
+
+        if (a == null || b == null)
+            throw new IllegalArgumentException("flowers cannot be null");
+        flowerA = a;
+        flowerB = b;
+    }
+
+    public Move(final Ditch b) {
+        type = MoveType.Ditch;
 
         if (b == null)
-            throw new IllegalArgumentException("bridge cannot be null");
-        bridge = b;
+            throw new IllegalArgumentException("ditch cannot be null");
+        ditch = b;
     }
 
     // ------------------------------------------------------------
@@ -31,16 +40,22 @@ public class Move implements Serializable {
         return type;
     }
 
-    public Land[] getLands() {
-        if (getType() != MoveType.Land)
+    public Flower getFirstFlower() {
+        if (getType() != MoveType.Flower)
             throw new IllegalStateException("cannot be called on type " + type);
-        return lands.clone();
+        return flowerA;
     }
 
-    public Bridge getBridge() {
-        if (getType() != MoveType.Bridge)
+    public Flower getSecondFlower() {
+        if (getType() != MoveType.Flower)
             throw new IllegalStateException("cannot be called on type " + type);
-        return bridge;
+        return flowerB;
+    }
+
+    public Ditch getDitch() {
+        if (getType() != MoveType.Ditch)
+            throw new IllegalStateException("cannot be called on type " + type);
+        return ditch;
     }
 
     // ------------------------------------------------------------
@@ -48,13 +63,14 @@ public class Move implements Serializable {
     @Override
     public String toString() {
         switch (getType()) {
-            case Land:
-                return "{" + lands[0].toString() + ", " + lands[1].toString()
+            case Flower:
+                return "{" + getFirstFlower().toString() + ", " +
+                        getSecondFlower().toString()
                         + "}";
-            case Bridge:
-                return bridge.toString();
+            case Ditch:
+                return ditch.toString();
+            default:
+                return type.toString();
         }
-        // The following should be unreachable code
-        throw new IllegalStateException("move is neither a land nor a bridge");
     }
 }

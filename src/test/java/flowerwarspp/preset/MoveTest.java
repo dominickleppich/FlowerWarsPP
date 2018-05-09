@@ -5,107 +5,141 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class MoveTest {
-    private Land landA, landB;
-    private Bridge bridge;
+    private Flower flowerA, flowerB;
+    private Ditch ditch;
 
     @Before
     public void init() {
-        landA = new Land(new Position(2, 3), new Position(4, 5), new Position
+        flowerA = new Flower(new Position(2, 3), new Position(4, 5), new Position
                 (6, 7));
-        landB = new Land(new Position(4, 3), new Position(6, 5), new Position
+        flowerB = new Flower(new Position(4, 3), new Position(6, 5), new Position
                 (8, 7));
-        bridge = new Bridge(new Position(3, 3), new Position(4, 4));
+        ditch = new Ditch(new Position(3, 3), new Position(4, 4));
     }
 
     // ------------------------------------------------------------
 
     @Test
-    public void creatingNewMoveWithValidLandsWorks() {
-        Move m = new Move(landA, landB);
+    public void creatingNewMoveWithValidFlowersWorks() {
+        Move m = new Move(flowerA, flowerB);
         assertNotNull(m);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createNewMoveWithNullFirstLandThrowsException() {
-        new Move(null, landB);
+    public void createNewMoveWithNullFirstFlowerThrowsException() {
+        new Move(null, flowerB);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createNewMoveWithNullSecondLandThrowsException() {
-        new Move(landA, null);
+    public void createNewMoveWithNullSecondFlowerThrowsException() {
+        new Move(flowerA, null);
     }
 
     @Test
-    public void creatingNewMoveWithValidBridgeWorks() {
-        Move m = new Move(bridge);
+    public void creatingNewMoveWithValidDitchWorks() {
+        Move m = new Move(ditch);
         assertNotNull(m);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createNewMoveWithNullBridgeThrowsException() {
-        new Move(null);
+    public void createNewMoveWithFlowerTypeThrowsException() {
+        new Move(MoveType.Flower);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createNewMoveWithDitchTypeThrowsException() {
+        new Move(MoveType.Ditch);
     }
 
     // ------------------------------------------------------------
     // /* Getters */
 
     @Test
-    public void getTypeForLandMoveReturnsCorrectType() {
-        Move m = new Move(landA, landB);
-        assertEquals(MoveType.Land, m.getType());
+    public void getTypeForFlowerMoveReturnsCorrectType() {
+        Move m = new Move(flowerA, flowerB);
+        assertEquals(MoveType.Flower, m.getType());
     }
 
     @Test
-    public void getTypeForBridgeMoveReturnsCorrectType() {
-        Move m = new Move(bridge);
-        assertEquals(MoveType.Bridge, m.getType());
+    public void getTypeForDitchMoveReturnsCorrectType() {
+        Move m = new Move(ditch);
+        assertEquals(MoveType.Ditch, m.getType());
     }
 
     @Test
-    public void getLandsForLandMoveReturnsCorrectValues() {
-        Move m = new Move(landA, landB);
-        assertArrayEquals(new Land[] {landA, landB}, m.getLands());
+    public void getTypeForSurrenderMoveReturnsCorrectType() {
+        Move m = new Move(MoveType.Surrender);
+        assertEquals(MoveType.Surrender, m.getType());
     }
 
     @Test
-    public void getLandsForLandMoveCannotModifyMovesInnerState() {
-        Move m = new Move(landA, landB);
-        m.getLands()[0] = null;
-        assertArrayEquals(new Land[] {landA, landB}, m.getLands());
+    public void getTypeForEndMoveReturnsCorrectType() {
+        Move m = new Move(MoveType.End);
+        assertEquals(MoveType.End, m.getType());
+    }
+
+    @Test
+    public void getFirstFlowerForFlowerMoveReturnsCorrectValue() {
+        Move m = new Move(flowerA, flowerB);
+        assertEquals(flowerA, m.getFirstFlower());
+    }
+
+    @Test
+    public void getSecondFlowerForFlowerMoveReturnsCorrectValue() {
+        Move m = new Move(flowerA, flowerB);
+        assertEquals(flowerB, m.getSecondFlower());
     }
 
     @Test(expected = IllegalStateException.class)
-    public void getLandsForBridgeMoveThrowsException() {
-        Move m = new Move(bridge);
-        m.getLands();
+    public void getFirstFlowerForDitchMoveThrowsException() {
+        Move m = new Move(ditch);
+        m.getFirstFlower();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void getSecondFlowerForDitchMoveThrowsException() {
+        Move m = new Move(ditch);
+        m.getSecondFlower();
     }
 
     @Test
     public void getBridgeForBridgeMoveReturnsCorrectValue() {
-        Move m = new Move(bridge);
-        assertEquals(bridge, m.getBridge());
+        Move m = new Move(ditch);
+        assertEquals(ditch, m.getDitch());
     }
 
     @Test(expected = IllegalStateException.class)
-    public void getBridgeForLandMoveThrowsException() {
-        Move m = new Move(landA, landB);
-        m.getBridge();
+    public void getBridgeForFlowerMoveThrowsException() {
+        Move m = new Move(flowerA, flowerB);
+        m.getDitch();
     }
 
     // ------------------------------------------------------------
     // * Other stuff *
 
     @Test
-    public void toStringForLandMoveReturnsSomething() {
-        Move m = new Move(landA, landB);
+    public void toStringForFlowerMoveReturnsSomething() {
+        Move m = new Move(flowerA, flowerB);
         assertNotNull(m.toString());
         assertNotEquals(m.toString(), "");
     }
 
     @Test
-    public void toStringForBridgeMoveReturnsSomething() {
-        Move m = new Move(bridge);
+    public void toStringForDitchMoveReturnsSomething() {
+        Move m = new Move(ditch);
         assertNotNull(m.toString());
         assertNotEquals(m.toString(), "");
+    }
+
+    @Test
+    public void toStringForSurrenderMoveReturnsCorrectValue() {
+        Move m = new Move(MoveType.Surrender);
+        assertEquals(m.toString(), "Surrender");
+    }
+
+    @Test
+    public void toStringForEndMoveReturnsCorrectValue() {
+        Move m = new Move(MoveType.End);
+        assertEquals(m.toString(), "End");
     }
 }

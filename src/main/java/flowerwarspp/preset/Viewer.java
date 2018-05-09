@@ -6,6 +6,6 @@ public interface Viewer {
     PlayerColor getTurn();
     int getSize();
     Status getStatus();
-    Collection<Land> getLands(PlayerColor color);
-    Collection<Bridge> getBridges(PlayerColor color);
+    Collection<Flower> getFlowers(PlayerColor color);
+    Collection<Ditch> getDitches(PlayerColor color);
 }

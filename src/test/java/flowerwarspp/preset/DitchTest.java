@@ -4,7 +4,7 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 
-public class BridgeTest {
+public class DitchTest {
     private Position start, end;
 
     @Before
@@ -17,18 +17,18 @@ public class BridgeTest {
 
     @Test
     public void creatingNewBridgeWithValidValuesWorks() {
-        Bridge b = new Bridge(start, end);
+        Ditch b = new Ditch(start, end);
         assertNotNull(b);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void creatingNewBridgeWithNullStartThrowsException() {
-        new Bridge(null, end);
+        new Ditch(null, end);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void creatingNewBridgeWithNullEndThrowsException() {
-        new Bridge(start, null);
+        new Ditch(start, null);
     }
 
     // ------------------------------------------------------------
@@ -36,14 +36,14 @@ public class BridgeTest {
 
     @Test
     public void getStartReturnsCorrectValue() {
-        Bridge b = new Bridge(start, end);
-        assertEquals(start, b.getStart());
+        Ditch b = new Ditch(start, end);
+        assertEquals(start, b.getFirst());
     }
 
     @Test
     public void getEndReturnsCorrectValue() {
-        Bridge b = new Bridge(start, end);
-        assertEquals(end, b.getEnd());
+        Ditch b = new Ditch(start, end);
+        assertEquals(end, b.getSecond());
     }
 
     // ------------------------------------------------------------
@@ -51,41 +51,41 @@ public class BridgeTest {
 
     @Test
     public void equalsOnEqualBridgesReturnsTrue() {
-        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge b = new Bridge(new Position(3, 4), new Position(5, 6));
+        Ditch a = new Ditch(new Position(3, 4), new Position(5, 6));
+        Ditch b = new Ditch(new Position(3, 4), new Position(5, 6));
         assertEquals(a, b);
     }
 
     @Test
     public void equalsOnInvertedBridgesReturnsTrue() {
-        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge b = new Bridge(new Position(5, 6), new Position(3, 4));
+        Ditch a = new Ditch(new Position(3, 4), new Position(5, 6));
+        Ditch b = new Ditch(new Position(5, 6), new Position(3, 4));
         assertEquals(a, b);
     }
 
     @Test
     public void equalsOnUnequalStartPositionReturnsFalse() {
-        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge b = new Bridge(new Position(3, 5), new Position(5, 6));
+        Ditch a = new Ditch(new Position(3, 4), new Position(5, 6));
+        Ditch b = new Ditch(new Position(3, 5), new Position(5, 6));
         assertNotEquals(a, b);
     }
 
     @Test
     public void equalsOnUnequalEndPositionReturnsFalse() {
-        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge b = new Bridge(new Position(3, 4), new Position(5, 7));
+        Ditch a = new Ditch(new Position(3, 4), new Position(5, 6));
+        Ditch b = new Ditch(new Position(3, 4), new Position(5, 7));
         assertNotEquals(a, b);
     }
 
     @Test
     public void equalsOnNullReturnsFalse() {
-        Bridge b = new Bridge(start, end);
+        Ditch b = new Ditch(start, end);
         assertNotEquals(b, null);
     }
 
     @Test
     public void equalsOnWrongTypeReturnsFalse() {
-        Bridge b = new Bridge(start, end);
+        Ditch b = new Ditch(start, end);
         assertNotEquals(b, new Object());
     }
 
@@ -94,21 +94,21 @@ public class BridgeTest {
 
     @Test
     public void equalBridgesReturnSameHashCode() {
-        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge b = new Bridge(new Position(3, 4), new Position(5, 6));
+        Ditch a = new Ditch(new Position(3, 4), new Position(5, 6));
+        Ditch b = new Ditch(new Position(3, 4), new Position(5, 6));
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void equalInvertedBridgesReturnSameHashCode() {
-        Bridge a = new Bridge(new Position(3, 4), new Position(5, 6));
-        Bridge b = new Bridge(new Position(5, 6), new Position(3, 4));
+        Ditch a = new Ditch(new Position(3, 4), new Position(5, 6));
+        Ditch b = new Ditch(new Position(5, 6), new Position(3, 4));
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     public void toStringReturnsSomething() {
-        Bridge b = new Bridge(start, end);
+        Ditch b = new Ditch(start, end);
         assertNotNull(b.toString());
         assertNotEquals(b.toString(), "");
     }

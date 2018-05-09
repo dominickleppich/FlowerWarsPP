@@ -2,12 +2,12 @@ package flowerwarspp.preset;
 
 import java.util.*;
 
-public class Land {
+public class Flower {
     private Position[] positions;
 
     // ------------------------------------------------------------
 
-    public Land(final Position first, final Position second, final Position
+    public Flower(final Position first, final Position second, final Position
             third) {
         positions = new Position[3];
 
@@ -67,9 +67,9 @@ public class Land {
     public boolean equals(final Object o) {
         if (o == null)
             return false;
-        if (!(o instanceof Land))
+        if (!(o instanceof Flower))
             return false;
-        Land l = (Land) o;
+        Flower l = (Flower) o;
         return Arrays.equals(positions, l.positions);
     }
 
