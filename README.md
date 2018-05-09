@@ -1,8 +1,14 @@
-# DiavoloPP
-DiavoloPP ist eine Variation des Spiels [Ponte del Diavolo](https://www.brettspielnetz.de/spielregeln/ponte+del+diavolo.php).
+# FlowerWarsPP
+FlowerWarsPP ist eine Variation des Spiels [Ponte del Diavolo](https://www.brettspielnetz.de/spielregeln/ponte+del+diavolo.php).
+
+# Geschichte
+Hier wird eine lustige Geschichte über die Brüder Tim und Tom geschrieben, die sich im Garten beflanzen duelieren.
+
+# Das Spiel
+FlowerWarsPP ist ein Spiel für zwei Spieler, die mit den Farben **Rot** und **Grün** spielen. Das Ziel beider Spieler ist es 
+eine Wiese so weit wie möglich mit Gärten zu bepflanzen.
 
 # Das Spielbrett
-
 Gespielt wird auf einem dreieckigen Spielbrett mit einer Seitenlänge `3 <= n <= 30`.
 Die Gitterpunkte, im Folgenden **Punkte** genannt, werden mit Spalten- und Zeilenkoordinaten versehen, wobei unten links die 
 Koordinate `1,1` liegt. 
@@ -31,18 +37,21 @@ Hier ist ein Spielbrett der Größe `n = 3` dargestellt:
  1,1_________2,1_________3,1_________4,1
 ```
 
-Die Hauptbestandteile des Spieles sind eingeschlossene Flächen und Kanten dieses Spielbretts,
-welche im Folgenden Land und Brücken genannt werden. 
+Das Spielfeld stellt eine dreieckige Wiese dar, die wiederum in kleine dreieckige Teilflächen aufgeteilt ist.
 
-Ein Land ist hierbei stets durch ein Tripel an umliegenden Punkten gegeben, eine Brücke
-durch Paare von Start- und Endpunkten.
+Die von drei Punkten eingeschlossenen Flächen werden können mit **Blumen** bepflanzt werden. Auf der Kante von 
+einem Punkt zu einem direkten Nachbarn kann ein Wassergraben, kurz 
+**Graben**, gebaut werden. Ein Punkt hat hierbei stets maximal `6` direkte Nachbarn. Blumen und Gräben sind die 
+Hauptbestandteile von FlowerWarsPP.
 
-Hier ist wieder ein Spielbrett der Größe `n = 3` gegeben, `+` stellt den weißen Spieler und 
-`*` den roten Spieler dar:
 
-- Der rote Spieler hat ein Land auf (`1,1`, `2,1`, `1,2`)
-- Der weiße Spieler hat Ländereien auf (`1,3`, `2,3`, `2,2`) und (`3,1`, `4,1`, `3,2`)
-- Der weiße Spieler hat eine Brücke von `2,2` nach `3,1`, mit der seine beiden Länder verbunden werden
+
+Hier ist wieder ein Spielbrett der Größe `n = 3` gegeben, `+` stellt den roten Spieler und 
+`*` den grünen Spieler dar:
+
+- Der rote Spieler hat eine Blume auf (`1,1`, `2,1`, `1,2`)
+- Der grüne Spieler hat Blumen auf (`1,3`, `2,3`, `2,2`) und (`3,1`, `4,1`, `3,2`)
+- Der grüne Spieler hat einen Graben von `2,2` nach `3,1`, mit der seine beiden Blumen verbunden werden
 
 ```
                    /\
@@ -66,56 +75,49 @@ Hier ist wieder ein Spielbrett der Größe `n = 3` gegeben, `+` stellt den weiß
 ```
 
 # Zugregeln
-- Der weiße Spieler hat den ersten Zug, danach wird abwechselnd gezogen.
-- Nach dem ersten Zug ist der rote Spieler an der Reihe und hat einmalig die Möglichkeit 
-sich zu entscheiden, mit dem weißen Spieler die Farben zu tauschen. Entscheidet er sich dafür, übernimmt
-er die soeben gesetzten weißen Steine und spielt fortan als weißer Spieler, sein Zug ist beendet. Danach
-ist der ehemals weiße Spieler als roter Spieler an der Reihe und spielt fortan als roter Spieler.
-- In einem Zug muss der Spieler sich entscheiden ob er **zwei** Länder *oder* **eine** Brücke 
-setzen möchte.
-    - Die beiden Ländereien können beliebig auf dem Spielbrett positioniert werden, müssen jedoch
-    auf leeren Feldern unter Einhaltung der nachfolgenden Regeln für Territorien, Inseln und Brücken
+- Der rote Spieler hat den ersten Zug, danach wird beginnend mit dem grünen Spieler abwechselnd weiter gezogen.
+- In einem Zug muss der Spieler sich entscheiden ob er **zwei** Blumen pflanzen *oder* **einen** Graben bauen möchte.
+    - Die beiden Blumen können beliebig auf dem Spielbrett positioniert werden, müssen jedoch
+    auf leeren Feldern unter Einhaltung der nachfolgenden Regeln für Blumenbeete, Gärten und Gräben
     gebaut werden.
-    - Brücken müssen immer zwei eigene Ländereien verbinden, genauer zwei Eckpunkte eigener Ländereien.
+    - Gräben müssen immer zwei eigene Blumen verbinden, genauer zwei Eckpunkte von Feldern, in denen eigene Blumen gepflanzt sind.
+- Darüber hinaus kann ein Spieler zu einem beliebigen Zeitpunkt aufgeben, der andere Spieler gewinnt dann das Spiel.
     
-## Inseln
-- Eine Ansammlung von `4` gleichfarbigen Ländereien, die sich an den Seiten berühren, nennt man
-eine **Insel**. Eine Insel besteht immer aus exakt `4` Ländereien.
-- Eine Ansammlung von `1`, `2` oder `3` Ländereien nennt man ein **Territorium**. Ein Territorium
-kann nie `5` Ländereien oder mehr umfassen.
-- Eine Insel darf weder mit einer anderen eigenen Insel noch mit einem anderen eigenen Territorium
-gemeinsame Eckpunkte haben. Das heißt in anderen Worten, dass Inseln eigene Inseln oder Territorien nicht 
-über eine gleiche Seite berühren dürfen (weil dadurch automatisch die Inselgröße überschritten würde) und
+## Gärten
+- Eine Ansammlung von `4` gleichfarbigen Blumen, die sich an den Seiten berühren, nennt man
+einen **Garten**. Ein Garten besteht immer aus exakt `4` Blumen.
+- Eine Ansammlung von `1`, `2` oder `3` Blumen nennt man ein **Blumenbeet**. Ein Blumenbeet
+kann nie `5` Blumen oder mehr umfassen.
+- Ein Garten darf weder mit einem anderen eigenen Garten noch mit einem anderen eigenen Blumenbeet
+gemeinsame Eckpunkte haben. Das heißt in anderen Worten, dass Gärten eigene Gärten oder Blumenbeete nicht 
+über eine gleiche Seite berühren dürfen (weil dadurch automatisch die Gartengröße überschritten würde) und
 auch nicht über einen gemeinsamen Eckpunkt.
-- Territorien dürfen sich über Eckpunkte berühren.
-- Territorien dürfen nur dann zu einer Insel ausgebaut werden, wenn ...
-    - ... sie dann nicht mehr als `4` Ländereien enthalten.
-    - ... sie dann keine weiteren eigenen Inseln oder Territorien berühren.
-- Diese Abstandsregeln gelten nicht für Territorien und Inseln unterschiedlicher Farbe. Territorien und Inseln
+- Blumenbeete dürfen sich über Eckpunkte berühren.
+- Blumenbeete dürfen nur dann zu einem Garten ausgebaut werden, wenn ...
+    - ... sie dann nicht mehr als `4` Blumen enthalten.
+    - ... sie dann keine weiteren eigenen Gärten oder Blumenbeete berühren.
+- Diese Abstandsregeln gelten nicht für Blumenbeete und Gärten unterschiedlicher Farbe. Blumenbeete und Gärten
 unterschiedlicher Farbe dürfen beliebig nebeneinander liegen oder sich über Eckpunkte berühren.
 
-## Brücken
-- Eine Brücke verbindet zwei Ländereien über dessen Eckpunkte. Diese Verbindung darf maximal einen Schritt
+## Gräben
+- Ein Graben verbindet zwei Blumen über dessen Eckpunkte. Diese Verbindung darf maximal einen Schritt
 entlang der Gitternetzlinien des Spielfeldes lang sein.
-- Ein *Punkt* kann nur ein Brückenende tragen und ist somit für zukünftige Brücken blockiert.
-- Die beiden Felder, die sich mit der Brücke eine gemeinsame Seite teilen, müssen beim Bau
-der Brücke leer sein. Dieselben Felder gelten nach Bau der Brücke als blockiert und dürfen
-von keinen Ländereien, unabhängig von der Farbe, bebaut werden. Auf den Bau von Brücken haben
-blockierte *Felder* keinen Einfluss.
+- Ein *Punkt* kann nur ein Brückenende tragen und ist somit für zukünftige Gräben blockiert.
+- Die beiden Felder, die sich mit dem Graben eine gemeinsame Seite teilen, müssen beim Bau
+des Grabens leer sein. Dieselben Felder gelten nach Bau des Grabens als unfruchtbar und dürfen
+von keinen Blumen, unabhängig von der Farbe, bepflanzt werden. Auf den Bau von Gräben haben
+unfruchtbare *Felder* keinen Einfluss.
 
 # Spielende
-- Kann der weiße Spieler keine 2 Ländereien mehr bauen und verzichtet auf das Bauen einer
-weiteren Brücke, kann er passen und der rote spieler darf einen letzten Zug machen.
-- Kann der rote Spieler keine 2 Ländereien mehr bauen und verzichtet auf das Bauen einer
-  weiteren Brücke, kann er passen das Spiel endet sofort.
+- Kann ein Spieler keine 2 Blumen mehr anpflanzen und verzichtet auf das Bauen eines Grabens, kann er das Spiel beenden.
 - Nach Zugende werden für beide Spieler die Punkte nach diesen Regeln ermittelt:
-    - Eine einzelne Insel, die nicht über eine Brücke mit anderen Inseln verbunden ist,
+    - Ein einzelner Garten, der nicht über einen Graben mit anderen Gärten verbunden ist,
     zählt `p(1) = 1` Punkt.
-    - Miteinander verbundene Inseln (auch über Territorien hinweg) geben `p(n)` Punkte, wobei `n`
-    die Anzahl der verbundenen Inseln beschreibt: `p(n) = p(n-1) + n`
+    - Miteinander verbundene Gärten (auch über einfache Blumenbeete hinweg) geben `p(n)` Punkte, wobei `n`
+    die Anzahl der verbundenen Gärten beschreibt: `p(n) = p(n-1) + n`
     
-- Bei Punktegleichstand gewinnt der Spieler mit den meisten Inseln. Falls wiederum gleichstand herrscht,
-gewinnt der Spieler mit den meisten Brücken. Sollte wieder Gleichstand herrschen, endet das
+- Bei Punktegleichstand gewinnt der Spieler mit den meisten Gärten. Falls wiederum Gleichstand herrscht,
+gewinnt der Spieler mit den meisten Gräben. Sollte wieder Gleichstand herrschen, endet das
 Spiel unentschieden.
 
 # ASCII board design
