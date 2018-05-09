@@ -6,12 +6,12 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 
-public class BoardLandMoveBridgeTest {
+public class BoardFlowerMoveDitchTest {
     private static final int BOARD_SIZE = 3;
 
-    private static final Land firstBlockedLand = new Land(new Position(2, 1), new Position(1,
+    private static final Flower FIRST_BLOCKED_FLOWER = new Flower(new Position(2, 1), new Position(1,
             2), new Position(2, 2));
-    private static final Land secondBlockedLand = new Land(new Position(2, 1), new Position(3,
+    private static final Flower SECOND_BLOCKED_FLOWER = new Flower(new Position(2, 1), new Position(3,
             1), new Position(2, 2));
 
     private Board board;
@@ -22,13 +22,13 @@ public class BoardLandMoveBridgeTest {
         board = new BoardImpl(BOARD_SIZE);
         viewer = board.viewer();
 
-        board.make(new Move(new Land(new Position(1, 1), new Position(2, 1), new
-                Position(1, 2)), new Land(new Position(2, 2), new Position(3,
+        board.make(new Move(new Flower(new Position(1, 1), new Position(2, 1), new
+                Position(1, 2)), new Flower(new Position(2, 2), new Position(3,
                 2), new Position(2, 3))));
-        board.make(new Move(new Land(new Position(1, 3), new Position(2, 3), new
-                Position(1, 4)), new Land(new Position(2, 2), new Position(1,
+        board.make(new Move(new Flower(new Position(1, 3), new Position(2, 3), new
+                Position(1, 4)), new Flower(new Position(2, 2), new Position(1,
                 3), new Position(2, 3))));
-        board.make(new Move(new Bridge(new Position(2, 1), new Position(2, 2)
+        board.make(new Move(new Ditch(new Position(2, 1), new Position(2, 2)
         )));
     }
 
@@ -36,8 +36,8 @@ public class BoardLandMoveBridgeTest {
 
     @Test
     public void validLandMoveForRedPlayer() {
-        board.make(new Move(new Land(new Position(1, 2), new Position(2, 2),
-                new Position(1, 3)), new Land(new Position(3, 1), new
+        board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
+                new Position(1, 3)), new Flower(new Position(3, 1), new
                 Position(2, 2), new Position(3, 2))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -45,47 +45,47 @@ public class BoardLandMoveBridgeTest {
 
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldByRedPlayerOnFirstBlockedFieldByFirstLand() {
-        Land validLand = new Land(new Position(1, 2), new Position(2, 2),
+        Flower validFlower = new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3));
 
-        board.make(new Move(firstBlockedLand, validLand));
+        board.make(new Move(FIRST_BLOCKED_FLOWER, validFlower));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
 
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldByRedPlayerOnSecondBlockedFieldByFirstLand() {
-        Land validLand = new Land(new Position(1, 2), new Position(2, 2),
+        Flower validFlower = new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3));
 
-        board.make(new Move(secondBlockedLand, validLand));
+        board.make(new Move(SECOND_BLOCKED_FLOWER, validFlower));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
 
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldByRedPlayerOnFirstBlockedFieldBySecondLand() {
-        Land validLand = new Land(new Position(1, 2), new Position(2, 2),
+        Flower validFlower = new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3));
 
-        board.make(new Move(validLand, firstBlockedLand));
+        board.make(new Move(validFlower, FIRST_BLOCKED_FLOWER));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
 
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldByRedPlayerOnSecondBlockedFieldBySecondLand() {
-        Land validLand = new Land(new Position(1, 2), new Position(2, 2),
+        Flower validFlower = new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3));
 
-        board.make(new Move(validLand, secondBlockedLand));
+        board.make(new Move(validFlower, SECOND_BLOCKED_FLOWER));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
 
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldsByRedPlayerOnBothBlockedFields() {
-        board.make(new Move(firstBlockedLand, secondBlockedLand));
+        board.make(new Move(FIRST_BLOCKED_FLOWER, SECOND_BLOCKED_FLOWER));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
@@ -93,14 +93,14 @@ public class BoardLandMoveBridgeTest {
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldByWhitePlayerOnFirstBlockedFieldByFirstLand() {
         // Do red move before
-        board.make(new Move(new Land(new Position(1, 2), new Position(2, 2),
-                new Position(1, 3)), new Land(new Position(3, 1), new
+        board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
+                new Position(1, 3)), new Flower(new Position(3, 1), new
                 Position(2, 2), new Position(3, 2))));
 
-        Land validLand = new Land(new Position(3, 1), new Position(4, 1), new
+        Flower validFlower = new Flower(new Position(3, 1), new Position(4, 1), new
                 Position(3, 2));
 
-        board.make(new Move(firstBlockedLand, validLand));
+        board.make(new Move(FIRST_BLOCKED_FLOWER, validFlower));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
@@ -108,14 +108,14 @@ public class BoardLandMoveBridgeTest {
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldByWhitePlayerOnSecondBlockedFieldByFirstLand() {
         // Do red move before
-        board.make(new Move(new Land(new Position(1, 2), new Position(2, 2),
-                new Position(1, 3)), new Land(new Position(3, 1), new
+        board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
+                new Position(1, 3)), new Flower(new Position(3, 1), new
                 Position(2, 2), new Position(3, 2))));
 
-        Land validLand = new Land(new Position(3, 1), new Position(4, 1), new
+        Flower validFlower = new Flower(new Position(3, 1), new Position(4, 1), new
                 Position(3, 2));
 
-        board.make(new Move(secondBlockedLand, validLand));
+        board.make(new Move(SECOND_BLOCKED_FLOWER, validFlower));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
@@ -123,14 +123,14 @@ public class BoardLandMoveBridgeTest {
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldByWhitePlayerOnFirstBlockedFieldBySecondLand() {
         // Do red move before
-        board.make(new Move(new Land(new Position(1, 2), new Position(2, 2),
-                new Position(1, 3)), new Land(new Position(3, 1), new
+        board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
+                new Position(1, 3)), new Flower(new Position(3, 1), new
                 Position(2, 2), new Position(3, 2))));
 
-        Land validLand = new Land(new Position(3, 1), new Position(4, 1), new
+        Flower validFlower = new Flower(new Position(3, 1), new Position(4, 1), new
                 Position(3, 2));
 
-        board.make(new Move(validLand, firstBlockedLand));
+        board.make(new Move(validFlower, FIRST_BLOCKED_FLOWER));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
@@ -138,14 +138,14 @@ public class BoardLandMoveBridgeTest {
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldByWhitePlayerOnSecondBlockedFieldBySecondLand() {
         // Do red move before
-        board.make(new Move(new Land(new Position(1, 2), new Position(2, 2),
-                new Position(1, 3)), new Land(new Position(3, 1), new
+        board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
+                new Position(1, 3)), new Flower(new Position(3, 1), new
                 Position(2, 2), new Position(3, 2))));
 
-        Land validLand = new Land(new Position(3, 1), new Position(4, 1), new
+        Flower validFlower = new Flower(new Position(3, 1), new Position(4, 1), new
                 Position(3, 2));
 
-        board.make(new Move(validLand, secondBlockedLand));
+        board.make(new Move(validFlower, SECOND_BLOCKED_FLOWER));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
@@ -153,11 +153,11 @@ public class BoardLandMoveBridgeTest {
     @Test
     public void invalidLandMoveOnBridgeBlockedFieldsByWhitePlayerOnBothBlockedFields() {
         // Do red move before
-        board.make(new Move(new Land(new Position(1, 2), new Position(2, 2),
-                new Position(1, 3)), new Land(new Position(3, 1), new
+        board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
+                new Position(1, 3)), new Flower(new Position(3, 1), new
                 Position(2, 2), new Position(3, 2))));
 
-        board.make(new Move(firstBlockedLand, secondBlockedLand));
+        board.make(new Move(FIRST_BLOCKED_FLOWER, SECOND_BLOCKED_FLOWER));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }

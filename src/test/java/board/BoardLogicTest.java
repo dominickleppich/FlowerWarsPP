@@ -32,7 +32,7 @@ public class BoardLogicTest {
 
     @Test
     public void newBoardStartsWithCorrectPlayer() {
-        assertEquals(PlayerColor.White, viewer.getTurn());
+        assertEquals(PlayerColor.Red, viewer.getTurn());
     }
 
     @Test
@@ -42,47 +42,47 @@ public class BoardLogicTest {
 
     @Test
     public void newBoardHasNoLandsForWhitePlayer() {
-        assertTrue(viewer.getLands(PlayerColor.White).isEmpty());
+        assertTrue(viewer.getFlowers(PlayerColor.Red).isEmpty());
     }
 
     @Test
     public void newBoardHasNoLandsForRedPlayer() {
-        assertTrue(viewer.getLands(PlayerColor.Red).isEmpty());
+        assertTrue(viewer.getFlowers(PlayerColor.Green).isEmpty());
     }
 
     @Test
     public void newBoardHasNoBridgesForWhitePlayer() {
-        assertTrue(viewer.getBridges(PlayerColor.White).isEmpty());
+        assertTrue(viewer.getDitches(PlayerColor.Red).isEmpty());
     }
 
     @Test
     public void newBoardHasNoBridgesForRedPlayer() {
-        assertTrue(viewer.getBridges(PlayerColor.Red).isEmpty());
+        assertTrue(viewer.getDitches(PlayerColor.Green).isEmpty());
     }
 
     // ------------------------------------------------------------
 
     @Test
     public void changeTurnAfterValidLandMove() {
-        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+        Flower flowerA = new Flower(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+        Flower flowerB = new Flower(new Position(3, 1), new Position(2, 2), new
                 Position
                 (3, 2));
-        Move m = new Move(landA, landB);
+        Move m = new Move(flowerA, flowerB);
 
         board.make(m);
-        assertEquals(PlayerColor.Red, viewer.getTurn());
+        assertEquals(PlayerColor.Green, viewer.getTurn());
     }
 
     @Test
     public void firstMoveIsHasStatusOk() {
-        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+        Flower flowerA = new Flower(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+        Flower flowerB = new Flower(new Position(3, 1), new Position(2, 2), new
                 Position
                 (3, 2));
-        Move m = new Move(landA, landB);
+        Move m = new Move(flowerA, flowerB);
 
         board.make(m);
 
@@ -91,19 +91,19 @@ public class BoardLogicTest {
 
     @Test
     public void firstMoveIsDoneByWhitePlayer() {
-        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+        Flower flowerA = new Flower(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+        Flower flowerB = new Flower(new Position(3, 1), new Position(2, 2), new
                 Position
                 (3, 2));
-        Move m = new Move(landA, landB);
+        Move m = new Move(flowerA, flowerB);
 
         board.make(m);
 
-        boolean firstContained = viewer.getLands(PlayerColor.White).contains
-                (landA);
-        boolean secondContained = viewer.getLands(PlayerColor.White).contains
-                (landB);
+        boolean firstContained = viewer.getFlowers(PlayerColor.Red).contains
+                (flowerA);
+        boolean secondContained = viewer.getFlowers(PlayerColor.Red).contains
+                (flowerB);
 
         assertEquals("First land is contained", true, firstContained);
         assertEquals("Second land is contained", true, secondContained);
@@ -111,57 +111,57 @@ public class BoardLogicTest {
 
     @Test
     public void firstMoveDoesNotSetAnyWhiteBridges() {
-        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+        Flower flowerA = new Flower(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+        Flower flowerB = new Flower(new Position(3, 1), new Position(2, 2), new
                 Position
                 (3, 2));
-        Move m = new Move(landA, landB);
+        Move m = new Move(flowerA, flowerB);
 
         board.make(m);
 
-        assertTrue(viewer.getBridges(PlayerColor.White).isEmpty());
+        assertTrue(viewer.getDitches(PlayerColor.Red).isEmpty());
     }
 
     @Test
     public void firstMoveDoesNotSetAnyRedBridges() {
-        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+        Flower flowerA = new Flower(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+        Flower flowerB = new Flower(new Position(3, 1), new Position(2, 2), new
                 Position
                 (3, 2));
-        Move m = new Move(landA, landB);
+        Move m = new Move(flowerA, flowerB);
 
         board.make(m);
 
-        assertTrue(viewer.getBridges(PlayerColor.Red).isEmpty());
+        assertTrue(viewer.getDitches(PlayerColor.Green).isEmpty());
     }
 
     @Test
     public void firstMoveDoesNotAddRedLands() {
-        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+        Flower flowerA = new Flower(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+        Flower flowerB = new Flower(new Position(3, 1), new Position(2, 2), new
                 Position
                 (3, 2));
-        Move m = new Move(landA, landB);
+        Move m = new Move(flowerA, flowerB);
 
         board.make(m);
 
-        assertTrue(viewer.getLands(PlayerColor.Red).isEmpty());
+        assertTrue(viewer.getFlowers(PlayerColor.Green).isEmpty());
     }
 
     @Test
     public void firstMoveDoesOnlyAddTwoWhiteLands() {
-        Land landA = new Land(new Position(2, 2), new Position(3, 2),
+        Flower flowerA = new Flower(new Position(2, 2), new Position(3, 2),
                 new Position(2, 3));
-        Land landB = new Land(new Position(3, 1), new Position(2, 2), new
+        Flower flowerB = new Flower(new Position(3, 1), new Position(2, 2), new
                 Position
                 (3, 2));
-        Move m = new Move(landA, landB);
+        Move m = new Move(flowerA, flowerB);
 
         board.make(m);
 
-        assertEquals(2, viewer.getLands(PlayerColor.White).size());
+        assertEquals(2, viewer.getFlowers(PlayerColor.Red).size());
     }
 }

@@ -11,9 +11,9 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class BoardLandMoveFormatTest {
+public class BoardFlowerMoveFormatTest {
     private static final int BOARD_SIZE = 10;
-    private static final Land VALID_LAND = new Land(new Position(2, 2), new
+    private static final Flower VALID_FLOWER = new Flower(new Position(2, 2), new
             Position(3, 2), new Position(2, 3));
     private Board board;
     private Viewer viewer;
@@ -26,24 +26,24 @@ public class BoardLandMoveFormatTest {
 
     // ------------------------------------------------------------
 
-    private Land land;
+    private Flower flower;
     private Status expectedStatus;
 
-    public BoardLandMoveFormatTest(Land land, Status expected) {
-        this.land = land;
+    public BoardFlowerMoveFormatTest(Flower flower, Status expected) {
+        this.flower = flower;
         this.expectedStatus = expected;
     }
 
     @Test
     public void testLandMovesFirstLand() {
-        board.make(new Move(land, VALID_LAND));
-        assertEquals("First land " + land.toString(), expectedStatus, viewer.getStatus());
+        board.make(new Move(flower, VALID_FLOWER));
+        assertEquals("First flower " + flower.toString(), expectedStatus, viewer.getStatus());
     }
 
     @Test
     public void testLandMovesSecondLand() {
-        board.make(new Move(VALID_LAND, land));
-        assertEquals("Second land " + land.toString(), expectedStatus, viewer.getStatus());
+        board.make(new Move(VALID_FLOWER, flower));
+        assertEquals("Second flower " + flower.toString(), expectedStatus, viewer.getStatus());
     }
 
     // ------------------------------------------------------------
@@ -52,64 +52,64 @@ public class BoardLandMoveFormatTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
                 // Up valid
-                {new Land(new Position(5, 5), new Position(6, 5), new
+                {new Flower(new Position(5, 5), new Position(6, 5), new
                         Position(5, 6)), Status.Ok},
-                {new Land(new Position(5, 5), new Position(5, 6), new
+                {new Flower(new Position(5, 5), new Position(5, 6), new
                         Position(6, 5)), Status.Ok},
-                {new Land(new Position(5, 5), new Position(6, 4), new
+                {new Flower(new Position(5, 5), new Position(6, 4), new
                         Position(5, 4)), Status.Ok},
                 // Down valid
-                {new Land(new Position(5, 5), new Position(6, 5), new
+                {new Flower(new Position(5, 5), new Position(6, 5), new
                         Position(6, 4)), Status.Ok},
-                {new Land(new Position(5, 5), new Position(5, 6), new
+                {new Flower(new Position(5, 5), new Position(5, 6), new
                         Position(4, 6)), Status.Ok},
-                {new Land(new Position(5, 5), new Position(6, 4), new
+                {new Flower(new Position(5, 5), new Position(6, 4), new
                         Position(6, 5)), Status.Ok},
                 // Invalid (one distance too wide)
-                {new Land(new Position(5, 5), new Position(6, 5), new
+                {new Flower(new Position(5, 5), new Position(6, 5), new
                         Position(6, 6)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 5), new
+                {new Flower(new Position(5, 5), new Position(6, 5), new
                         Position(7, 4)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 5), new
+                {new Flower(new Position(5, 5), new Position(6, 5), new
                         Position(4, 6)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 5), new
+                {new Flower(new Position(5, 5), new Position(6, 5), new
                         Position(5, 4)), Status.Illegal},
 
-                {new Land(new Position(5, 5), new Position(5, 6), new
+                {new Flower(new Position(5, 5), new Position(5, 6), new
                         Position(6, 6)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(5, 6), new
+                {new Flower(new Position(5, 5), new Position(5, 6), new
                         Position(4, 7)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(5, 6), new
+                {new Flower(new Position(5, 5), new Position(5, 6), new
                         Position(6, 4)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(5, 6), new
+                {new Flower(new Position(5, 5), new Position(5, 6), new
                         Position(4, 5)), Status.Illegal},
 
-                {new Land(new Position(5, 5), new Position(6, 4), new
+                {new Flower(new Position(5, 5), new Position(6, 4), new
                         Position(7, 4)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 4), new
+                {new Flower(new Position(5, 5), new Position(6, 4), new
                         Position(6, 4)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 4), new
+                {new Flower(new Position(5, 5), new Position(6, 4), new
                         Position(5, 6)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 4), new
+                {new Flower(new Position(5, 5), new Position(6, 4), new
                         Position(4, 5)), Status.Illegal},
                 // Invalid in a line
-                {new Land(new Position(5, 5), new Position(6, 5), new
+                {new Flower(new Position(5, 5), new Position(6, 5), new
                         Position(7, 5)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 5), new
+                {new Flower(new Position(5, 5), new Position(6, 5), new
                         Position(4, 5)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(5, 6), new
+                {new Flower(new Position(5, 5), new Position(5, 6), new
                         Position(5, 7)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(5, 6), new
+                {new Flower(new Position(5, 5), new Position(5, 6), new
                         Position(5, 4)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 4), new
+                {new Flower(new Position(5, 5), new Position(6, 4), new
                         Position(7, 3)), Status.Illegal},
-                {new Land(new Position(5, 5), new Position(6, 4), new
+                {new Flower(new Position(5, 5), new Position(6, 4), new
                         Position(4, 6)), Status.Illegal},
                 // Invalid arbitrary
-                {new Land(new Position(5, 5), new Position(5, 8), new
+                {new Flower(new Position(5, 5), new Position(5, 8), new
                         Position(7, 2)), Status.Illegal},
-                // Invalid same land
-                {VALID_LAND, Status.Illegal}
+                // Invalid same flower
+                {VALID_FLOWER, Status.Illegal}
         });
     }
 

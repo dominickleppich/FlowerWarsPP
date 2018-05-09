@@ -6,10 +6,10 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 
-public class BoardLandMovePositionTest {
+public class BoardFlowerMovePositionTest {
     private static final int BOARD_SIZE = 3;
 
-    private static final Land VALID_LAND = new Land(new Position(2, 2), new
+    private static final Flower VALID_FLOWER = new Flower(new Position(2, 2), new
             Position(1, 3), new Position(2, 3));
 
     private Board board;
@@ -22,28 +22,28 @@ public class BoardLandMovePositionTest {
     }
 
     // ------------------------------------------------------------
-    // ** Land inside or outside of the board **
+    // ** Flower inside or outside of the board **
 
     /**
-     * Create a land move with given land and another valid land, use the given
-     * land as first move parameter, if the {@code first} flag is set.
+     * Create a flower move with given flower and another valid flower, use the given
+     * flower as first move parameter, if the {@code first} flag is set.
      *
-     * @param first - enable this flag, if the given {@code land} should be
-     *              used as first move parameter land
-     * @param land  - the land to test in the move
+     * @param first - enable this flag, if the given {@code flower} should be
+     *              used as first move parameter flower
+     * @param flower  - the flower to test in the move
      */
-    private Move createMove(boolean first, Land land) {
+    private Move createMove(boolean first, Flower flower) {
         Move m;
         if (first)
-            m = new Move(land, VALID_LAND);
+            m = new Move(flower, VALID_FLOWER);
         else
-            m = new Move(VALID_LAND, land);
+            m = new Move(VALID_FLOWER, flower);
         return m;
     }
 
     @Test
     public void makeValidBottomLeftLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(1, 1), new Position
+        board.make(createMove(true, new Flower(new Position(1, 1), new Position
                 (2, 1), new Position(1, 2))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -51,7 +51,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeValidBottomRightLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(3, 1), new Position
+        board.make(createMove(true, new Flower(new Position(3, 1), new Position
                 (4, 1), new Position(3, 2))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -59,7 +59,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeValidTopLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(1, 3), new Position
+        board.make(createMove(true, new Flower(new Position(1, 3), new Position
                 (2, 3), new Position(1, 4))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -67,7 +67,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeValidBorderLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(2, 2), new Position
+        board.make(createMove(true, new Flower(new Position(2, 2), new Position
                 (3, 2), new Position(2, 3))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -75,7 +75,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeValidBottomLeftLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(1, 1), new Position
+        board.make(createMove(false, new Flower(new Position(1, 1), new Position
                 (2, 1), new Position(1, 2))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -83,7 +83,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeValidBottomRightLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(3, 1), new Position
+        board.make(createMove(false, new Flower(new Position(3, 1), new Position
                 (4, 1), new Position(3, 2))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -91,7 +91,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeValidTopLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(1, 3), new Position
+        board.make(createMove(false, new Flower(new Position(1, 3), new Position
                 (2, 3), new Position(1, 4))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -99,7 +99,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeValidBorderLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(2, 2), new Position
+        board.make(createMove(false, new Flower(new Position(2, 2), new Position
                 (3, 2), new Position(2, 3))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -107,7 +107,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidTopOutsideLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(1, 4), new Position
+        board.make(createMove(true, new Flower(new Position(1, 4), new Position
                 (2, 4), new Position(1, 5))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -115,7 +115,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidBottomRightOutsideLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(4, 1), new Position
+        board.make(createMove(true, new Flower(new Position(4, 1), new Position
                 (5, 1), new Position(4, 2))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -123,7 +123,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidTopBorderOutsideLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(2, 3), new Position
+        board.make(createMove(true, new Flower(new Position(2, 3), new Position
                 (1, 4), new Position(2, 4))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -131,7 +131,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidMiddleBorderOutsideLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(3, 2), new Position
+        board.make(createMove(true, new Flower(new Position(3, 2), new Position
                 (2, 3), new Position(3, 3))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -139,7 +139,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidBottomBorderOutsideLandMoveInFirstLand() {
-        board.make(createMove(true, new Land(new Position(4, 1), new Position
+        board.make(createMove(true, new Flower(new Position(4, 1), new Position
                 (3, 2), new Position(4, 2))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -147,7 +147,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidTopOutsideLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(1, 4), new Position
+        board.make(createMove(false, new Flower(new Position(1, 4), new Position
                 (2, 4), new Position(1, 5))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -155,7 +155,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidBottomRightOutsideLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(4, 1), new Position
+        board.make(createMove(false, new Flower(new Position(4, 1), new Position
                 (5, 1), new Position(4, 2))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -163,7 +163,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidTopBorderOutsideLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(2, 3), new Position
+        board.make(createMove(false, new Flower(new Position(2, 3), new Position
                 (1, 4), new Position(2, 4))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -171,7 +171,7 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidMiddleBorderOutsideLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(3, 2), new Position
+        board.make(createMove(false, new Flower(new Position(3, 2), new Position
                 (2, 3), new Position(3, 3))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -179,22 +179,22 @@ public class BoardLandMovePositionTest {
 
     @Test
     public void makeInvalidBottomBorderOutsideLandMoveInSecondLand() {
-        board.make(createMove(false, new Land(new Position(4, 1), new Position
+        board.make(createMove(false, new Flower(new Position(4, 1), new Position
                 (3, 2), new Position(4, 2))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
 
     // ------------------------------------------------------------
-    // ** Land moves only on empty fields allowed **
+    // ** Flower moves only on empty fields allowed **
 
     private void prepareBoard() {
         // Add four white and red lands to the bottom left corner of the map
-        board.make(new Move(new Land(new Position(1, 1), new Position(2, 1),
-                new Position(1, 2)), new Land(new Position(1, 2), new
+        board.make(new Move(new Flower(new Position(1, 1), new Position(2, 1),
+                new Position(1, 2)), new Flower(new Position(1, 2), new
                 Position(1, 3), new Position(2, 2))));
-        board.make(new Move(new Land(new Position(2, 1), new Position(1, 2),
-                new Position(2, 2)), new Land(new Position(2, 1), new
+        board.make(new Move(new Flower(new Position(2, 1), new Position(1, 2),
+                new Position(2, 2)), new Flower(new Position(2, 1), new
                 Position(3, 1), new Position(2, 2))));
 
     }
@@ -203,7 +203,7 @@ public class BoardLandMovePositionTest {
     public void makeValidLandMoveOnEmptyFieldInFirstLand() {
         prepareBoard();
 
-        board.make(createMove(true, new Land(new Position(3, 1), new Position
+        board.make(createMove(true, new Flower(new Position(3, 1), new Position
                 (2, 2), new Position(3, 2))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -213,7 +213,7 @@ public class BoardLandMovePositionTest {
     public void makeInvalidLandMoveOnWhiteLandInFirstLand() {
         prepareBoard();
 
-        board.make(createMove(true, new Land(new Position(1, 2), new
+        board.make(createMove(true, new Flower(new Position(1, 2), new
                 Position(1, 3), new Position(2, 2))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -223,7 +223,7 @@ public class BoardLandMovePositionTest {
     public void makeInvalidLandMoveOnRedLandInFirstLand() {
         prepareBoard();
 
-        board.make(createMove(true, new Land(new Position(2, 1), new
+        board.make(createMove(true, new Flower(new Position(2, 1), new
                 Position(3, 1), new Position(2, 2))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -233,7 +233,7 @@ public class BoardLandMovePositionTest {
     public void makeValidLandMoveOnEmptyFieldInSecondLand() {
         prepareBoard();
 
-        board.make(createMove(false, new Land(new Position(3, 1), new Position
+        board.make(createMove(false, new Flower(new Position(3, 1), new Position
                 (2, 2), new Position(3, 2))));
 
         assertEquals(Status.Ok, viewer.getStatus());
@@ -243,7 +243,7 @@ public class BoardLandMovePositionTest {
     public void makeInvalidLandMoveOnWhiteLandInSecondLand() {
         prepareBoard();
 
-        board.make(createMove(false, new Land(new Position(1, 2), new
+        board.make(createMove(false, new Flower(new Position(1, 2), new
                 Position(1, 3), new Position(2, 2))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
@@ -253,7 +253,7 @@ public class BoardLandMovePositionTest {
     public void makeInvalidLandMoveOnRedLandInSecondLand() {
         prepareBoard();
 
-        board.make(createMove(false, new Land(new Position(2, 1), new
+        board.make(createMove(false, new Flower(new Position(2, 1), new
                 Position(3, 1), new Position(2, 2))));
 
         assertEquals(Status.Illegal, viewer.getStatus());
