@@ -1,7 +1,7 @@
 package board;
 
-import diavolopp.board.*;
-import diavolopp.preset.*;
+import flowerwarspp.board.*;
+import flowerwarspp.preset.*;
 import org.junit.*;
 import org.junit.runner.*;
 import org.junit.runners.*;

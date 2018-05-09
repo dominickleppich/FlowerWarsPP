@@ -1,7 +1,8 @@
-package diavolopp.board;
+package flowerwarspp.board;
 
-import diavolopp.preset.*;
-import javafx.geometry.*;
+import flowerwarspp.preset.*;
+import org.slf4j.*;
+
 
 import java.util.*;
 import java.util.stream.*;
@@ -9,6 +10,8 @@ import java.util.stream.*;
 import static java.util.stream.Collectors.*;
 
 public class BoardImpl implements Board {
+    private static final Logger logger = LoggerFactory.getLogger(BoardImpl.class);
+
     private final int size;
     private PlayerColor turn;
     private Status status;
