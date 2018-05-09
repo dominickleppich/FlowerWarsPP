@@ -141,3 +141,9 @@ Spiel unentschieden.
    /  ****  \  /        +  /  ++++  \
   /__________\/__________+/__________\
 ```
+
+# Kompilieren und Starten
+Das Projekt basiert auf dem Build-System **Maven**. Folgendermaßen kann ein ausführbares jar-Archiv erzeugt werden:
+```
+mvn assembly:single
+```
