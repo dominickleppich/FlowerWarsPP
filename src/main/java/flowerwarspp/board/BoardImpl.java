@@ -41,7 +41,8 @@ public class BoardImpl implements Board {
     public void make(Move move) throws IllegalStateException {
         // TODO write test for this
         if (status != Status.Ok)
-            throw new IllegalStateException("cannot perform moves on this board anymore");
+            throw new IllegalStateException("cannot perform moves on this " +
+                    "board anymore");
 
         if (!isValidMoveFormat(move) || !isValidMove(move)) {
             status = Status.Illegal;
@@ -348,6 +349,36 @@ public class BoardImpl implements Board {
         return flowers;
     }
 
+    public Set<Ditch> getAllPossibleDitches() {
+        return getAllPossibleDitches(size);
+    }
+
+    public static Set<Ditch> getAllPossibleDitches(int boardSize) {
+        Set<Ditch> ditches = new HashSet<>();
+
+        for (int c = 1; c <= boardSize + 1; c++) {
+            for (int r = 1; r <= boardSize; r++) {
+                // For each point create 3 ditches, if available
+                if (c + r <= boardSize + 1) {
+                    Ditch d1 = new Ditch(new Position(c, r), new Position(c,
+                            r + 1));
+                    Ditch d2 = new Ditch(new Position(c, r), new Position(c +
+                            1, r));
+                    ditches.add(d1);
+                    ditches.add(d2);
+                }
+                if (c > 1 && c + r <= boardSize + 2) {
+                    Ditch d = new Ditch(new Position(c, r), new Position(c -
+                            1, r
+                            + 1));
+                    ditches.add(d);
+                }
+            }
+        }
+
+        return ditches;
+    }
+
     private Set<Move> getPossibleMoves() {
         // TODO make it correct!
         Set<Move> moves = new HashSet<>();
@@ -363,6 +394,14 @@ public class BoardImpl implements Board {
                     moves.add(new Move(f1, f2));
 
         moves.add(new Move(MoveType.Surrender));
+
+        // Ditch moves
+        moves.addAll(getAllPossibleDitches()
+                .stream()
+                .map(Move::new)
+                .filter(this::isValidMoveFormat)
+                .filter(this::isValidMove)
+                .collect(toSet()));
 
         return moves;
     }
