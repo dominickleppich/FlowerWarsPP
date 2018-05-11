@@ -47,18 +47,28 @@ public class UIPanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                logger.debug("Clicked: " + mouseEvent.getX() + ", " + mouseEvent.getY() + " [" + pointToFlower(mouseEvent.getPoint()) + "]");
+                logger.debug("Clicked: " + mouseEvent.getX() + ", " +
+                        mouseEvent.getY() + " [" + pointToFlower(mouseEvent
+                        .getPoint()) + "]");
             }
         });
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent mouseEvent) {
+                // Clear old positions
+                if (hoverFlower != null) {
+                    Rectangle bounds = flowerToPolygon(hoverFlower).getBounds();
+                    hoverFlower = null;
+                    repaint(bounds);
+                }
+
                 hoverDitch = pointToDitch(mouseEvent.getPoint());
                 if (hoverDitch == null)
                     hoverFlower = pointToFlower(mouseEvent.getPoint());
                 else
                     hoverFlower = null;
-                repaint();
+                repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent
+                        .getY() - UNIT), (int) UNIT * 2, (int) UNIT * 2);
             }
         });
     }
@@ -111,7 +121,8 @@ public class UIPanel extends JPanel {
                     polygonFlowerMap.put(flowerToPolygon(f), f);
                 }
                 if (c + r <= boardSize) {
-                    Flower f = new Flower(new Position(c + 1, r + 1), new Position(c,
+                    Flower f = new Flower(new Position(c + 1, r + 1), new
+                            Position(c,
                             r + 1), new Position(c + 1, r));
                     polygonFlowerMap.put(flowerToPolygon(f), f);
                 }
@@ -133,8 +144,8 @@ public class UIPanel extends JPanel {
         p1 = positionPoints.get(f.getFirst());
         p2 = positionPoints.get(f.getSecond());
         p3 = positionPoints.get(f.getThird());
-        int[] x = new int[] {(int) p1.getX(), (int) p2.getX(), (int) p3.getX()};
-        int[] y = new int[] {(int) p1.getY(), (int) p2.getY(), (int) p3.getY()};
+        int[] x = new int[]{(int) p1.getX(), (int) p2.getX(), (int) p3.getX()};
+        int[] y = new int[]{(int) p1.getY(), (int) p2.getY(), (int) p3.getY()};
         return new Polygon(x, y, 3);
     }
 
