@@ -2,12 +2,15 @@ package flowerwarspp.ui.graphical;
 
 import flowerwarspp.preset.*;
 import flowerwarspp.ui.*;
+import org.slf4j.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class UIWindow extends JFrame implements UserInterface {
+    private static final Logger logger = LoggerFactory.getLogger(UIWindow.class);
+
     private UIPanel panel;
 
     // ------------------------------------------------------------
@@ -40,7 +43,9 @@ public class UIWindow extends JFrame implements UserInterface {
     }
 
     @Override
-    public void update() {
+    public void update(Move move) {
+        // TODO Something useful with the move done
+        logger.debug("Move done: " + move);
         panel.repaint();
     }
 
