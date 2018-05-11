@@ -3,7 +3,7 @@ package flowerwarspp.preset;
 import java.io.*;
 import java.util.*;
 
-public class Ditch implements Serializable {
+public class Ditch implements Serializable, Comparable<Ditch> {
     private Position[] positions;
 
     // ------------------------------------------------------------
@@ -49,6 +49,15 @@ public class Ditch implements Serializable {
     public int hashCode() {
         return getFirst().hashCode() * Position.MAX_COLUMN * Position.MAX_ROW
                 + getSecond().hashCode();
+    }
+
+    @Override
+    public int compareTo(Ditch ditch) {
+        // Due to the unique ordering it is easy to calculate
+        if (!getFirst().equals(ditch.getFirst()))
+            return getFirst().compareTo(ditch.getFirst());
+        else
+            return getSecond().compareTo(ditch.getSecond());
     }
 
     @Override

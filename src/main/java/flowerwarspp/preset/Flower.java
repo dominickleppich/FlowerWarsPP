@@ -1,8 +1,9 @@
 package flowerwarspp.preset;
 
+import java.io.*;
 import java.util.*;
 
-public class Flower {
+public class Flower implements Serializable, Comparable<Flower> {
     private Position[] positions;
 
     // ------------------------------------------------------------
@@ -61,6 +62,17 @@ public class Flower {
         return (getFirst().hashCode() * Position.MAX_COLUMN * Position
                 .MAX_ROW + getSecond().hashCode()) * Position
                 .MAX_COLUMN * Position.MAX_ROW + getThird().hashCode();
+    }
+
+    @Override
+    public int compareTo(Flower flower) {
+        // Due to the unique ordering it is easy to calculate
+        if (!getFirst().equals(flower.getFirst()))
+            return getFirst().compareTo(flower.getFirst());
+        else if (!getSecond().equals(flower.getSecond()))
+            return getSecond().compareTo(flower.getSecond());
+        else
+            return getThird().compareTo(flower.getThird());
     }
 
     @Override
