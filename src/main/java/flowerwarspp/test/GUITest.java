@@ -66,7 +66,7 @@ public class GUITest {
         Thread.sleep(1000);
         for (Move m : moves) {
             board.make(m);
-            window.update();
+            window.update(m);
             Thread.sleep(1000);
         }
 
