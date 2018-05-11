@@ -50,7 +50,7 @@ public class UIWindow extends JFrame implements UserInterface {
     }
 
     @Override
-    public Move request() {
-        return null;
+    public Move request() throws InterruptedException {
+        return panel.request();
     }
 }

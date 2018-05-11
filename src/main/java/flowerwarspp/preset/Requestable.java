@@ -1,5 +1,5 @@
 package flowerwarspp.preset;
 
 public interface Requestable {
-    Move request();
+    Move request() throws Exception;
 }
