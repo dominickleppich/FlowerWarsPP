@@ -23,7 +23,8 @@ public class UIPanel extends JPanel {
     private static final Color BOARD_BACKGROUND_COLOR = new Color(41, 112, 69);
     private static final Color RED_PLAYER_COLOR = new Color(173, 69, 29);
     private static final Color GREEN_PLAYER_COLOR = new Color(22, 173, 47);
-    private static final Color HOVER_COLOR = new Color(218, 224, 31);
+    private static final Color HOVER_COLOR = new Color(255, 255, 255);
+    private static final float HOVER_ALPHA = 0.5f;
 
     private static final double GRID_DOT_SIZE = 0.3;
     private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
@@ -34,6 +35,7 @@ public class UIPanel extends JPanel {
 
     private Map<Position, Point2D> positionPoints;
     private Map<Polygon, Flower> polygonFlowerMap;
+    private Map<Polygon, Ditch> polygonDitchMap;
     private Flower hoverFlower;
     private Ditch hoverDitch;
 
@@ -59,6 +61,11 @@ public class UIPanel extends JPanel {
                 if (hoverFlower != null) {
                     Rectangle bounds = flowerToPolygon(hoverFlower).getBounds();
                     hoverFlower = null;
+                    repaint(bounds);
+                }
+                if (hoverDitch != null) {
+                    Rectangle bounds = ditchToPolygon(hoverDitch).getBounds();
+                    hoverDitch = null;
                     repaint(bounds);
                 }
 
@@ -129,6 +136,27 @@ public class UIPanel extends JPanel {
             }
         }
 
+        // Create the polygon ditch mapping
+        polygonDitchMap = new HashMap<>();
+        for (int c = 1; c <= boardSize + 1; c++) {
+            for (int r = 1; r <= boardSize; r++) {
+                // For each point create 3 ditches, if available
+                if (c + r <= boardSize + 1) {
+                    Ditch d1 = new Ditch(new Position(c, r), new Position(c,
+                            r + 1));
+                    Ditch d2 = new Ditch(new Position(c, r), new Position(c +
+                            1, r));
+                    polygonDitchMap.put(ditchToPolygon(d1), d1);
+                    polygonDitchMap.put(ditchToPolygon(d2), d2);
+                }
+                if (c > 1 && c + r <= boardSize + 2) {
+                    Ditch d = new Ditch(new Position(c, r), new Position(c -
+                            1, r
+                            + 1));
+                    polygonDitchMap.put(ditchToPolygon(d), d);
+                }
+            }
+        }
     }
 
     public synchronized void setViewer(Viewer viewer) {
@@ -157,9 +185,76 @@ public class UIPanel extends JPanel {
         return null;
     }
 
+    private Polygon ditchToPolygon(Ditch hoverDitch) {
+        // Calculate polygon depending on orientation
+        Position first = hoverDitch.getFirst();
+        Position second = hoverDitch.getSecond();
+
+        int[] x = null, y = null;
+        double angle = 0.0;
+
+        // 0 degree
+        if (first.getRow() == second.getRow()) {
+            angle = 0.0;
+        }
+        // 60 degree
+        else if (first.getColumn() == second.getColumn()) {
+            angle = 120.0;
+        }
+        // 120 degree
+        else {
+            angle = 60.0;
+        }
+
+        Point2D pStart1, pStart2, pEnd1, pEnd2;
+        Point2D firstPoint = positionPoints.get(first);
+        Point2D secondPoint = positionPoints.get(second);
+
+        pStart1 = rotateAroundCenter(new Point2D.Double(firstPoint.getX(),
+                firstPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                firstPoint, angle);
+        pStart2 = rotateAroundCenter(new Point2D.Double(firstPoint.getX(),
+                firstPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                firstPoint, angle);
+        pEnd1 = rotateAroundCenter(new Point2D.Double(secondPoint.getX(),
+                secondPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                secondPoint, angle);
+        pEnd2 = rotateAroundCenter(new Point2D.Double(secondPoint.getX(),
+                secondPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                secondPoint, angle);
+
+        x = new int[]{(int) pStart1.getX(), (int) pStart2.getX(), (int)
+                pEnd1.getX(), (int) pEnd2.getX()};
+        y = new int[]{(int) pStart1.getY(), (int) pStart2.getY(), (int)
+                pEnd1.getY(), (int) pEnd2.getY()};
+
+        return new Polygon(x, y, 4);
+    }
+
     private Ditch pointToDitch(Point point) {
-        // TODO
+        for (Map.Entry<Polygon, Ditch> e : polygonDitchMap.entrySet()) {
+            if (e.getKey().contains(point))
+                return e.getValue();
+        }
         return null;
+    }
+
+    private Point2D rotateAroundCenter(Point2D p, Point2D center, double
+            degree) {
+        double x = p.getX();
+        double y = p.getY();
+        double cx = center.getX();
+        double cy = center.getY();
+
+        x -= cx;
+        y -= cy;
+
+        double newx = x * Math.cos(Math.toRadians(degree)) - y * Math.sin
+                (Math.toRadians(degree));
+        double newy = x * Math.sin(Math.toRadians(degree)) + y * Math.cos
+                (Math.toRadians(degree));
+
+        return new Point2D.Double(newx + cx, newy + cy);
     }
 
     // ------------------------------------------------------------
@@ -216,12 +311,17 @@ public class UIPanel extends JPanel {
             }
         }
 
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                HOVER_ALPHA));
+
         // Draw hover flower
         if (hoverFlower != null) {
             g.setColor(HOVER_COLOR);
             g.fill(flowerToPolygon(hoverFlower));
         }
 
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                1.0f));
 
         // Draw grid
         g.setStroke(new BasicStroke(UNIT * GRID_NEUTRAL_LINE_STRENGTH));
@@ -241,14 +341,28 @@ public class UIPanel extends JPanel {
                 Ditch d = new Ditch(e.getKey(), neighbor);
 
                 // Determine color
-                if (viewer.getDitches(PlayerColor.Red).contains(d))
+                if (viewer.getDitches(PlayerColor.Red).contains(d)) {
                     g.setColor(RED_PLAYER_COLOR);
-                else if (viewer.getDitches(PlayerColor.Green).contains(d))
+                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get
+                            (neighbor)));
+                } else if (viewer.getDitches(PlayerColor.Green).contains(d)) {
                     g.setColor(GREEN_PLAYER_COLOR);
-                else
-                    continue;
-                g.draw(new Line2D.Double(e.getValue(), positionPoints.get
-                        (neighbor)));
+                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get
+                            (neighbor)));
+                }
+
+                // Draw hover ditch
+                if (d.equals(hoverDitch)) {
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite
+                                    .SRC_OVER,
+                            HOVER_ALPHA));
+                    g.setColor(HOVER_COLOR);
+                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get
+                            (neighbor)));
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite
+                                    .SRC_OVER,
+                            1.0f));
+                }
             }
         }
 
@@ -259,6 +373,11 @@ public class UIPanel extends JPanel {
             g.fill(new Ellipse2D.Double(p.getX() - dotSize / 2, p.getY() -
                     dotSize / 2, dotSize, dotSize));
         }
+
+        /*g.setColor(Color.RED);
+        g.setStroke(new BasicStroke(1.0f));
+        for (Polygon p : polygonDitchMap.keySet())
+            g.draw(p);*/
     }
 
     // ------------------------------------------------------------
