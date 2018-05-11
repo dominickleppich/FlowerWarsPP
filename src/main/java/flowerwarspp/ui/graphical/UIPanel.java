@@ -49,9 +49,14 @@ public class UIPanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
+                String p = "";
+                if (hoverDitch != null)
+                    p = hoverDitch.toString();
+                if (hoverFlower != null)
+                    p += hoverFlower.toString();
+
                 logger.debug("Clicked: " + mouseEvent.getX() + ", " +
-                        mouseEvent.getY() + " [" + pointToFlower(mouseEvent
-                        .getPoint()) + "]");
+                        mouseEvent.getY() + " [" + p + "]");
             }
         });
         addMouseMotionListener(new MouseMotionAdapter() {
