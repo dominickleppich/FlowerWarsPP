@@ -8,4 +8,5 @@ public interface Viewer {
     Status getStatus();
     Collection<Flower> getFlowers(PlayerColor color);
     Collection<Ditch> getDitches(PlayerColor color);
+    Collection<Move> getPossibleMoves();
 }
