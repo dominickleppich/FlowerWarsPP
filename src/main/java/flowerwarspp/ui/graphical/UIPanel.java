@@ -16,6 +16,8 @@ public class UIPanel extends JPanel {
     private UIWindow parentWindow;
     private Viewer viewer;
 
+    private Object moveWaitingMonitor = new Object();
+
     // ------------------------------------------------------------
 
     private static final Color BACKGROUND_COLOR_A = new Color(210, 190, 30);
@@ -23,8 +25,9 @@ public class UIPanel extends JPanel {
     private static final Color BOARD_BACKGROUND_COLOR = new Color(41, 112, 69);
     private static final Color RED_PLAYER_COLOR = new Color(173, 69, 29);
     private static final Color GREEN_PLAYER_COLOR = new Color(22, 173, 47);
-    private static final Color HOVER_COLOR = new Color(255, 255, 255);
-    private static final float HOVER_ALPHA = 0.5f;
+    private static final Color RED_HOVER_COLOR = new Color(255, 160, 160);
+    private static final Color GREEN_HOVER_COLOR = new Color(160, 255, 160);
+    private static final float HOVER_ALPHA = 0.8f;
 
     private static final double GRID_DOT_SIZE = 0.3;
     private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
@@ -36,8 +39,15 @@ public class UIPanel extends JPanel {
     private Map<Position, Point2D> positionPoints;
     private Map<Polygon, Flower> polygonFlowerMap;
     private Map<Polygon, Ditch> polygonDitchMap;
+    private Color hoverColor;
     private Flower hoverFlower;
     private Ditch hoverDitch;
+
+    private boolean inputEnabled = false;
+    private Move move;
+    private Flower moveFirstFlower;
+    private Flower moveSecondFlower;
+    private Ditch moveDitch;
 
     // ------------------------------------------------------------
 
@@ -48,42 +58,135 @@ public class UIPanel extends JPanel {
 
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                String p = "";
-                if (hoverDitch != null)
-                    p = hoverDitch.toString();
-                if (hoverFlower != null)
-                    p += hoverFlower.toString();
+            public synchronized void mouseClicked(MouseEvent mouseEvent) {
+                if (!inputEnabled)
+                    return;
 
-                logger.debug("Clicked: " + mouseEvent.getX() + ", " +
-                        mouseEvent.getY() + " [" + p + "]");
+                // Select with left mouse button
+                if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+                    String p = "";
+                    if (hoverDitch != null) {
+                        p = hoverDitch.toString();
+                        moveDitch = hoverDitch;
+                        createMove();
+                    }
+                    if (hoverFlower != null) {
+                        p += hoverFlower.toString();
+                        if (moveFirstFlower == null)
+                            moveFirstFlower = hoverFlower;
+                        else {
+                            moveSecondFlower = hoverFlower;
+                            createMove();
+                        }
+                    }
+
+                    logger.debug("Clicked: " + mouseEvent.getX() + ", " +
+                            mouseEvent.getY() + " [" + p + "]");
+                }
+                // Clear with right mouse button
+                else if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
+                    moveSecondFlower = null;
+                    moveDitch = null;
+
+                    clearHover();
+                    clearFlowerSelection();
+
+                    logger.debug("Input cleared");
+                }
             }
         });
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
-            public void mouseMoved(MouseEvent mouseEvent) {
-                // Clear old positions
-                if (hoverFlower != null) {
-                    Rectangle bounds = flowerToPolygon(hoverFlower).getBounds();
-                    hoverFlower = null;
-                    repaint(bounds);
-                }
-                if (hoverDitch != null) {
-                    Rectangle bounds = ditchToPolygon(hoverDitch).getBounds();
-                    hoverDitch = null;
-                    repaint(bounds);
-                }
+            public synchronized void mouseMoved(MouseEvent mouseEvent) {
+                if (!inputEnabled)
+                    return;
+
+                clearHover();
 
                 hoverDitch = pointToDitch(mouseEvent.getPoint());
                 if (hoverDitch == null)
                     hoverFlower = pointToFlower(mouseEvent.getPoint());
                 else
                     hoverFlower = null;
+
                 repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent
                         .getY() - UNIT), (int) UNIT * 2, (int) UNIT * 2);
             }
         });
     }
+
+    // ------------------------------------------------------------
+
+    private void clearHover() {
+        // Clear old positions
+        if (hoverFlower != null) {
+            Rectangle bounds = flowerToPolygon(hoverFlower).getBounds();
+            hoverFlower = null;
+            repaint(bounds);
+        }
+        if (hoverDitch != null) {
+            Rectangle bounds = ditchToPolygon(hoverDitch).getBounds();
+            hoverDitch = null;
+            repaint(bounds);
+        }
+    }
+
+    private void clearFlowerSelection() {
+        if (moveFirstFlower != null) {
+            Rectangle bounds = flowerToPolygon(moveFirstFlower).getBounds();
+            moveFirstFlower = null;
+            repaint(bounds);
+        }
+    }
+
+    private synchronized void createMove() {
+        clearHover();
+        if (moveFirstFlower != null && moveSecondFlower != null &&
+                !moveFirstFlower.equals(moveSecondFlower) && moveDitch == null)
+            move = new Move(moveFirstFlower, moveSecondFlower);
+        else if (moveFirstFlower == null && moveSecondFlower == null &&
+                moveDitch != null)
+            move = new Move(moveDitch);
+
+        logger.debug("moveFirstFlower: " + moveFirstFlower + ", " +
+                "moveSecondFlower: " + moveSecondFlower + ", moveDitch: " +
+                moveDitch + ", move: " + move);
+
+        clearFlowerSelection();
+        moveFirstFlower = null;
+        moveSecondFlower = null;
+        moveDitch = null;
+
+        if (move != null)
+            confirmMove();
+    }
+
+    private void confirmMove() {
+        synchronized (moveWaitingMonitor) {
+            moveWaitingMonitor.notify();
+        }
+    }
+
+    public Move request() throws InterruptedException {
+        synchronized (moveWaitingMonitor) {
+            move = null;
+            hoverColor = viewer.getTurn() == PlayerColor.Red ? RED_HOVER_COLOR : GREEN_HOVER_COLOR;
+            inputEnabled = true;
+            logger.debug("Start waiting for ui to create a move");
+            while (move == null) {
+                logger.debug("Wait...");
+                moveWaitingMonitor.wait();
+            }
+            inputEnabled = false;
+            hoverFlower = null;
+            hoverDitch = null;
+
+            logger.debug("UI created move: " + move);
+            return move;
+        }
+    }
+
+    // ------------------------------------------------------------
 
     public void update() {
         WIDTH = parentWindow.getContentPane().getWidth();
@@ -216,16 +319,16 @@ public class UIPanel extends JPanel {
         Point2D secondPoint = positionPoints.get(second);
 
         pStart1 = rotateAroundCenter(new Point2D.Double(firstPoint.getX(),
-                firstPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                        firstPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
                 firstPoint, angle);
         pStart2 = rotateAroundCenter(new Point2D.Double(firstPoint.getX(),
-                firstPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                        firstPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
                 firstPoint, angle);
         pEnd1 = rotateAroundCenter(new Point2D.Double(secondPoint.getX(),
-                secondPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                        secondPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
                 secondPoint, angle);
         pEnd2 = rotateAroundCenter(new Point2D.Double(secondPoint.getX(),
-                secondPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                        secondPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
                 secondPoint, angle);
 
         x = new int[]{(int) pStart1.getX(), (int) pStart2.getX(), (int)
@@ -321,8 +424,13 @@ public class UIPanel extends JPanel {
 
         // Draw hover flower
         if (hoverFlower != null) {
-            g.setColor(HOVER_COLOR);
+            g.setColor(hoverColor);
             g.fill(flowerToPolygon(hoverFlower));
+        }
+        // Draw already selected first flower
+        if (moveFirstFlower != null) {
+            g.setColor(hoverColor);
+            g.fill(flowerToPolygon(moveFirstFlower));
         }
 
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
@@ -361,7 +469,7 @@ public class UIPanel extends JPanel {
                     g.setComposite(AlphaComposite.getInstance(AlphaComposite
                                     .SRC_OVER,
                             HOVER_ALPHA));
-                    g.setColor(HOVER_COLOR);
+                    g.setColor(hoverColor);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get
                             (neighbor)));
                     g.setComposite(AlphaComposite.getInstance(AlphaComposite
