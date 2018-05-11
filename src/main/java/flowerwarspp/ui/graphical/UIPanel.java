@@ -43,6 +43,7 @@ public class UIPanel extends JPanel {
     private Flower hoverFlower;
     private Ditch hoverDitch;
 
+    private Collection<Move> possibleMoves;
     private boolean inputEnabled = false;
     private Move move;
     private Flower moveFirstFlower;
@@ -109,10 +110,62 @@ public class UIPanel extends JPanel {
                 else
                     hoverFlower = null;
 
+                // Check if this is a valid move
+                if (hoverDitch != null) {
+                    Move hoverMove = new Move(hoverDitch);
+                    if (!possibleMoves.contains(hoverMove)) {
+                        hoverDitch = null;
+                        return;
+                    }
+                } else if (hoverFlower != null) {
+                    // Check if it is the first flower
+                    if (moveFirstFlower == null) {
+                        if (possibleMoves.stream().filter(move -> move
+                                .getType() == MoveType.Flower).filter(move ->
+                                hoverFlower.equals(move.getFirstFlower()) ||
+                                        hoverFlower.equals(move
+                                                .getSecondFlower()))
+                                .count() == 0) {
+                            hoverFlower = null;
+                            return;
+                        }
+                    } else {
+                        Move hoverMove = new Move(moveFirstFlower, hoverFlower);
+                        if (!possibleMoves.contains(hoverMove)) {
+                            hoverFlower = null;
+                            return;
+                        }
+                    }
+                }
+
                 repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent
                         .getY() - UNIT), (int) UNIT * 2, (int) UNIT * 2);
             }
         });
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                UIPanel.this.keyPressed(keyEvent);
+            }
+        });
+        parentWindow.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                UIPanel.this.keyPressed(keyEvent);
+            }
+        });
+    }
+
+    public synchronized void keyPressed(KeyEvent keyEvent) {
+        logger.debug("Key pressed: " + keyEvent.getKeyChar() + " [" + keyEvent.getKeyCode() + "]");
+
+        if (inputEnabled) {
+            if (keyEvent.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                logger.debug("Surrender button typed");
+                move = new Move(MoveType.Surrender);
+                createMove();
+            }
+        }
     }
 
     // ------------------------------------------------------------
@@ -170,7 +223,9 @@ public class UIPanel extends JPanel {
     public Move request() throws InterruptedException {
         synchronized (moveWaitingMonitor) {
             move = null;
-            hoverColor = viewer.getTurn() == PlayerColor.Red ? RED_HOVER_COLOR : GREEN_HOVER_COLOR;
+            hoverColor = viewer.getTurn() == PlayerColor.Red ?
+                    RED_HOVER_COLOR : GREEN_HOVER_COLOR;
+            possibleMoves = viewer.getPossibleMoves();
             inputEnabled = true;
             logger.debug("Start waiting for ui to create a move");
             while (move == null) {

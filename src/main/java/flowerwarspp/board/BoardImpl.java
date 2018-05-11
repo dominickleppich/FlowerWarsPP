@@ -38,14 +38,21 @@ public class BoardImpl implements Board {
     // ------------------------------------------------------------
 
     @Override
-    public void make(Move move) {
+    public void make(Move move) throws IllegalStateException {
         // TODO write test for this
-        if (status == Status.Illegal)
-            throw new IllegalStateException("cannot perform moves on illegal " +
-                    "state board");
+        if (status != Status.Ok)
+            throw new IllegalStateException("cannot perform moves on this board anymore");
 
         if (!isValidMoveFormat(move) || !isValidMove(move)) {
             status = Status.Illegal;
+            return;
+        }
+
+        if (move.getType() == MoveType.Surrender) {
+            if (turn == PlayerColor.Red)
+                status = Status.GreenWin;
+            else
+                status = Status.RedWin;
             return;
         }
 
@@ -71,18 +78,15 @@ public class BoardImpl implements Board {
                         return false;
                 }
 
-                // Flower cannot be placed on other land
-                Set<Flower> flowerSet = getLandSet(null);
+                // Flower cannot be placed on other flower
+                Set<Flower> flowerSet = getFlowerSet(null);
                 if (flowerSet.contains(flowers[0]) || flowerSet.contains
                         (flowers[1]))
                     return false;
 
-                // Flower cannot be placed on bridge blocked fields
-                Set<Flower> bridgeBlocked = new HashSet<>();
-                for (Ditch b : getBridgeSet(null))
-                    for (Flower l : getBridgeBlockedLands(b))
-                        bridgeBlocked.add(l);
-                if (bridgeBlocked.contains(flowers[0]) || bridgeBlocked
+                // Flower cannot be placed on ditch blocked fields
+                Set<Flower> ditchBlocked = getAllDitchBlockedFlowers();
+                if (ditchBlocked.contains(flowers[0]) || ditchBlocked
                         .contains(flowers[1]))
                     return false;
 
@@ -94,25 +98,30 @@ public class BoardImpl implements Board {
                 end = b.getSecond();
 
                 // Ditch cannot be build on blocked position
-                Set<Position> blockedPositionSet = getBridgePositionSet(null);
+                Set<Position> blockedPositionSet = getDitchPositionSet(null);
                 if (blockedPositionSet.contains(start) || blockedPositionSet
                         .contains(end))
                     return false;
 
-                // Ditch needs to be build on own land position
-                Set<Position> landPositionSet = getLandPositionSet(turn);
-                if (!landPositionSet.contains(start) || !landPositionSet
+                // Ditch needs to be build on own flower position
+                Set<Position> flowerPositionSet = getFlowerPositionSet(turn);
+                if (!flowerPositionSet.contains(start) || !flowerPositionSet
                         .contains(end))
                     return false;
 
-                // Ditch cannot be build over land
-                Set<Flower> blockedFlowerIntersection = getBridgeBlockedLands
+                // Ditch cannot be build next to flowers
+                Set<Flower> blockedFlowerIntersection = getDitchBlockedFlowers
                         (b);
-                blockedFlowerIntersection.retainAll(getLandSet(null));
+                blockedFlowerIntersection.retainAll(getFlowerSet(null));
                 if (!blockedFlowerIntersection.isEmpty())
                     return false;
 
                 break;
+            case Surrender:
+                return true;
+            case End:
+                // TODO check
+                return false;
             default:
                 throw new IllegalArgumentException("illegal move type: " +
                         move.getType());
@@ -130,14 +139,17 @@ public class BoardImpl implements Board {
                     return false;
 
                 for (Flower flower : flowers)
-                    if (!isValidLandFormat(flower))
+                    if (!isValidFlowerFormat(flower))
                         return false;
                 break;
             case Ditch:
                 Ditch ditch = move.getDitch();
-                if (!isValidBridgeFormat(ditch))
+                if (!isValidDitchFormat(ditch))
                     return false;
                 break;
+            case Surrender:
+            case End:
+                return true;
             default:
                 throw new IllegalArgumentException("illegal move type: " + move
                         .getType());
@@ -145,7 +157,7 @@ public class BoardImpl implements Board {
         return true;
     }
 
-    private boolean isValidLandFormat(Flower flower) {
+    private boolean isValidFlowerFormat(Flower flower) {
         Position a = flower.getFirst();
         Position b = flower.getSecond();
         Position c = flower.getThird();
@@ -162,7 +174,7 @@ public class BoardImpl implements Board {
         return true;
     }
 
-    private boolean isValidBridgeFormat(Ditch ditch) {
+    private boolean isValidDitchFormat(Ditch ditch) {
         Position a = ditch.getFirst();
         Position b = ditch.getSecond();
         return getNeighborPositions(a).contains(b);
@@ -189,11 +201,11 @@ public class BoardImpl implements Board {
     private void setMoveOnBoard(Move move) {
         switch (move.getType()) {
             case Flower:
-                getLandSet(turn).add(move.getFirstFlower());
-                getLandSet(turn).add(move.getSecondFlower());
+                getFlowerSet(turn).add(move.getFirstFlower());
+                getFlowerSet(turn).add(move.getSecondFlower());
                 break;
             case Ditch:
-                getBridgeSet(turn).add(move.getDitch());
+                getDitchSet(turn).add(move.getDitch());
                 break;
             default:
                 throw new IllegalArgumentException("illegal move type: " + move
@@ -203,7 +215,7 @@ public class BoardImpl implements Board {
 
     // ------------------------------------------------------------
 
-    private Set<Flower> getLandSet(PlayerColor color) {
+    private Set<Flower> getFlowerSet(PlayerColor color) {
         if (color == null) {
             Set<Flower> resultSet = new HashSet<>();
             resultSet.addAll(redFlowers);
@@ -215,7 +227,7 @@ public class BoardImpl implements Board {
             return greenFlowers;
     }
 
-    private Set<Ditch> getBridgeSet(PlayerColor color) {
+    private Set<Ditch> getDitchSet(PlayerColor color) {
         if (color == null) {
             Set<Ditch> resultSet = new HashSet<>();
             resultSet.addAll(redDitches);
@@ -227,9 +239,9 @@ public class BoardImpl implements Board {
             return greenDitches;
     }
 
-    private Set<Position> getLandPositionSet(PlayerColor color) {
+    private Set<Position> getFlowerPositionSet(PlayerColor color) {
         Set<Position> resultSet = new HashSet<>();
-        for (Flower l : getLandSet(color)) {
+        for (Flower l : getFlowerSet(color)) {
             resultSet.add(l.getFirst());
             resultSet.add(l.getSecond());
             resultSet.add(l.getThird());
@@ -237,16 +249,24 @@ public class BoardImpl implements Board {
         return resultSet;
     }
 
-    private Set<Position> getBridgePositionSet(PlayerColor color) {
+    private Set<Position> getDitchPositionSet(PlayerColor color) {
         Set<Position> resultSet = new HashSet<>();
-        for (Ditch b : getBridgeSet(color)) {
+        for (Ditch b : getDitchSet(color)) {
             resultSet.add(b.getFirst());
             resultSet.add(b.getSecond());
         }
         return resultSet;
     }
 
-    private Set<Flower> getBridgeBlockedLands(Ditch ditch) {
+    private Set<Flower> getAllDitchBlockedFlowers() {
+        Set<Flower> ditchBlocked = new HashSet<>();
+        for (Ditch b : getDitchSet(null))
+            for (Flower l : getDitchBlockedFlowers(b))
+                ditchBlocked.add(l);
+        return ditchBlocked;
+    }
+
+    private Set<Flower> getDitchBlockedFlowers(Ditch ditch) {
         Position start, end;
         start = ditch.getFirst();
         end = ditch.getSecond();
@@ -306,6 +326,47 @@ public class BoardImpl implements Board {
         return neighbors;
     }
 
+    public Set<Flower> getAllPossibleFlowers() {
+        return getAllPossibleFlowers(size);
+    }
+
+    public static Set<Flower> getAllPossibleFlowers(int boardSize) {
+        Set<Flower> flowers = new HashSet<>();
+
+        for (int c = 1; c <= boardSize; c++) {
+            for (int r = 1; r <= boardSize; r++) {
+                if (c + r <= boardSize + 1)
+                    flowers.add(new Flower(new Position(c, r), new Position(c
+                            + 1, r), new Position(c, r + 1)));
+                if (c + r <= boardSize)
+                    flowers.add(new Flower(new Position(c + 1, r + 1), new
+                            Position(c
+                            + 1, r), new Position(c, r + 1)));
+            }
+        }
+
+        return flowers;
+    }
+
+    private Set<Move> getPossibleMoves() {
+        // TODO make it correct!
+        Set<Move> moves = new HashSet<>();
+
+        Set<Flower> validFlowers = getAllPossibleFlowers();
+        validFlowers.removeAll(getFlowerSet(null));
+        validFlowers.removeAll(getAllDitchBlockedFlowers());
+
+        // Create cartesian product
+        for (Flower f1 : validFlowers)
+            for (Flower f2 : validFlowers)
+                if (!f1.equals(f2))
+                    moves.add(new Move(f1, f2));
+
+        moves.add(new Move(MoveType.Surrender));
+
+        return moves;
+    }
+
     // ------------------------------------------------------------
 
     @Override
@@ -328,12 +389,17 @@ public class BoardImpl implements Board {
 
             @Override
             public Collection<Flower> getFlowers(PlayerColor color) {
-                return new HashSet<>(BoardImpl.this.getLandSet(color));
+                return new HashSet<>(BoardImpl.this.getFlowerSet(color));
             }
 
             @Override
             public Collection<Ditch> getDitches(PlayerColor color) {
-                return new HashSet<>(BoardImpl.this.getBridgeSet(color));
+                return new HashSet<>(BoardImpl.this.getDitchSet(color));
+            }
+
+            @Override
+            public Collection<Move> getPossibleMoves() {
+                return BoardImpl.this.getPossibleMoves();
             }
         };
     }
@@ -350,8 +416,8 @@ public class BoardImpl implements Board {
         firstLine += (size + 1);
         st.add(firstLine);
 
-        Set<Flower> whiteFlowers = getLandSet(PlayerColor.Red);
-        Set<Flower> redFlowers = getLandSet(PlayerColor.Green);
+        Set<Flower> whiteFlowers = getFlowerSet(PlayerColor.Red);
+        Set<Flower> redFlowers = getFlowerSet(PlayerColor.Green);
 
         String indent = "";
         for (int r = 1; r <= size; r++) {
