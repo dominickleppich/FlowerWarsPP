@@ -20,13 +20,15 @@ public class UIPanel extends JPanel {
 
     // ------------------------------------------------------------
 
-    private static final Color BACKGROUND_COLOR_A = new Color(210, 190, 30);
-    private static final Color BACKGROUND_COLOR_B = new Color(230, 150, 0);
-    private static final Color BOARD_BACKGROUND_COLOR = new Color(41, 112, 69);
-    private static final Color RED_PLAYER_COLOR = new Color(173, 69, 29);
-    private static final Color GREEN_PLAYER_COLOR = new Color(22, 173, 47);
-    private static final Color RED_HOVER_COLOR = new Color(255, 160, 160);
-    private static final Color GREEN_HOVER_COLOR = new Color(160, 255, 160);
+    private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
+    private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
+
+    private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
+    private static final Color RED_PLAYER_COLOR = new Color(166, 55, 63);
+    private static final Color GREEN_PLAYER_COLOR = new Color(52, 52, 119);
+
+    private static final Color RED_HOVER_COLOR = new Color(215, 161, 165);
+    private static final Color GREEN_HOVER_COLOR = new Color(122, 122, 154);
     private static final float HOVER_ALPHA = 0.8f;
 
     private static final double GRID_DOT_SIZE = 0.3;
@@ -463,7 +465,7 @@ public class UIPanel extends JPanel {
         for (PlayerColor pc : PlayerColor.values()) {
             if (pc == PlayerColor.Red)
                 g.setColor(RED_PLAYER_COLOR);
-            else if (pc == PlayerColor.Green)
+            else if (pc == PlayerColor.Blue)
                 g.setColor(GREEN_PLAYER_COLOR);
             else
                 throw new IllegalStateException("only red and green player " +
@@ -513,7 +515,7 @@ public class UIPanel extends JPanel {
                     g.setColor(RED_PLAYER_COLOR);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get
                             (neighbor)));
-                } else if (viewer.getDitches(PlayerColor.Green).contains(d)) {
+                } else if (viewer.getDitches(PlayerColor.Blue).contains(d)) {
                     g.setColor(GREEN_PLAYER_COLOR);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get
                             (neighbor)));
