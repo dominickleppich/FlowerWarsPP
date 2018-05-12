@@ -5,7 +5,7 @@ FlowerWarsPP ist eine Variation des Spiels [Ponte del Diavolo](https://www.brett
 Hier wird eine lustige Geschichte über die Brüder Tim und Tom geschrieben, die sich im Garten beflanzen duelieren.
 
 # Das Spiel
-FlowerWarsPP ist ein Spiel für zwei Spieler, die mit den Farben **Rot** und **Grün** spielen. Das Ziel beider Spieler ist es 
+FlowerWarsPP ist ein Spiel für zwei Spieler, die mit den Farben **Rot** und **Blau** spielen. Das Ziel beider Spieler ist es 
 eine Wiese so weit wie möglich mit Gärten zu bepflanzen.
 
 # Das Spielbrett
@@ -47,11 +47,11 @@ Hauptbestandteile von FlowerWarsPP.
 
 
 Hier ist wieder ein Spielbrett der Größe `n = 3` gegeben, `+` stellt den roten Spieler und 
-`*` den grünen Spieler dar:
+`*` den blauen Spieler dar:
 
 - Der rote Spieler hat eine Blume auf (`1,1`, `2,1`, `1,2`)
-- Der grüne Spieler hat Blumen auf (`1,3`, `2,3`, `2,2`) und (`3,1`, `4,1`, `3,2`)
-- Der grüne Spieler hat einen Graben von `2,2` nach `3,1`, mit der seine beiden Blumen verbunden werden
+- Der blaue Spieler hat Blumen auf (`1,3`, `2,3`, `2,2`) und (`3,1`, `4,1`, `3,2`)
+- Der blaue Spieler hat einen Graben von `2,2` nach `3,1`, mit der seine beiden Blumen verbunden werden
 
 ```
                    /\
@@ -75,7 +75,7 @@ Hier ist wieder ein Spielbrett der Größe `n = 3` gegeben, `+` stellt den roten
 ```
 
 # Zugregeln
-- Der rote Spieler hat den ersten Zug, danach wird beginnend mit dem grünen Spieler abwechselnd weiter gezogen.
+- Der rote Spieler hat den ersten Zug, danach wird beginnend mit dem blauen Spieler abwechselnd weiter gezogen.
 - In einem Zug muss der Spieler sich entscheiden ob er **zwei** Blumen pflanzen *oder* **einen** Graben bauen möchte.
     - Die beiden Blumen können beliebig auf dem Spielbrett positioniert werden, müssen jedoch
     auf leeren Feldern unter Einhaltung der nachfolgenden Regeln für Blumenbeete, Gärten und Gräben
