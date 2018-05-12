@@ -26,7 +26,7 @@ public class UIPanel extends JPanel {
     private static final double GRID_DOT_SIZE = 0.3;
     private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
     private static final float GRID_DITCH_LINE_STRENGTH = 0.05f;
-    private static final double BORDER = 30.0;*/
+    private static final double BORDER_SIZE = 0.2;*/
 
     private static final Color BACKGROUND_COLOR_A = new Color(255, 255, 255);
     private static final Color BACKGROUND_COLOR_B = new Color(255, 255, 255);
@@ -39,7 +39,7 @@ public class UIPanel extends JPanel {
     private static final double GRID_DOT_SIZE = 0.3;
     private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
     private static final float GRID_DITCH_LINE_STRENGTH = 0.1f;
-    private static final double BORDER = 30.0;
+    private static final double BORDER_SIZE = 0.2;
 
     private UIWindow parentWindow;
     private Viewer viewer;
@@ -265,13 +265,13 @@ public class UIPanel extends JPanel {
             return;
 
         int boardSize = viewer.getSize();
-        double fieldWidth = Math.min((WIDTH - 2 * BORDER) / boardSize,
-                ((HEIGHT - 2 * BORDER) / boardSize) / Math.sin(Math.toRadians(60)));
+        double fieldWidth = Math.min(WIDTH / boardSize,
+                (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 - BORDER_SIZE);
         UNIT = (float) fieldWidth;
         double fieldHeight = Math.sin(Math.toRadians(60)) * fieldWidth;
 
-        double xOffset = (WIDTH - boardSize * fieldWidth - 2 * BORDER) / 2 + BORDER;
-        double yOffset = (HEIGHT - boardSize * fieldHeight - 2 * BORDER) / 2 + BORDER;
+        double xOffset = (WIDTH - boardSize * fieldWidth - 2 * UNIT * BORDER_SIZE) / 2 + UNIT * BORDER_SIZE;
+        double yOffset = (HEIGHT - boardSize * fieldHeight - 2 * UNIT * BORDER_SIZE) / 2 + UNIT * BORDER_SIZE;
 
         positionPoints = new HashMap<>();
 
