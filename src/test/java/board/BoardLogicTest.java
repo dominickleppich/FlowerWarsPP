@@ -47,7 +47,7 @@ public class BoardLogicTest {
 
     @Test
     public void newBoardHasNoLandsForRedPlayer() {
-        assertTrue(viewer.getFlowers(PlayerColor.Green).isEmpty());
+        assertTrue(viewer.getFlowers(PlayerColor.Blue).isEmpty());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class BoardLogicTest {
 
     @Test
     public void newBoardHasNoBridgesForRedPlayer() {
-        assertTrue(viewer.getDitches(PlayerColor.Green).isEmpty());
+        assertTrue(viewer.getDitches(PlayerColor.Blue).isEmpty());
     }
 
     // ------------------------------------------------------------
@@ -72,7 +72,7 @@ public class BoardLogicTest {
         Move m = new Move(flowerA, flowerB);
 
         board.make(m);
-        assertEquals(PlayerColor.Green, viewer.getTurn());
+        assertEquals(PlayerColor.Blue, viewer.getTurn());
     }
 
     @Test
@@ -134,7 +134,7 @@ public class BoardLogicTest {
 
         board.make(m);
 
-        assertTrue(viewer.getDitches(PlayerColor.Green).isEmpty());
+        assertTrue(viewer.getDitches(PlayerColor.Blue).isEmpty());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class BoardLogicTest {
 
         board.make(m);
 
-        assertTrue(viewer.getFlowers(PlayerColor.Green).isEmpty());
+        assertTrue(viewer.getFlowers(PlayerColor.Blue).isEmpty());
     }
 
     @Test
