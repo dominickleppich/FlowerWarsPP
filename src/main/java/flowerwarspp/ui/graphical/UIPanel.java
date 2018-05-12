@@ -12,11 +12,12 @@ import java.util.*;
 
 public class UIPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(UIPanel.class);
-    private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
-    private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
-    private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
 
     // ------------------------------------------------------------
+
+    /*private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
+    private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
+    private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
     private static final Color RED_PLAYER_COLOR = new Color(166, 55, 63);
     private static final Color GREEN_PLAYER_COLOR = new Color(52, 52, 119);
     private static final Color RED_HOVER_COLOR = new Color(215, 161, 165);
@@ -25,7 +26,21 @@ public class UIPanel extends JPanel {
     private static final double GRID_DOT_SIZE = 0.3;
     private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
     private static final float GRID_DITCH_LINE_STRENGTH = 0.05f;
+    private static final double BORDER = 30.0;*/
+
+    private static final Color BACKGROUND_COLOR_A = new Color(255, 255, 255);
+    private static final Color BACKGROUND_COLOR_B = new Color(255, 255, 255);
+    private static final Color BOARD_BACKGROUND_COLOR = new Color(255, 255, 255);
+    private static final Color RED_PLAYER_COLOR = new Color(255, 0, 0);
+    private static final Color GREEN_PLAYER_COLOR = new Color(0, 0, 255);
+    private static final Color RED_HOVER_COLOR = new Color(255, 0, 0);
+    private static final Color GREEN_HOVER_COLOR = new Color(0, 0, 255);
+    private static final float HOVER_ALPHA = 0.5f;
+    private static final double GRID_DOT_SIZE = 0.3;
+    private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
+    private static final float GRID_DITCH_LINE_STRENGTH = 0.1f;
     private static final double BORDER = 30.0;
+
     private UIWindow parentWindow;
     private Viewer viewer;
     private Object moveWaitingMonitor = new Object();
