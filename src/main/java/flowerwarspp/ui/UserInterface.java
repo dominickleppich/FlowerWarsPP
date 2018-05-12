@@ -6,4 +6,6 @@ public interface UserInterface extends Requestable {
     void setViewer(Viewer viewer);
 
     void update(Move move);
+
+    void close();
 }
