@@ -329,23 +329,29 @@ public class BoardImpl implements Board {
         minRow = Math.min(start.getRow(), end.getRow());
         maxRow = Math.max(start.getRow(), end.getRow());
 
-        Position posA, posB;
+        Position posA = null, posB = null;
+
         if (start.getColumn() == end.getColumn()) {
             int col = minCol;
-            posA = new Position(col - 1, maxRow);
+            if (col > 1)
+                posA = new Position(col - 1, maxRow);
             posB = new Position(col + 1, minRow);
         } else if (start.getRow() == end.getRow()) {
             int row = minRow;
             posA = new Position(minCol, row + 1);
-            posB = new Position(maxCol, row - 1);
+            if (row > 1)
+                posB = new Position(maxCol, row - 1);
         } else {
             posA = new Position(minCol, minRow);
             posB = new Position(maxCol, maxRow);
         }
 
+
         Set<Flower> resultFlowers = new HashSet<>();
-        resultFlowers.add(new Flower(start, end, posA));
-        resultFlowers.add(new Flower(start, end, posB));
+        if (posA != null)
+            resultFlowers.add(new Flower(start, end, posA));
+        if (posB != null)
+            resultFlowers.add(new Flower(start, end, posB));
 
         return resultFlowers;
     }
