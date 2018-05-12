@@ -233,7 +233,4 @@ public class ArgumentParser {
     //  Hier koennen weitere Schalter und Einstellungen ergaenzt werden...
     // ********************************************************************
 
-    public boolean isPrintableGraphic() throws ArgumentParserException {
-        return getFlag("printgraphic");
-    }
 }
