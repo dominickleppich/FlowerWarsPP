@@ -24,16 +24,13 @@ einem Punkt zu einem direkten Nachbarn kann ein Wassergraben, kurz
 **Graben**, gebaut werden. Ein Punkt hat hierbei stets maximal `6` direkte Nachbarn. Blumen und Gräben sind die 
 Hauptbestandteile von FlowerWarsPP.
 
+![Spielbrett der Groesse 3](specification/images/board-3-situation1.png)
 
+Auf diesem Spielbrett ist folgende Situation gezeigt:
 
-Hier ist wieder ein Spielbrett der Größe `n = 3` gegeben, `+` stellt den roten Spieler und 
-`*` den blauen Spieler dar:
-
-- Der rote Spieler hat eine Blume auf (`1,1`, `2,1`, `1,2`)
-- Der blaue Spieler hat Blumen auf (`1,3`, `2,3`, `2,2`) und (`3,1`, `4,1`, `3,2`)
-- Der blaue Spieler hat einen Graben von `2,2` nach `3,1`, mit der seine beiden Blumen verbunden werden
-
-
+- Der rote Spieler hat Blumen auf (`1,1`, `2,1`, `1,2`) und (`2,1`, `3,1`, `2,2`)
+- Der blaue Spieler hat Blumen auf (`2,2`, `1,3`, `2,3`) und (`1,3`, `2,3`, `1,4`)
+- Der rote Spieler hat einen Graben von `1,2` nach `2,2`, mit der seine beiden Blumen verbunden werden
 
 # Zugregeln
 - Der rote Spieler hat den ersten Zug, danach wird beginnend mit dem blauen Spieler abwechselnd weiter gezogen.
