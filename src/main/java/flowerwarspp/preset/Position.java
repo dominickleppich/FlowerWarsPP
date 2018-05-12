@@ -3,8 +3,8 @@ package flowerwarspp.preset;
 import java.io.*;
 
 public class Position implements Serializable, Comparable<Position> {
-    public static final int MAX_COLUMN = 100;
-    public static final int MAX_ROW = 100;
+    public static final int MAX_VALUE = 31;
+    public static final int COMBINATIONS = MAX_VALUE * MAX_VALUE;
 
     // ------------------------------------------------------------
 
@@ -24,7 +24,7 @@ public class Position implements Serializable, Comparable<Position> {
     }
 
     private void setColumn(final int column) {
-        if (column <= 0 || column > MAX_COLUMN)
+        if (column <= 0 || column > MAX_VALUE)
             throw new IllegalArgumentException("illegal column value: " +
                     column);
         this.column = column;
@@ -35,7 +35,7 @@ public class Position implements Serializable, Comparable<Position> {
     }
 
     private void setRow(final int row) {
-        if (row <= 0 || row > MAX_ROW)
+        if (row <= 0 || row > MAX_VALUE)
             throw new IllegalArgumentException("illegal row value: " + row);
         this.row = row;
     }
@@ -44,7 +44,7 @@ public class Position implements Serializable, Comparable<Position> {
 
     @Override
     public int hashCode() {
-        return getColumn() * MAX_COLUMN + getRow();
+        return getColumn() * MAX_VALUE + getRow();
     }
 
     @Override

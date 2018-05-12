@@ -4,6 +4,11 @@ import java.io.*;
 import java.util.*;
 
 public class Flower implements Serializable, Comparable<Flower> {
+    public static final int COMBINATIONS = Position.COMBINATIONS * 2 *
+            Position.COMBINATIONS;
+
+    // ------------------------------------------------------------
+
     private Position[] positions;
 
     // ------------------------------------------------------------
@@ -59,9 +64,11 @@ public class Flower implements Serializable, Comparable<Flower> {
 
     @Override
     public int hashCode() {
-        return (getFirst().hashCode() * Position.MAX_COLUMN * Position
-                .MAX_ROW + getSecond().hashCode()) * Position
-                .MAX_COLUMN * Position.MAX_ROW + getThird().hashCode();
+        // Distributes perfectly for valid moves. For arbitrary flowers of
+        // valid position combinations which does not result in correct
+        // flowers collisions might occur!
+        return getFirst().hashCode() * 2 + (getSecond().getColumn() >
+                getFirst().getColumn() ? 0 : 1);
     }
 
     @Override
@@ -69,10 +76,7 @@ public class Flower implements Serializable, Comparable<Flower> {
         // Due to the unique ordering it is easy to calculate
         if (!getFirst().equals(flower.getFirst()))
             return getFirst().compareTo(flower.getFirst());
-        else if (!getSecond().equals(flower.getSecond()))
-            return getSecond().compareTo(flower.getSecond());
-        else
-            return getThird().compareTo(flower.getThird());
+        else return getSecond().getColumn() - flower.getSecond().getColumn();
     }
 
     @Override
@@ -87,7 +91,8 @@ public class Flower implements Serializable, Comparable<Flower> {
 
     @Override
     public String toString() {
-        return "{" + getFirst().toString() + "," + getSecond().toString() + "," +
+        return "{" + getFirst().toString() + "," + getSecond().toString() +
+                "," +
                 getThird().toString() + "}";
     }
 }

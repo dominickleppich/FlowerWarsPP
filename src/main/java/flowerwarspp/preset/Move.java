@@ -21,9 +21,6 @@ public class Move implements Serializable, Comparable<Move> {
     public Move(final Flower a, final Flower b) {
         type = MoveType.Flower;
 
-        if (a == null || b == null)
-            throw new IllegalArgumentException("flowers cannot be null");
-
         flowers = new Flower[2];
 
         setFirstFlower(a);
@@ -35,8 +32,8 @@ public class Move implements Serializable, Comparable<Move> {
     public Move(final Ditch b) {
         type = MoveType.Ditch;
 
-        if (b == null)
-            throw new IllegalArgumentException("ditch cannot be null");
+        /*if (b == null)
+            throw new IllegalArgumentException("ditch cannot be null");*/
         ditch = b;
     }
 
@@ -82,20 +79,24 @@ public class Move implements Serializable, Comparable<Move> {
 
     // ------------------------------------------------------------
 
-    public static Move parseMove(String str) {
+    /*public static Move parseMove(String str) {
         return null;
-    }
+    }*/
 
     @Override
     public int hashCode() {
         switch (type) {
             case Flower:
-                return getFirstFlower().hashCode() ^ getSecondFlower()
-                        .hashCode();
+                return getFirstFlower().hashCode() * Flower.COMBINATIONS +
+                        getSecondFlower().hashCode();
             case Ditch:
-                return ditch.hashCode();
+                return -ditch.hashCode();
+            case Surrender:
+                return Integer.MAX_VALUE;
+            case End:
+                // There is no other default case
             default:
-                return type.hashCode();
+                return Integer.MIN_VALUE;
         }
     }
 

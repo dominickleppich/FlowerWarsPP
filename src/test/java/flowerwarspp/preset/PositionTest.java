@@ -1,13 +1,34 @@
 package flowerwarspp.preset;
 
+import javafx.geometry.*;
 import org.junit.*;
+
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class PositionTest {
-    public static final int MAX_COLUMN = 100;
-    public static final int MAX_ROW = 100;
+    public static final int MAX_VALUE = 31;
+
+    private Position[] positionCompareArray;
+
+    // ------------------------------------------------------------
+
+    @Before
+    public void init() {
+        positionCompareArray = new Position[] {
+                new Position(3,2),
+                new Position(4,2),
+                new Position(2,3),
+                new Position(3,3),
+                new Position(4,3),
+                new Position(2,4),
+                new Position(3,4)
+        };
+    }
+
+    // ------------------------------------------------------------
 
     @Test
     public void creatingNewPositionWithValidValuesWorks() {
@@ -39,13 +60,13 @@ public class PositionTest {
 
     @Test
     public void creatingNewPositionWithMaxColumnValueWorks() {
-        Position p = new Position(MAX_COLUMN, 5);
+        Position p = new Position(MAX_VALUE, 5);
         assertNotNull(p);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void creatingNewPositionWithTooHighColumnValueThrowsException() {
-        new Position(MAX_COLUMN + 1, 5);
+        new Position(MAX_VALUE + 1, 5);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -60,13 +81,13 @@ public class PositionTest {
 
     @Test
     public void creatingNewPositionWithMaxRowValueWorks() {
-        Position p = new Position(5, MAX_ROW);
+        Position p = new Position(5, MAX_VALUE);
         assertNotNull(p);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void creatingNewPositionWithTooHighRowValueThrowsException() {
-        new Position(5, MAX_ROW + 1);
+        new Position(5, MAX_VALUE + 1);
     }
 
     // ------------------------------------------------------------
@@ -82,6 +103,88 @@ public class PositionTest {
     public void getRowReturnsCorrectValue() {
         Position p = new Position(4, 10);
         assertEquals(10, p.getRow());
+    }
+
+    // ------------------------------------------------------------
+    // * Hash *
+
+    @Test
+    public void hashFunctionDistributesPerfectly() {
+        Set<Integer> knownHashes = new HashSet<>();
+        for (int c = 1; c <= MAX_VALUE; c++) {
+            for (int r = 1; r <= MAX_VALUE; r++) {
+                Position p = new Position(c, r);
+                int hash = p.hashCode();
+                if (knownHashes.contains(hash))
+                    fail("double hash code for position: " + p);
+                else
+                    knownHashes.add(hash);
+            }
+        }
+    }
+
+    @Test
+    public void equalPositionsReturnSameHashCode() {
+        Position a = new Position(3, 4);
+        Position b = new Position(3, 4);
+        assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    // ------------------------------------------------------------
+    // * Compare *
+
+    @Test
+    public void compareToOnEqualPositionsReturnsZero() {
+        Position a = new Position(3, 4);
+        Position b = new Position(3, 4);
+        assertThat(a.compareTo(b), is(0));
+    }
+
+    @Test
+    public void compareToDeterminesCorrectOrderingForUnequalPositions1() {
+        Position a = new Position(3, 4);
+        Position b = new Position(3, 3);
+        assertThat(a, greaterThan(b));
+    }
+
+    @Test
+    public void compareToDeterminesCorrectOrderingForUnequalPositions2() {
+        Position a = new Position(3, 3);
+        Position b = new Position(3, 4);
+        assertThat(a, lessThan(b));
+    }
+
+    @Test
+    public void compareToDeterminesCorrectOrderingForUnequalPositions3() {
+        Position a = new Position(4, 4);
+        Position b = new Position(3, 4);
+        assertThat(a, greaterThan(b));
+    }
+
+    @Test
+    public void compareToDeterminesCorrectOrderingForUnequalPositions4() {
+        Position a = new Position(3, 4);
+        Position b = new Position(4, 4);
+        assertThat(a, lessThan(b));
+    }
+
+    @Test
+    public void compareToCanBeUsedToSortCorrectly() {
+        // The array can be sorted correctly
+
+        List<Position> correct = new LinkedList<>();
+        List<Position> toTest = new LinkedList<>();
+        for (Position p : positionCompareArray) {
+            correct.add(p);
+            toTest.add(p);
+        }
+
+        // Shuffle test list (this might accidentally result in correct ordering)
+        Collections.shuffle(toTest);
+        Collections.sort(toTest);
+
+        // Test equality
+        assertEquals(correct, toTest);
     }
 
     // ------------------------------------------------------------
@@ -122,48 +225,6 @@ public class PositionTest {
 
     // ------------------------------------------------------------
     // * Other stuff *
-
-    @Test
-    public void compareToOnEqualPositionsReturnsZero() {
-        Position a = new Position(3, 4);
-        Position b = new Position(3, 4);
-        assertThat(a.compareTo(b), is(0));
-    }
-
-    @Test
-    public void compareToDeterminesCorrectOrderingForUnequalPositions1() {
-        Position a = new Position(3, 4);
-        Position b = new Position(3, 3);
-        assertThat(a, greaterThan(b));
-    }
-
-    @Test
-    public void compareToDeterminesCorrectOrderingForUnequalPositions2() {
-        Position a = new Position(3, 3);
-        Position b = new Position(3, 4);
-        assertThat(a, lessThan(b));
-    }
-
-    @Test
-    public void compareToDeterminesCorrectOrderingForUnequalPositions3() {
-        Position a = new Position(4, 4);
-        Position b = new Position(3, 4);
-        assertThat(a, greaterThan(b));
-    }
-
-    @Test
-    public void compareToDeterminesCorrectOrderingForUnequalPositions4() {
-        Position a = new Position(3, 4);
-        Position b = new Position(4, 4);
-        assertThat(a, lessThan(b));
-    }
-
-    @Test
-    public void equalPositionsReturnSameHashCode() {
-        Position a = new Position(3, 4);
-        Position b = new Position(3, 4);
-        assertEquals(a.hashCode(), b.hashCode());
-    }
 
     @Test
     public void toStringMethodContainsColumn() {

@@ -29,7 +29,7 @@ public class Ditch implements Serializable, Comparable<Ditch> {
 
     private void setFirst(final Position start) {
         if (start == null)
-            throw new IllegalArgumentException("start cannot be null");
+            throw new IllegalArgumentException("first cannot be null");
         positions[0] = start;
     }
 
@@ -39,7 +39,7 @@ public class Ditch implements Serializable, Comparable<Ditch> {
 
     private void setSecond(final Position end) {
         if (end == null)
-            throw new IllegalArgumentException("end cannot be null");
+            throw new IllegalArgumentException("second cannot be null");
         positions[1] = end;
     }
 
@@ -47,7 +47,7 @@ public class Ditch implements Serializable, Comparable<Ditch> {
 
     @Override
     public int hashCode() {
-        return getFirst().hashCode() * Position.MAX_COLUMN * Position.MAX_ROW
+        return getFirst().hashCode() * Position.COMBINATIONS
                 + getSecond().hashCode();
     }
 
@@ -57,7 +57,7 @@ public class Ditch implements Serializable, Comparable<Ditch> {
         if (!getFirst().equals(ditch.getFirst()))
             return getFirst().compareTo(ditch.getFirst());
         else
-            return getSecond().compareTo(ditch.getSecond());
+            return getSecond().getColumn() - ditch.getSecond().getColumn();
     }
 
     @Override
