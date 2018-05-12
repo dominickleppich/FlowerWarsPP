@@ -15,27 +15,7 @@ Koordinate `1,1` liegt.
 
 Hier ist ein Spielbrett der Größe `n = 3` dargestellt:
 
-```
-                   1,4
-                   /\
-                  /  \
-                 /    \
-                /      \
-               /        \
-             1,3_________2,3
-             /\          /\
-            /  \        /  \
-           /    \      /    \
-          /      \    /      \
-         /        \  /        \
-       1,2_________2,2_________3,2
-       /\          /\          /\
-      /  \        /  \        /  \
-     /    \      /    \      /    \
-    /      \    /      \    /      \
-   /        \  /        \  /        \
- 1,1_________2,1_________3,1_________4,1
-```
+![Spielbrett der Groesse 3](specification/images/board-3-empty.png)
 
 Das Spielfeld stellt eine dreieckige Wiese dar, die wiederum in kleine dreieckige Teilflächen aufgeteilt ist.
 
@@ -53,26 +33,7 @@ Hier ist wieder ein Spielbrett der Größe `n = 3` gegeben, `+` stellt den roten
 - Der blaue Spieler hat Blumen auf (`1,3`, `2,3`, `2,2`) und (`3,1`, `4,1`, `3,2`)
 - Der blaue Spieler hat einen Graben von `2,2` nach `3,1`, mit der seine beiden Blumen verbunden werden
 
-```
-                   /\
-                  /  \
-                 /    \
-                /      \
-               /        \
-              /__________\
-             /\          /\
-            /  \  ++++  /  \
-           /    \  ++  /    \
-          /      \    /      \
-         /        \  /        \
-        /__________\/__________\
-       /\          /+          /\
-      /  \        /  +        /  \
-     /    \      /    +      /    \
-    /  **  \    /      +    /  ++  \
-   /  ****  \  /        +  /  ++++  \
-  /__________\/__________+/__________\
-```
+
 
 # Zugregeln
 - Der rote Spieler hat den ersten Zug, danach wird beginnend mit dem blauen Spieler abwechselnd weiter gezogen.
