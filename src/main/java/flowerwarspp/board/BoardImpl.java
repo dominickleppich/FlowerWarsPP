@@ -194,7 +194,7 @@ public class BoardImpl implements Board {
 
     private void nextPlayer() {
         if (turn == PlayerColor.Red)
-            turn = PlayerColor.Green;
+            turn = PlayerColor.Blue;
         else
             turn = PlayerColor.Red;
     }
@@ -456,7 +456,7 @@ public class BoardImpl implements Board {
         st.add(firstLine);
 
         Set<Flower> whiteFlowers = getFlowerSet(PlayerColor.Red);
-        Set<Flower> redFlowers = getFlowerSet(PlayerColor.Green);
+        Set<Flower> redFlowers = getFlowerSet(PlayerColor.Blue);
 
         String indent = "";
         for (int r = 1; r <= size; r++) {
