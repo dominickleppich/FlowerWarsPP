@@ -12,8 +12,7 @@ public class Move implements Serializable, Comparable<Move> {
 
     public Move(final MoveType type) {
         if (type == MoveType.Flower || type == MoveType.Ditch)
-            throw new IllegalArgumentException("flower and ditch moves have " +
-                    "separate constructors");
+            throw new IllegalArgumentException("flower and ditch moves have " + "separate constructors");
 
         this.type = type;
     }
@@ -47,28 +46,28 @@ public class Move implements Serializable, Comparable<Move> {
         return type;
     }
 
-    private void setFirstFlower(final Flower first) {
-        if (first == null)
-            throw new IllegalArgumentException("first flower cannot be null");
-        flowers[0] = first;
-    }
-
     public Flower getFirstFlower() {
         if (getType() != MoveType.Flower)
             throw new IllegalStateException("cannot be called on type " + type);
         return flowers[0];
     }
 
-    private void setSecondFlower(final Flower second) {
-        if (second == null)
-            throw new IllegalArgumentException("second flower cannot be null");
-        flowers[1] = second;
+    private void setFirstFlower(final Flower first) {
+        if (first == null)
+            throw new IllegalArgumentException("first flower cannot be null");
+        flowers[0] = first;
     }
 
     public Flower getSecondFlower() {
         if (getType() != MoveType.Flower)
             throw new IllegalStateException("cannot be called on type " + type);
         return flowers[1];
+    }
+
+    private void setSecondFlower(final Flower second) {
+        if (second == null)
+            throw new IllegalArgumentException("second flower cannot be null");
+        flowers[1] = second;
     }
 
     public Ditch getDitch() {
@@ -87,8 +86,7 @@ public class Move implements Serializable, Comparable<Move> {
     public int hashCode() {
         switch (type) {
             case Flower:
-                return getFirstFlower().hashCode() * Flower.COMBINATIONS +
-                        getSecondFlower().hashCode();
+                return getFirstFlower().hashCode() * Flower.COMBINATIONS + getSecondFlower().hashCode();
             case Ditch:
                 return -ditch.hashCode();
             case Surrender:
@@ -111,11 +109,9 @@ public class Move implements Serializable, Comparable<Move> {
             switch (type) {
                 case Flower:
                     if (!getFirstFlower().equals(move.getFirstFlower()))
-                        return getFirstFlower().compareTo(move.getFirstFlower
-                                ());
+                        return getFirstFlower().compareTo(move.getFirstFlower());
                     else
-                        return getSecondFlower().compareTo(move
-                                .getSecondFlower());
+                        return getSecondFlower().compareTo(move.getSecondFlower());
                 case Ditch:
                     return ditch.compareTo(move.ditch);
                 default:
@@ -135,8 +131,7 @@ public class Move implements Serializable, Comparable<Move> {
             return false;
         switch (type) {
             case Flower:
-                return getFirstFlower().equals(m.getFirstFlower()) &&
-                        getSecondFlower().equals(m.getSecondFlower());
+                return getFirstFlower().equals(m.getFirstFlower()) && getSecondFlower().equals(m.getSecondFlower());
             case Ditch:
                 return ditch.equals(m.ditch);
             default:
@@ -150,8 +145,7 @@ public class Move implements Serializable, Comparable<Move> {
         String s = "{";
         switch (getType()) {
             case Flower:
-                s += getFirstFlower().toString() + ", " +
-                        getSecondFlower().toString();
+                s += getFirstFlower().toString() + ", " + getSecondFlower().toString();
                 break;
             case Ditch:
                 s += ditch.toString();

@@ -47,8 +47,7 @@ public class Ditch implements Serializable, Comparable<Ditch> {
 
     @Override
     public int hashCode() {
-        return getFirst().hashCode() * Position.COMBINATIONS
-                + getSecond().hashCode();
+        return getFirst().hashCode() * Position.COMBINATIONS + getSecond().hashCode();
     }
 
     @Override
@@ -57,7 +56,8 @@ public class Ditch implements Serializable, Comparable<Ditch> {
         if (!getFirst().equals(ditch.getFirst()))
             return getFirst().compareTo(ditch.getFirst());
         else
-            return getSecond().getColumn() - ditch.getSecond().getColumn();
+            return getSecond().getColumn() - ditch.getSecond()
+                                                  .getColumn();
     }
 
     @Override

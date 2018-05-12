@@ -12,29 +12,23 @@ import java.util.*;
 
 public class UIPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(UIPanel.class);
-
-    private UIWindow parentWindow;
-    private Viewer viewer;
-
-    private Object moveWaitingMonitor = new Object();
-
-    // ------------------------------------------------------------
-
     private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
     private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
-
     private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
+
+    // ------------------------------------------------------------
     private static final Color RED_PLAYER_COLOR = new Color(166, 55, 63);
     private static final Color GREEN_PLAYER_COLOR = new Color(52, 52, 119);
-
     private static final Color RED_HOVER_COLOR = new Color(215, 161, 165);
     private static final Color GREEN_HOVER_COLOR = new Color(122, 122, 154);
     private static final float HOVER_ALPHA = 0.8f;
-
     private static final double GRID_DOT_SIZE = 0.3;
     private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
     private static final float GRID_DITCH_LINE_STRENGTH = 0.05f;
     private static final double BORDER = 30.0;
+    private UIWindow parentWindow;
+    private Viewer viewer;
+    private Object moveWaitingMonitor = new Object();
     private int WIDTH, HEIGHT;
     private float UNIT;
 
@@ -83,8 +77,7 @@ public class UIPanel extends JPanel {
                         }
                     }
 
-                    logger.debug("Clicked: " + mouseEvent.getX() + ", " +
-                            mouseEvent.getY() + " [" + p + "]");
+                    logger.debug("Clicked: " + mouseEvent.getX() + ", " + mouseEvent.getY() + " [" + p + "]");
                 }
                 // Clear with right mouse button
                 else if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
@@ -122,12 +115,11 @@ public class UIPanel extends JPanel {
                 } else if (hoverFlower != null) {
                     // Check if it is the first flower
                     if (moveFirstFlower == null) {
-                        if (possibleMoves.stream().filter(move -> move
-                                .getType() == MoveType.Flower).filter(move ->
-                                hoverFlower.equals(move.getFirstFlower()) ||
-                                        hoverFlower.equals(move
-                                                .getSecondFlower()))
-                                .count() == 0) {
+                        if (possibleMoves.stream()
+                                         .filter(move -> move.getType() == MoveType.Flower)
+                                         .filter(move -> hoverFlower.equals(
+                                                 move.getFirstFlower()) || hoverFlower.equals(move.getSecondFlower()))
+                                         .count() == 0) {
                             hoverFlower = null;
                             return;
                         }
@@ -140,8 +132,8 @@ public class UIPanel extends JPanel {
                     }
                 }
 
-                repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent
-                        .getY() - UNIT), (int) UNIT * 2, (int) UNIT * 2);
+                repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent.getY() - UNIT), (int) UNIT * 2,
+                        (int) UNIT * 2);
             }
         });
         addKeyListener(new KeyAdapter() {
@@ -196,16 +188,14 @@ public class UIPanel extends JPanel {
 
     private synchronized void createMove() {
         clearHover();
-        if (moveFirstFlower != null && moveSecondFlower != null &&
-                !moveFirstFlower.equals(moveSecondFlower) && moveDitch == null)
+        if (moveFirstFlower != null && moveSecondFlower != null && !moveFirstFlower.equals(
+                moveSecondFlower) && moveDitch == null)
             move = new Move(moveFirstFlower, moveSecondFlower);
-        else if (moveFirstFlower == null && moveSecondFlower == null &&
-                moveDitch != null)
+        else if (moveFirstFlower == null && moveSecondFlower == null && moveDitch != null)
             move = new Move(moveDitch);
 
-        logger.debug("moveFirstFlower: " + moveFirstFlower + ", " +
-                "moveSecondFlower: " + moveSecondFlower + ", moveDitch: " +
-                moveDitch + ", move: " + move);
+        logger.debug(
+                "moveFirstFlower: " + moveFirstFlower + ", " + "moveSecondFlower: " + moveSecondFlower + ", moveDitch: " + moveDitch + ", move: " + move);
 
         clearFlowerSelection();
         moveFirstFlower = null;
@@ -225,8 +215,7 @@ public class UIPanel extends JPanel {
     public Move request() throws InterruptedException {
         synchronized (moveWaitingMonitor) {
             move = null;
-            hoverColor = viewer.getTurn() == PlayerColor.Red ?
-                    RED_HOVER_COLOR : GREEN_HOVER_COLOR;
+            hoverColor = viewer.getTurn() == PlayerColor.Red ? RED_HOVER_COLOR : GREEN_HOVER_COLOR;
             possibleMoves = viewer.getPossibleMoves();
             inputEnabled = true;
             logger.debug("Start waiting for ui to create a move");
@@ -246,10 +235,12 @@ public class UIPanel extends JPanel {
     // ------------------------------------------------------------
 
     public void update() {
-        WIDTH = parentWindow.getContentPane().getWidth();
-        HEIGHT = parentWindow.getContentPane().getHeight();
-//        logger.debug("Constants updated to new window constraints: WIDTH =
-// " + WIDTH + ", HEIGHT = " + HEIGHT);
+        WIDTH = parentWindow.getContentPane()
+                            .getWidth();
+        HEIGHT = parentWindow.getContentPane()
+                             .getHeight();
+        //        logger.debug("Constants updated to new window constraints: WIDTH =
+        // " + WIDTH + ", HEIGHT = " + HEIGHT);
 
         updateUIPositions();
     }
@@ -259,16 +250,13 @@ public class UIPanel extends JPanel {
             return;
 
         int boardSize = viewer.getSize();
-        double fieldWidth = Math.min((WIDTH - 2 * BORDER) / boardSize, (
-                (HEIGHT - 2 * BORDER) /
-                        boardSize) / Math.sin(Math.toRadians(60)));
+        double fieldWidth = Math.min((WIDTH - 2 * BORDER) / boardSize,
+                ((HEIGHT - 2 * BORDER) / boardSize) / Math.sin(Math.toRadians(60)));
         UNIT = (float) fieldWidth;
         double fieldHeight = Math.sin(Math.toRadians(60)) * fieldWidth;
 
-        double xOffset = (WIDTH - boardSize * fieldWidth - 2 * BORDER) / 2 +
-                BORDER;
-        double yOffset = (HEIGHT - boardSize * fieldHeight - 2 * BORDER) / 2
-                + BORDER;
+        double xOffset = (WIDTH - boardSize * fieldWidth - 2 * BORDER) / 2 + BORDER;
+        double yOffset = (HEIGHT - boardSize * fieldHeight - 2 * BORDER) / 2 + BORDER;
 
         positionPoints = new HashMap<>();
 
@@ -277,8 +265,8 @@ public class UIPanel extends JPanel {
             for (int c = 0; c <= boardSize; c++) {
                 if (r + c > boardSize)
                     continue;
-                Point2D p = new Point2D.Double(xOffset + c * fieldWidth + r *
-                        fieldWidth / 2, HEIGHT - yOffset - r * fieldHeight);
+                Point2D p = new Point2D.Double(xOffset + c * fieldWidth + r * fieldWidth / 2,
+                        HEIGHT - yOffset - r * fieldHeight);
                 positionPoints.put(new Position(c + 1, r + 1), p);
             }
         }
@@ -288,14 +276,11 @@ public class UIPanel extends JPanel {
         for (int c = 1; c <= boardSize; c++) {
             for (int r = 1; r <= boardSize; r++) {
                 if (c + r <= boardSize + 1) {
-                    Flower f = new Flower(new Position(c, r), new Position(c,
-                            r + 1), new Position(c + 1, r));
+                    Flower f = new Flower(new Position(c, r), new Position(c, r + 1), new Position(c + 1, r));
                     polygonFlowerMap.put(flowerToPolygon(f), f);
                 }
                 if (c + r <= boardSize) {
-                    Flower f = new Flower(new Position(c + 1, r + 1), new
-                            Position(c,
-                            r + 1), new Position(c + 1, r));
+                    Flower f = new Flower(new Position(c + 1, r + 1), new Position(c, r + 1), new Position(c + 1, r));
                     polygonFlowerMap.put(flowerToPolygon(f), f);
                 }
             }
@@ -307,17 +292,13 @@ public class UIPanel extends JPanel {
             for (int r = 1; r <= boardSize; r++) {
                 // For each point create 3 ditches, if available
                 if (c + r <= boardSize + 1) {
-                    Ditch d1 = new Ditch(new Position(c, r), new Position(c,
-                            r + 1));
-                    Ditch d2 = new Ditch(new Position(c, r), new Position(c +
-                            1, r));
+                    Ditch d1 = new Ditch(new Position(c, r), new Position(c, r + 1));
+                    Ditch d2 = new Ditch(new Position(c, r), new Position(c + 1, r));
                     polygonDitchMap.put(ditchToPolygon(d1), d1);
                     polygonDitchMap.put(ditchToPolygon(d2), d2);
                 }
                 if (c > 1 && c + r <= boardSize + 2) {
-                    Ditch d = new Ditch(new Position(c, r), new Position(c -
-                            1, r
-                            + 1));
+                    Ditch d = new Ditch(new Position(c, r), new Position(c - 1, r + 1));
                     polygonDitchMap.put(ditchToPolygon(d), d);
                 }
             }
@@ -344,7 +325,8 @@ public class UIPanel extends JPanel {
 
     private synchronized Flower pointToFlower(Point point) {
         for (Map.Entry<Polygon, Flower> e : polygonFlowerMap.entrySet()) {
-            if (e.getKey().contains(point))
+            if (e.getKey()
+                 .contains(point))
                 return e.getValue();
         }
         return null;
@@ -375,37 +357,39 @@ public class UIPanel extends JPanel {
         Point2D firstPoint = positionPoints.get(first);
         Point2D secondPoint = positionPoints.get(second);
 
-        pStart1 = rotateAroundCenter(new Point2D.Double(firstPoint.getX(),
-                        firstPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+        pStart1 = rotateAroundCenter(
+                new Point2D.Double(firstPoint.getX(), firstPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
                 firstPoint, angle);
-        pStart2 = rotateAroundCenter(new Point2D.Double(firstPoint.getX(),
-                        firstPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+        pStart2 = rotateAroundCenter(
+                new Point2D.Double(firstPoint.getX(), firstPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
                 firstPoint, angle);
-        pEnd1 = rotateAroundCenter(new Point2D.Double(secondPoint.getX(),
-                        secondPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+        pEnd1 = rotateAroundCenter(
+                new Point2D.Double(secondPoint.getX(), secondPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
                 secondPoint, angle);
-        pEnd2 = rotateAroundCenter(new Point2D.Double(secondPoint.getX(),
-                        secondPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+        pEnd2 = rotateAroundCenter(
+                new Point2D.Double(secondPoint.getX(), secondPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
                 secondPoint, angle);
 
-        x = new int[]{(int) pStart1.getX(), (int) pStart2.getX(), (int)
-                pEnd1.getX(), (int) pEnd2.getX()};
-        y = new int[]{(int) pStart1.getY(), (int) pStart2.getY(), (int)
-                pEnd1.getY(), (int) pEnd2.getY()};
+        x = new int[]{
+                (int) pStart1.getX(), (int) pStart2.getX(), (int) pEnd1.getX(), (int) pEnd2.getX()
+        };
+        y = new int[]{
+                (int) pStart1.getY(), (int) pStart2.getY(), (int) pEnd1.getY(), (int) pEnd2.getY()
+        };
 
         return new Polygon(x, y, 4);
     }
 
     private Ditch pointToDitch(Point point) {
         for (Map.Entry<Polygon, Ditch> e : polygonDitchMap.entrySet()) {
-            if (e.getKey().contains(point))
+            if (e.getKey()
+                 .contains(point))
                 return e.getValue();
         }
         return null;
     }
 
-    private Point2D rotateAroundCenter(Point2D p, Point2D center, double
-            degree) {
+    private Point2D rotateAroundCenter(Point2D p, Point2D center, double degree) {
         double x = p.getX();
         double y = p.getY();
         double cx = center.getX();
@@ -414,10 +398,8 @@ public class UIPanel extends JPanel {
         x -= cx;
         y -= cy;
 
-        double newx = x * Math.cos(Math.toRadians(degree)) - y * Math.sin
-                (Math.toRadians(degree));
-        double newy = x * Math.sin(Math.toRadians(degree)) + y * Math.cos
-                (Math.toRadians(degree));
+        double newx = x * Math.cos(Math.toRadians(degree)) - y * Math.sin(Math.toRadians(degree));
+        double newy = x * Math.sin(Math.toRadians(degree)) + y * Math.cos(Math.toRadians(degree));
 
         return new Point2D.Double(newx + cx, newy + cy);
     }
@@ -431,9 +413,7 @@ public class UIPanel extends JPanel {
         g.fill(new Rectangle2D.Float(midX - 10, midY - 10, 20, 20));
         g.setColor(Color.RED);
         g.draw(new Rectangle2D.Float(10, 10, WIDTH - 20, HEIGHT - 20));*/
-        Paint backgroundPaint = new GradientPaint(0, 0, BACKGROUND_COLOR_A,
-                WIDTH,
-                HEIGHT, BACKGROUND_COLOR_B);
+        Paint backgroundPaint = new GradientPaint(0, 0, BACKGROUND_COLOR_A, WIDTH, HEIGHT, BACKGROUND_COLOR_B);
         g.setPaint(backgroundPaint);
         g.fill(new Rectangle2D.Float(0, 0, WIDTH, HEIGHT));
 
@@ -455,9 +435,10 @@ public class UIPanel extends JPanel {
         bottomLeft = positionPoints.get(new Position(1, 1));
         bottomRight = positionPoints.get(new Position(boardSize + 1, 1));
         top = positionPoints.get(new Position(1, boardSize + 1));
-        g.fill(new Polygon(new int[]{(int) bottomLeft.getX(), (int)
-                bottomRight.getX(), (int) top.getX()}, new int[]{(int)
-                bottomLeft.getY(), (int) bottomRight.getY(), (int) top.getY()
+        g.fill(new Polygon(new int[]{
+                (int) bottomLeft.getX(), (int) bottomRight.getX(), (int) top.getX()
+        }, new int[]{
+                (int) bottomLeft.getY(), (int) bottomRight.getY(), (int) top.getY()
         }, 3));
 
 
@@ -468,16 +449,14 @@ public class UIPanel extends JPanel {
             else if (pc == PlayerColor.Blue)
                 g.setColor(GREEN_PLAYER_COLOR);
             else
-                throw new IllegalStateException("only red and green player " +
-                        "supported");
+                throw new IllegalStateException("only red and green player " + "supported");
 
             for (Flower f : viewer.getFlowers(pc)) {
                 g.fill(flowerToPolygon(f));
             }
         }
 
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                HOVER_ALPHA));
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, HOVER_ALPHA));
 
         // Draw hover flower
         if (hoverFlower != null) {
@@ -490,48 +469,39 @@ public class UIPanel extends JPanel {
             g.fill(flowerToPolygon(moveFirstFlower));
         }
 
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                1.0f));
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
         // Draw grid
         g.setStroke(new BasicStroke(UNIT * GRID_NEUTRAL_LINE_STRENGTH));
         g.setColor(Color.BLACK);
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
-            for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(),
-                    boardSize)) {
-                g.draw(new Line2D.Double(e.getValue(), positionPoints.get
-                        (neighbor)));
+            for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
+                g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
             }
         }
 
         g.setStroke(new BasicStroke(UNIT * GRID_DITCH_LINE_STRENGTH));
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
-            for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(),
-                    boardSize)) {
+            for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
                 Ditch d = new Ditch(e.getKey(), neighbor);
 
                 // Determine color
-                if (viewer.getDitches(PlayerColor.Red).contains(d)) {
+                if (viewer.getDitches(PlayerColor.Red)
+                          .contains(d)) {
                     g.setColor(RED_PLAYER_COLOR);
-                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get
-                            (neighbor)));
-                } else if (viewer.getDitches(PlayerColor.Blue).contains(d)) {
+                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
+                } else if (viewer.getDitches(PlayerColor.Blue)
+                                 .contains(d)) {
                     g.setColor(GREEN_PLAYER_COLOR);
-                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get
-                            (neighbor)));
+                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                 }
 
                 // Draw hover ditch
                 if (d.equals(hoverDitch)) {
-                    g.setComposite(AlphaComposite.getInstance(AlphaComposite
-                                    .SRC_OVER,
-                            HOVER_ALPHA));
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, HOVER_ALPHA));
                     g.setColor(hoverColor);
-                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get
-                            (neighbor)));
-                    g.setComposite(AlphaComposite.getInstance(AlphaComposite
-                                    .SRC_OVER,
-                            1.0f));
+                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
+                    g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 }
             }
         }
@@ -540,8 +510,7 @@ public class UIPanel extends JPanel {
         // Draw grid points
         double dotSize = UNIT * GRID_DOT_SIZE;
         for (Point2D p : positionPoints.values()) {
-            g.fill(new Ellipse2D.Double(p.getX() - dotSize / 2, p.getY() -
-                    dotSize / 2, dotSize, dotSize));
+            g.fill(new Ellipse2D.Double(p.getX() - dotSize / 2, p.getY() - dotSize / 2, dotSize, dotSize));
         }
 
         /*g.setColor(Color.RED);
@@ -556,11 +525,9 @@ public class UIPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.BLACK);
-        g2d.fill(new Rectangle2D.Float(0, 0, parentWindow.getWidth(),
-                parentWindow.getHeight()));
+        g2d.fill(new Rectangle2D.Float(0, 0, parentWindow.getWidth(), parentWindow.getHeight()));
 
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints
-                .VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         render(g2d);
     }

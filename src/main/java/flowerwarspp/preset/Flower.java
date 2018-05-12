@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class Flower implements Serializable, Comparable<Flower> {
-    public static final int COMBINATIONS = Position.COMBINATIONS * 2 *
-            Position.COMBINATIONS;
+    public static final int COMBINATIONS = Position.COMBINATIONS * 2 * Position.COMBINATIONS;
 
     // ------------------------------------------------------------
 
@@ -13,8 +12,7 @@ public class Flower implements Serializable, Comparable<Flower> {
 
     // ------------------------------------------------------------
 
-    public Flower(final Position first, final Position second, final Position
-            third) {
+    public Flower(final Position first, final Position second, final Position third) {
         positions = new Position[3];
 
         setFirst(first);
@@ -67,8 +65,7 @@ public class Flower implements Serializable, Comparable<Flower> {
         // Distributes perfectly for valid moves. For arbitrary flowers of
         // valid position combinations which does not result in correct
         // flowers collisions might occur!
-        return getFirst().hashCode() * 2 + (getSecond().getColumn() >
-                getFirst().getColumn() ? 0 : 1);
+        return getFirst().hashCode() * 2 + (getSecond().getColumn() > getFirst().getColumn() ? 0 : 1);
     }
 
     @Override
@@ -76,7 +73,9 @@ public class Flower implements Serializable, Comparable<Flower> {
         // Due to the unique ordering it is easy to calculate
         if (!getFirst().equals(flower.getFirst()))
             return getFirst().compareTo(flower.getFirst());
-        else return getSecond().getColumn() - flower.getSecond().getColumn();
+        else
+            return getSecond().getColumn() - flower.getSecond()
+                                                   .getColumn();
     }
 
     @Override
@@ -91,8 +90,6 @@ public class Flower implements Serializable, Comparable<Flower> {
 
     @Override
     public String toString() {
-        return "{" + getFirst().toString() + "," + getSecond().toString() +
-                "," +
-                getThird().toString() + "}";
+        return "{" + getFirst().toString() + "," + getSecond().toString() + "," + getThird().toString() + "}";
     }
 }

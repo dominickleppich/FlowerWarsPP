@@ -4,9 +4,14 @@ import java.util.*;
 
 public interface Viewer {
     PlayerColor getTurn();
+
     int getSize();
+
     Status getStatus();
+
     Collection<Flower> getFlowers(PlayerColor color);
+
     Collection<Ditch> getDitches(PlayerColor color);
+
     Collection<Move> getPossibleMoves();
 }

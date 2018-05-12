@@ -25,8 +25,7 @@ public class Position implements Serializable, Comparable<Position> {
 
     private void setColumn(final int column) {
         if (column <= 0 || column > MAX_VALUE)
-            throw new IllegalArgumentException("illegal column value: " +
-                    column);
+            throw new IllegalArgumentException("illegal column value: " + column);
         this.column = column;
     }
 
