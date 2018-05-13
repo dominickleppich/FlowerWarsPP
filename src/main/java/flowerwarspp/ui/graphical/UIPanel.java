@@ -462,7 +462,7 @@ public class UIPanel extends JPanel {
             else if (pc == PlayerColor.Blue)
                 g.setColor(BLUE_PLAYER_COLOR);
             else
-                throw new IllegalStateException("only red and green player " + "supported");
+                throw new IllegalStateException("only red and blue player supported");
 
             for (Flower f : viewer.getFlowers(pc)) {
                 g.fill(flowerToPolygon(f));
