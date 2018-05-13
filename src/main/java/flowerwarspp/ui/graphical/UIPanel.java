@@ -26,11 +26,13 @@ public class UIPanel extends JPanel {
     private static final double GRID_DOT_SIZE = 0.3;
     private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
     private static final float GRID_DITCH_LINE_STRENGTH = 0.05f;
-    private static final double BORDER_SIZE = 0.2;*/
+    private static final double BORDER_SIZE = 0.2;
+    private static final float FONT_SIZE = 0.1f;*/
 
     private static final Color BACKGROUND_COLOR_A = new Color(255, 255, 255);
     private static final Color BACKGROUND_COLOR_B = new Color(255, 255, 255);
     private static final Color BOARD_BACKGROUND_COLOR = new Color(255, 255, 255);
+    private static final Color BOARD_GRID_NUMBER_COLOR = new Color(255, 255, 255);
     private static final Color RED_PLAYER_COLOR = new Color(255, 0, 0);
     private static final Color GREEN_PLAYER_COLOR = new Color(0, 0, 255);
     private static final Color RED_HOVER_COLOR = new Color(255, 0, 0);
@@ -40,6 +42,7 @@ public class UIPanel extends JPanel {
     private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
     private static final float GRID_DITCH_LINE_STRENGTH = 0.1f;
     private static final double BORDER_SIZE = 0.2;
+    private static final float FONT_SIZE = 0.1f;
 
     private UIWindow parentWindow;
     private Viewer viewer;
@@ -528,6 +531,28 @@ public class UIPanel extends JPanel {
             g.fill(new Ellipse2D.Double(p.getX() - dotSize / 2, p.getY() - dotSize / 2, dotSize, dotSize));
         }
 
+        // Draw grid numbers
+        g.setFont(g.getFont()
+                   .deriveFont(Font.BOLD, UNIT * FONT_SIZE));
+        FontMetrics fm = g.getFontMetrics();
+        if (BOARD_GRID_NUMBER_COLOR != null) {
+            g.setColor(BOARD_GRID_NUMBER_COLOR);
+
+            for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
+                Point2D p = e.getValue();
+                Position pos = e.getKey();
+                String s = "" + pos.getColumn() + "," + pos.getRow();
+
+                if (p == null)
+                    continue;
+
+                float x = (float) (p.getX() - fm.stringWidth(s) / 2);
+                float y = (float) (p.getY() + fm.getAscent() / 2);
+
+                g.drawString(s, x, y);
+            }
+        }
+
         /*g.setColor(Color.RED);
         g.setStroke(new BasicStroke(1.0f));
         for (Polygon p : polygonDitchMap.keySet())
@@ -539,8 +564,7 @@ public class UIPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.BLACK);
-        g2d.fill(new Rectangle2D.Float(0, 0, parentWindow.getWidth(), parentWindow.getHeight()));
+        g2d.setBackground(Color.BLACK);
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
