@@ -5,28 +5,40 @@ import flowerwarspp.preset.*;
 import java.util.*;
 
 public class CodeGenerationUtil {
-    public static String printReplayCode(List<Move> moves) {
+
+    public static String createReplayList(List<Move> moves) {
         StringBuilder sb = new StringBuilder();
         sb.append("List<Move> replayMoves = new LinkedList<>();\n");
-        for (Move m : moves) {
-            String newMoveString = "";
-            switch (m.getType()) {
-                case Flower:
-                    newMoveString = newFlowerMoveString(m);
-                    break;
-                case Ditch:
-                    newMoveString = newDitchMoveString(m);
-                    break;
-                case Surrender:
-                    newMoveString = "new Move(MoveType.Surrender)";
-                    break;
-                case End:
-                    newMoveString = "new Move(MoveType.End)";
-                    break;
-            }
-           sb.append("replayMoves.add(" + newMoveString + ");\n");
-        }
+        for (Move m : moves)
+            sb.append("replayMoves.add(" + createMoveString(m) + ");\n");
         return sb.toString();
+    }
+
+    public static String createParameterArray(List<Move> moves, boolean createFrame) {
+        StringBuilder sb = new StringBuilder();
+        if (createFrame)
+            sb.append("return Arrays.asList(new Object[][]{\n");
+        for (Move m : moves)
+            sb.append("{" + createMoveString(m) + "},\n");
+        if (createFrame)
+            sb.append("});\n");
+        return sb.toString();
+    }
+
+    // ------------------------------------------------------------
+
+    public static String createMoveString(Move move) {
+        switch (move.getType()) {
+            case Flower:
+                return newFlowerMoveString(move);
+            case Ditch:
+                return newDitchMoveString(move);
+            case Surrender:
+                return "new Move(MoveType.Surrender)";
+            case End:
+                return "new Move(MoveType.End)";
+        }
+        return null;
     }
 
     public static String newFlowerMoveString(Move move) {
