@@ -14,35 +14,30 @@ public class UIPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(UIPanel.class);
 
     // ------------------------------------------------------------
+    // ------------------------------------------------------------
+    // * Customizable settings *
 
-    /*private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
+    private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
     private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
-    private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
-    private static final Color RED_PLAYER_COLOR = new Color(166, 55, 63);
-    private static final Color GREEN_PLAYER_COLOR = new Color(52, 52, 119);
-    private static final Color RED_HOVER_COLOR = new Color(215, 161, 165);
-    private static final Color GREEN_HOVER_COLOR = new Color(122, 122, 154);
-    private static final float HOVER_ALPHA = 0.8f;
-    private static final double GRID_DOT_SIZE = 0.3;
-    private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
-    private static final float GRID_DITCH_LINE_STRENGTH = 0.05f;
     private static final double BORDER_SIZE = 0.2;
-    private static final float FONT_SIZE = 0.1f;*/
 
-    private static final Color BACKGROUND_COLOR_A = new Color(255, 255, 255);
-    private static final Color BACKGROUND_COLOR_B = new Color(255, 255, 255);
-    private static final Color BOARD_BACKGROUND_COLOR = new Color(255, 255, 255);
-    private static final Color BOARD_GRID_NUMBER_COLOR = new Color(255, 255, 255);
-    private static final Color RED_PLAYER_COLOR = new Color(255, 0, 0);
-    private static final Color GREEN_PLAYER_COLOR = new Color(0, 0, 255);
-    private static final Color RED_HOVER_COLOR = new Color(255, 0, 0);
-    private static final Color GREEN_HOVER_COLOR = new Color(0, 0, 255);
-    private static final float HOVER_ALPHA = 0.5f;
-    private static final double GRID_DOT_SIZE = 0.3;
-    private static final float GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
-    private static final float GRID_DITCH_LINE_STRENGTH = 0.1f;
-    private static final double BORDER_SIZE = 0.2;
-    private static final float FONT_SIZE = 0.1f;
+    private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
+    private static final Color BOARD_GRID_LINE_COLOR = new Color(44, 44, 44);
+    private static final Color BOARD_GRID_POINT_COLOR = new Color(44, 44, 44);
+    private static final double BOARD_GRID_POINT_SIZE = 0.3;
+    private static final Color BOARD_GRID_POINT_LABEL_COLOR = new Color(255, 255, 255);
+    private static final float BOARD_GRID_POINT_LABEL_FONT_SIZE = 0.1f;
+    private static final float BOARD_GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
+    private static final float BOARD_GRID_DITCH_LINE_STRENGTH = 0.05f;
+
+    private static final Color RED_PLAYER_COLOR = new Color(166, 55, 63);
+    private static final Color BLUE_PLAYER_COLOR = new Color(52, 52, 119);
+    private static final Color RED_HOVER_COLOR = new Color(215, 161, 165);
+    private static final Color BLUE_HOVER_COLOR = new Color(122, 122, 154);
+    private static final float HOVER_ALPHA = 0.8f;
+
+    // ------------------------------------------------------------
+    // ------------------------------------------------------------
 
     private UIWindow parentWindow;
     private Viewer viewer;
@@ -233,7 +228,7 @@ public class UIPanel extends JPanel {
     public Move request() throws InterruptedException {
         synchronized (moveWaitingMonitor) {
             move = null;
-            hoverColor = viewer.getTurn() == PlayerColor.Red ? RED_HOVER_COLOR : GREEN_HOVER_COLOR;
+            hoverColor = viewer.getTurn() == PlayerColor.Red ? RED_HOVER_COLOR : BLUE_HOVER_COLOR;
             possibleMoves = viewer.getPossibleMoves();
             inputEnabled = true;
             logger.debug("Start waiting for ui to create a move");
@@ -376,16 +371,16 @@ public class UIPanel extends JPanel {
         Point2D secondPoint = positionPoints.get(second);
 
         pStart1 = rotateAroundCenter(
-                new Point2D.Double(firstPoint.getX(), firstPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                new Point2D.Double(firstPoint.getX(), firstPoint.getY() + UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH),
                 firstPoint, angle);
         pStart2 = rotateAroundCenter(
-                new Point2D.Double(firstPoint.getX(), firstPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                new Point2D.Double(firstPoint.getX(), firstPoint.getY() - UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH),
                 firstPoint, angle);
         pEnd1 = rotateAroundCenter(
-                new Point2D.Double(secondPoint.getX(), secondPoint.getY() - UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                new Point2D.Double(secondPoint.getX(), secondPoint.getY() - UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH),
                 secondPoint, angle);
         pEnd2 = rotateAroundCenter(
-                new Point2D.Double(secondPoint.getX(), secondPoint.getY() + UNIT * GRID_NEUTRAL_LINE_STRENGTH),
+                new Point2D.Double(secondPoint.getX(), secondPoint.getY() + UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH),
                 secondPoint, angle);
 
         x = new int[]{
@@ -465,7 +460,7 @@ public class UIPanel extends JPanel {
             if (pc == PlayerColor.Red)
                 g.setColor(RED_PLAYER_COLOR);
             else if (pc == PlayerColor.Blue)
-                g.setColor(GREEN_PLAYER_COLOR);
+                g.setColor(BLUE_PLAYER_COLOR);
             else
                 throw new IllegalStateException("only red and green player " + "supported");
 
@@ -490,15 +485,15 @@ public class UIPanel extends JPanel {
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 
         // Draw grid
-        g.setStroke(new BasicStroke(UNIT * GRID_NEUTRAL_LINE_STRENGTH));
-        g.setColor(Color.BLACK);
+        g.setStroke(new BasicStroke(UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH));
+        g.setColor(BOARD_GRID_LINE_COLOR);
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
             for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
                 g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
             }
         }
 
-        g.setStroke(new BasicStroke(UNIT * GRID_DITCH_LINE_STRENGTH));
+        g.setStroke(new BasicStroke(UNIT * BOARD_GRID_DITCH_LINE_STRENGTH));
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
             for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
                 Ditch d = new Ditch(e.getKey(), neighbor);
@@ -510,7 +505,7 @@ public class UIPanel extends JPanel {
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                 } else if (viewer.getDitches(PlayerColor.Blue)
                                  .contains(d)) {
-                    g.setColor(GREEN_PLAYER_COLOR);
+                    g.setColor(BLUE_PLAYER_COLOR);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                 }
 
@@ -524,19 +519,19 @@ public class UIPanel extends JPanel {
             }
         }
 
-        g.setColor(Color.BLACK);
+        g.setColor(BOARD_GRID_POINT_COLOR);
         // Draw grid points
-        double dotSize = UNIT * GRID_DOT_SIZE;
+        double dotSize = UNIT * BOARD_GRID_POINT_SIZE;
         for (Point2D p : positionPoints.values()) {
             g.fill(new Ellipse2D.Double(p.getX() - dotSize / 2, p.getY() - dotSize / 2, dotSize, dotSize));
         }
 
         // Draw grid numbers
         g.setFont(g.getFont()
-                   .deriveFont(Font.BOLD, UNIT * FONT_SIZE));
+                   .deriveFont(Font.BOLD, UNIT * BOARD_GRID_POINT_LABEL_FONT_SIZE));
         FontMetrics fm = g.getFontMetrics();
-        if (BOARD_GRID_NUMBER_COLOR != null) {
-            g.setColor(BOARD_GRID_NUMBER_COLOR);
+        if (BOARD_GRID_POINT_LABEL_COLOR != null) {
+            g.setColor(BOARD_GRID_POINT_LABEL_COLOR);
 
             for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
                 Point2D p = e.getValue();
