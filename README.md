@@ -29,7 +29,7 @@ Hauptbestandteile von FlowerWarsPP.
 Auf diesem Spielbrett ist folgende Situation gezeigt:
 
 - Der rote Spieler hat Blumen auf (`1,1`, `2,1`, `1,2`) und (`2,1`, `3,1`, `2,2`)
-- Der blaue Spieler hat eine Blume auf (`2,2`, `1,3`, `2,3`)
+- Der blaue Spieler hat eine Blume auf (`1,3`, `2,3`, `1,4`)
 - Der rote Spieler hat einen Graben von `1,2` nach `2,2`, mit der seine beiden Blumen verbunden werden
 
 # Zugregeln
