@@ -7,7 +7,8 @@ import org.junit.runners.*;
 @Suite.SuiteClasses({
         BoardFlowerMoveFormatTest.class,
         BoardFlowerMovePositionTest.class,
-        BoardFlowerMoveDitchTest.class
+        BoardFlowerMoveDitchTest.class,
+        BoardFlowerMoveGardenRulesTests.class
 })
 public class BoardFlowerMoveTests {
 }
