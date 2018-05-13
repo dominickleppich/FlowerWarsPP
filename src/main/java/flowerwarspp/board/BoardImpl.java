@@ -297,6 +297,8 @@ public class BoardImpl implements Board {
                         move.getFirstFlower(), move.getSecondFlower()
                 };
 
+                // TODO even if two separate flowers are valid, the combination can make it invalid!
+
                 for (Flower f : flowers)
                     if (!isValidFlower(f))
                         return false;
@@ -586,13 +588,20 @@ public class BoardImpl implements Board {
                 nonValidFlowers.add(f);
         validFlowers.removeAll(nonValidFlowers);
 
-        // TODO even if two separate flowers are valid, the combination can make it invalid!
-
+        Set<Move> flowerMoves = new HashSet<>();
         // Create cartesian product
         for (Flower f1 : validFlowers)
             for (Flower f2 : validFlowers)
                 if (!f1.equals(f2))
-                    moves.add(new Move(f1, f2));
+                    flowerMoves.add(new Move(f1, f2));
+
+        Set<Move> invalidFlowerMoves = new HashSet<>();
+        for (Move m : flowerMoves)
+            if (!isValidMove(m))
+                invalidFlowerMoves.add(m);
+
+        flowerMoves.removeAll(invalidFlowerMoves);
+        moves.addAll(flowerMoves);
 
         moves.add(new Move(MoveType.Surrender));
 
