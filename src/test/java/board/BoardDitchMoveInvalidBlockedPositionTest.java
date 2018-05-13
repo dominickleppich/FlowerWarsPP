@@ -12,83 +12,43 @@ import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class BoardDitchMoveInvalidBlockedPositionTest {
-    private static final int BOARD_SIZE = 10;
+    private static final int BOARD_SIZE = 15;
     private Board board;
     private Viewer viewer;
+
+    private static final String MESSAGE = "Invalid ditch move on blocked position";
+
+    // ------------------------------------------------------------
 
     @Before
     public void init() {
         board = new BoardImpl(BOARD_SIZE);
         viewer = board.viewer();
 
-        // Place three flowers to make 6 ditches possible
-        // Red flowers
-        Flower r1, r2, r3, r4;
-        r1 = new Flower(new Position(5, 5), new Position(6, 5), new Position(5,
-                6));
-        r2 = new Flower(new Position(4, 4), new Position(5, 4), new Position(4,
-                5));
-        r3 = new Flower(new Position(7, 4), new Position(8, 4), new Position(7,
-                5));
-        r4 = new Flower(new Position(4, 7), new Position(5, 7), new Position(4,
-                8));
+        // Set up board
 
-        // Blue flowers
-        Flower b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
-        b1 = new Flower(new Position(2, 2), new Position(3, 2), new Position(2,
-                3));
-        b2 = new Flower(new Position(3, 2), new Position(4, 2), new Position(3,
-                3));
-        b3 = new Flower(new Position(3, 2), new Position(2, 3), new Position(3,
-                3));
-        b4 = new Flower(new Position(2, 3), new Position(3, 3), new Position(2,
-                4));
-        b5 = new Flower(new Position(1, 5), new Position(2, 5), new Position(2,
-                4));
-        b6 = new Flower(new Position(2, 4), new Position(3, 4), new Position(2,
-                5));
-        b7 = new Flower(new Position(2, 4), new Position(3, 4), new Position(3,
-                3));
-        b8 = new Flower(new Position(3, 3), new Position(4, 3), new Position(3,
-                4));
-        b9 = new Flower(new Position(3, 3), new Position(4, 3), new Position(4,
-                2));
-        b10 = new Flower(new Position(4, 2), new Position(5, 2), new Position
-                (4, 3));
+        List<Move> replayMoves = new LinkedList<>();
 
-        // Set up test scenario
-        board.make(new Move(r1, r2));
-        board.make(new Move(b1, b2));
-        board.make(new Move(r3, r4));
-        board.make(new Move(b3, b4));
-        board.make(new Move(new Ditch(new Position(5, 5), new Position(4, 5)
-        )));
-        board.make(new Move(b5, b6));
-        board.make(new Move(new Ditch(new Position(6, 5), new Position(7, 5)
-        )));
-        board.make(new Move(b7, b8));
-        board.make(new Move(new Ditch(new Position(5, 6), new Position(4, 7)
-        )));
-        board.make(new Move(b9, b10));
+        replayMoves.add(new Move(new Flower(new Position(2, 2), new Position(3, 2), new Position(2, 3)),
+                new Flower(new Position(3, 3), new Position(4, 3), new Position(3, 4))));
+        replayMoves.add(new Move(new Flower(new Position(13, 2), new Position(14, 2), new Position(13, 3)),
+                new Flower(new Position(12, 3), new Position(11, 4), new Position(12, 4))));
+        replayMoves.add(new Move(new Flower(new Position(5, 2), new Position(6, 2), new Position(5, 3)),
+                new Flower(new Position(2, 5), new Position(3, 5), new Position(2, 6))));
+        replayMoves.add(new Move(new Flower(new Position(11, 2), new Position(12, 2), new Position(11, 3)),
+                new Flower(new Position(10, 3), new Position(9, 4), new Position(10, 4))));
+        replayMoves.add(new Move(new Ditch(new Position(3, 4), new Position(2, 5))));
+        replayMoves.add(new Move(new Flower(new Position(10, 5), new Position(11, 5), new Position(10, 6)),
+                new Flower(new Position(9, 6), new Position(8, 7), new Position(9, 7))));
+        replayMoves.add(new Move(new Ditch(new Position(4, 3), new Position(5, 3))));
+        replayMoves.add(new Move(new Flower(new Position(8, 5), new Position(9, 5), new Position(8, 6)),
+                new Flower(new Position(7, 6), new Position(6, 7), new Position(7, 7))));
+        replayMoves.add(new Move(new Ditch(new Position(2, 3), new Position(3, 3))));
+        replayMoves.add(new Move(new Flower(new Position(7, 8), new Position(8, 8), new Position(7, 9)),
+                new Flower(new Position(6, 9), new Position(5, 10), new Position(6, 10))));
 
-    }
-
-    // ------------------------------------------------------------
-
-    private Ditch ditch;
-    private Status expectedStatus;
-
-    public BoardDitchMoveInvalidBlockedPositionTest(Ditch ditch, Status expected) {
-        this.ditch = ditch;
-        this.expectedStatus = expected;
-    }
-
-    @Test
-    public void testBridgeMove() {
-        board.make(new Move(ditch));
-        assertEquals("Invalid ditch containing blocked position " + ditch.toString(), expectedStatus,
-                viewer
-                        .getStatus());
+        for (Move m : replayMoves)
+            board.make(m);
     }
 
     // ------------------------------------------------------------
@@ -96,19 +56,28 @@ public class BoardDitchMoveInvalidBlockedPositionTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                // Bridges starting on blocked positions
-                {new Ditch(new Position(5, 5), new Position(4, 5)), Status
-                        .Illegal},
-                {new Ditch(new Position(5, 5), new Position(5, 4)), Status
-                        .Illegal},
-                {new Ditch(new Position(6, 5), new Position(7, 5)), Status
-                        .Illegal},
-                {new Ditch(new Position(6, 5), new Position(7, 4)), Status
-                        .Illegal},
-                {new Ditch(new Position(5, 6), new Position(5, 7)), Status
-                        .Illegal},
-                {new Ditch(new Position(5, 6), new Position(4, 7)), Status
-                        .Illegal}
+                {new Move(new Ditch(new Position(3, 3), new Position(3, 4))), Status.Illegal},
+                {new Move(new Ditch(new Position(4, 3), new Position(3, 4))), Status.Illegal},
+                {new Move(new Ditch(new Position(3, 3), new Position(4, 3))), Status.Illegal},
+                {new Move(new Ditch(new Position(3, 2), new Position(3, 3))), Status.Illegal},
+                {new Move(new Ditch(new Position(3, 4), new Position(3, 5))), Status.Illegal},
+                {new Move(new Ditch(new Position(5, 2), new Position(4, 3))), Status.Illegal}
         });
+    }
+
+    // ------------------------------------------------------------
+
+    private Move move;
+    private Status expectedStatus;
+
+    public BoardDitchMoveInvalidBlockedPositionTest(Move move, Status expected) {
+        this.move = move;
+        this.expectedStatus = expected;
+    }
+
+    @Test
+    public void testFlowerGardenMove() {
+        board.make(move);
+        assertEquals(MESSAGE + " " + move.toString(), expectedStatus, viewer.getStatus());
     }
 }
