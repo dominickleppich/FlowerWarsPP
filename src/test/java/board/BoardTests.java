@@ -5,7 +5,7 @@ import org.junit.runners.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        BoardLogicTest.class,
+        BoardSimpleLogicTest.class,
         BoardFlowerMoveTests.class,
         BoardDitchMoveTests.class
 })

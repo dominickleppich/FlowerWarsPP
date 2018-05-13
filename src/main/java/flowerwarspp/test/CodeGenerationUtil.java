@@ -5,7 +5,9 @@ import flowerwarspp.preset.*;
 import java.util.*;
 
 public class CodeGenerationUtil {
-    public static void printReplayCode(List<Move> moves) {
+    public static String printReplayCode(List<Move> moves) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("List<Move> replayMoves = new LinkedList<>();\n");
         for (Move m : moves) {
             String newMoveString = "";
             switch (m.getType()) {
@@ -22,8 +24,9 @@ public class CodeGenerationUtil {
                     newMoveString = "new Move(MoveType.End)";
                     break;
             }
-            System.out.println("moves.add(" + newMoveString + ");");
+           sb.append("replayMoves.add(" + newMoveString + ");\n");
         }
+        return sb.toString();
     }
 
     public static String newFlowerMoveString(Move move) {
