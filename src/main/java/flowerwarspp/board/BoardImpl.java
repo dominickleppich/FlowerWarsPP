@@ -110,7 +110,7 @@ public class BoardImpl implements Board {
 
         if (move.getType() == MoveType.Surrender) {
             if (turn == PlayerColor.Red)
-                status = Status.GreenWin;
+                status = Status.BlueWin;
             else
                 status = Status.RedWin;
             return;
@@ -123,6 +123,7 @@ public class BoardImpl implements Board {
     }
 
     private boolean isValidMove(Move move) {
+
         switch (move.getType()) {
             case Flower:
                 // Flower needs to be placed on the board!
