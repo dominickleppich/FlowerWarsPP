@@ -41,8 +41,10 @@ public class BoardFlowerMovePositionTest {
         return m;
     }
 
+    // ------------------------------------------------------------
+
     @Test
-    public void makeValidBottomLeftLandMoveInFirstLand() {
+    public void makeValidBottomLeftFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(1, 1), new Position
                 (2, 1), new Position(1, 2))));
 
@@ -50,7 +52,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidBottomRightLandMoveInFirstLand() {
+    public void makeValidBottomRightFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(3, 1), new Position
                 (4, 1), new Position(3, 2))));
 
@@ -58,7 +60,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidTopLandMoveInFirstLand() {
+    public void makeValidTopFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(1, 3), new Position
                 (2, 3), new Position(1, 4))));
 
@@ -66,7 +68,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidBorderLandMoveInFirstLand() {
+    public void makeValidBorderFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(2, 2), new Position
                 (3, 2), new Position(2, 3))));
 
@@ -74,7 +76,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidBottomLeftLandMoveInSecondLand() {
+    public void makeValidBottomLeftFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(1, 1), new Position
                 (2, 1), new Position(1, 2))));
 
@@ -82,7 +84,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidBottomRightLandMoveInSecondLand() {
+    public void makeValidBottomRightFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(3, 1), new Position
                 (4, 1), new Position(3, 2))));
 
@@ -90,7 +92,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidTopLandMoveInSecondLand() {
+    public void makeValidTopFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(1, 3), new Position
                 (2, 3), new Position(1, 4))));
 
@@ -98,7 +100,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidBorderLandMoveInSecondLand() {
+    public void makeValidBorderFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(2, 2), new Position
                 (3, 2), new Position(2, 3))));
 
@@ -106,7 +108,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidTopOutsideLandMoveInFirstLand() {
+    public void makeInvalidTopOutsideFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(1, 4), new Position
                 (2, 4), new Position(1, 5))));
 
@@ -114,7 +116,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidBottomRightOutsideLandMoveInFirstLand() {
+    public void makeInvalidBottomRightOutsideFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(4, 1), new Position
                 (5, 1), new Position(4, 2))));
 
@@ -122,7 +124,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidTopBorderOutsideLandMoveInFirstLand() {
+    public void makeInvalidTopBorderOutsideFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(2, 3), new Position
                 (1, 4), new Position(2, 4))));
 
@@ -130,7 +132,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidMiddleBorderOutsideLandMoveInFirstLand() {
+    public void makeInvalidMiddleBorderOutsideFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(3, 2), new Position
                 (2, 3), new Position(3, 3))));
 
@@ -138,7 +140,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidBottomBorderOutsideLandMoveInFirstLand() {
+    public void makeInvalidBottomBorderOutsideFlowerMoveInFirstFlower() {
         board.make(createMove(true, new Flower(new Position(4, 1), new Position
                 (3, 2), new Position(4, 2))));
 
@@ -146,7 +148,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidTopOutsideLandMoveInSecondLand() {
+    public void makeInvalidTopOutsideFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(1, 4), new Position
                 (2, 4), new Position(1, 5))));
 
@@ -154,7 +156,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidBottomRightOutsideLandMoveInSecondLand() {
+    public void makeInvalidBottomRightOutsideFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(4, 1), new Position
                 (5, 1), new Position(4, 2))));
 
@@ -162,7 +164,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidTopBorderOutsideLandMoveInSecondLand() {
+    public void makeInvalidTopBorderOutsideFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(2, 3), new Position
                 (1, 4), new Position(2, 4))));
 
@@ -170,7 +172,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidMiddleBorderOutsideLandMoveInSecondLand() {
+    public void makeInvalidMiddleBorderOutsideFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(3, 2), new Position
                 (2, 3), new Position(3, 3))));
 
@@ -178,7 +180,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidBottomBorderOutsideLandMoveInSecondLand() {
+    public void makeInvalidBottomBorderOutsideFlowerMoveInSecondFlower() {
         board.make(createMove(false, new Flower(new Position(4, 1), new Position
                 (3, 2), new Position(4, 2))));
 
@@ -189,7 +191,7 @@ public class BoardFlowerMovePositionTest {
     // ** Flower moves only on empty fields allowed **
 
     private void prepareBoard() {
-        // Add four white and red lands to the bottom left corner of the map
+        // Add four white and red Flowers to the bottom left corner of the map
         board.make(new Move(new Flower(new Position(1, 1), new Position(2, 1),
                 new Position(1, 2)), new Flower(new Position(1, 2), new
                 Position(1, 3), new Position(2, 2))));
@@ -200,7 +202,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidLandMoveOnEmptyFieldInFirstLand() {
+    public void makeValidFlowerMoveOnEmptyFieldInFirstFlower() {
         prepareBoard();
 
         board.make(createMove(true, new Flower(new Position(3, 1), new Position
@@ -210,7 +212,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidLandMoveOnWhiteLandInFirstLand() {
+    public void makeInvalidFlowerMoveOnRedFlowerInFirstFlower() {
         prepareBoard();
 
         board.make(createMove(true, new Flower(new Position(1, 2), new
@@ -220,7 +222,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidLandMoveOnRedLandInFirstLand() {
+    public void makeInvalidFlowerMoveOnBlueFlowerInFirstFlower() {
         prepareBoard();
 
         board.make(createMove(true, new Flower(new Position(2, 1), new
@@ -230,7 +232,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeValidLandMoveOnEmptyFieldInSecondLand() {
+    public void makeValidFlowerMoveOnEmptyFieldInSecondFlower() {
         prepareBoard();
 
         board.make(createMove(false, new Flower(new Position(3, 1), new Position
@@ -240,7 +242,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidLandMoveOnWhiteLandInSecondLand() {
+    public void makeInvalidFlowerMoveOnRedFlowerInSecondFlower() {
         prepareBoard();
 
         board.make(createMove(false, new Flower(new Position(1, 2), new
@@ -250,7 +252,7 @@ public class BoardFlowerMovePositionTest {
     }
 
     @Test
-    public void makeInvalidLandMoveOnRedLandInSecondLand() {
+    public void makeInvalidFlowerMoveOnBlueFlowerInSecondFlower() {
         prepareBoard();
 
         board.make(createMove(false, new Flower(new Position(2, 1), new

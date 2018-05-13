@@ -35,13 +35,13 @@ public class BoardFlowerMoveFormatTest {
     }
 
     @Test
-    public void testLandMovesFirstLand() {
+    public void testFlowerMovesFirstFlower() {
         board.make(new Move(flower, VALID_FLOWER));
         assertEquals("First flower " + flower.toString(), expectedStatus, viewer.getStatus());
     }
 
     @Test
-    public void testLandMovesSecondLand() {
+    public void testFlowerMovesSecondFlower() {
         board.make(new Move(VALID_FLOWER, flower));
         assertEquals("Second flower " + flower.toString(), expectedStatus, viewer.getStatus());
     }

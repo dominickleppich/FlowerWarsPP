@@ -21,55 +21,55 @@ public class BoardDitchMoveInvalidBlockedPositionTest {
         board = new BoardImpl(BOARD_SIZE);
         viewer = board.viewer();
 
-        // Place three lands to make 6 bridges possible
-        // Red lands
-        Flower w1, w2, w3, w4;
-        w1 = new Flower(new Position(5, 5), new Position(6, 5), new Position(5,
+        // Place three flowers to make 6 ditches possible
+        // Red flowers
+        Flower r1, r2, r3, r4;
+        r1 = new Flower(new Position(5, 5), new Position(6, 5), new Position(5,
                 6));
-        w2 = new Flower(new Position(4, 4), new Position(5, 4), new Position(4,
+        r2 = new Flower(new Position(4, 4), new Position(5, 4), new Position(4,
                 5));
-        w3 = new Flower(new Position(7, 4), new Position(8, 4), new Position(7,
+        r3 = new Flower(new Position(7, 4), new Position(8, 4), new Position(7,
                 5));
-        w4 = new Flower(new Position(4, 7), new Position(5, 7), new Position(4,
+        r4 = new Flower(new Position(4, 7), new Position(5, 7), new Position(4,
                 8));
 
-        // Green lands
-        Flower r1, r2, r3, r4, r5, r6, r7, r8, r9, r10;
-        r1 = new Flower(new Position(2, 2), new Position(3, 2), new Position(2,
+        // Blue flowers
+        Flower b1, b2, b3, b4, b5, b6, b7, b8, b9, b10;
+        b1 = new Flower(new Position(2, 2), new Position(3, 2), new Position(2,
                 3));
-        r2 = new Flower(new Position(3, 2), new Position(4, 2), new Position(3,
+        b2 = new Flower(new Position(3, 2), new Position(4, 2), new Position(3,
                 3));
-        r3 = new Flower(new Position(3, 2), new Position(2, 3), new Position(3,
+        b3 = new Flower(new Position(3, 2), new Position(2, 3), new Position(3,
                 3));
-        r4 = new Flower(new Position(2, 3), new Position(3, 3), new Position(2,
+        b4 = new Flower(new Position(2, 3), new Position(3, 3), new Position(2,
                 4));
-        r5 = new Flower(new Position(1, 5), new Position(2, 5), new Position(2,
+        b5 = new Flower(new Position(1, 5), new Position(2, 5), new Position(2,
                 4));
-        r6 = new Flower(new Position(2, 4), new Position(3, 4), new Position(2,
+        b6 = new Flower(new Position(2, 4), new Position(3, 4), new Position(2,
                 5));
-        r7 = new Flower(new Position(2, 4), new Position(3, 4), new Position(3,
+        b7 = new Flower(new Position(2, 4), new Position(3, 4), new Position(3,
                 3));
-        r8 = new Flower(new Position(3, 3), new Position(4, 3), new Position(3,
+        b8 = new Flower(new Position(3, 3), new Position(4, 3), new Position(3,
                 4));
-        r9 = new Flower(new Position(3, 3), new Position(4, 3), new Position(4,
+        b9 = new Flower(new Position(3, 3), new Position(4, 3), new Position(4,
                 2));
-        r10 = new Flower(new Position(4, 2), new Position(5, 2), new Position
+        b10 = new Flower(new Position(4, 2), new Position(5, 2), new Position
                 (4, 3));
 
         // Set up test scenario
-        board.make(new Move(w1, w2));
         board.make(new Move(r1, r2));
-        board.make(new Move(w3, w4));
+        board.make(new Move(b1, b2));
         board.make(new Move(r3, r4));
+        board.make(new Move(b3, b4));
         board.make(new Move(new Ditch(new Position(5, 5), new Position(4, 5)
         )));
-        board.make(new Move(r5, r6));
+        board.make(new Move(b5, b6));
         board.make(new Move(new Ditch(new Position(6, 5), new Position(7, 5)
         )));
-        board.make(new Move(r7, r8));
+        board.make(new Move(b7, b8));
         board.make(new Move(new Ditch(new Position(5, 6), new Position(4, 7)
         )));
-        board.make(new Move(r9, r10));
+        board.make(new Move(b9, b10));
 
     }
 
@@ -86,7 +86,7 @@ public class BoardDitchMoveInvalidBlockedPositionTest {
     @Test
     public void testBridgeMove() {
         board.make(new Move(ditch));
-        assertEquals("Invalid ditch blocked position " + ditch.toString(), expectedStatus,
+        assertEquals("Invalid ditch containing blocked position " + ditch.toString(), expectedStatus,
                 viewer
                         .getStatus());
     }

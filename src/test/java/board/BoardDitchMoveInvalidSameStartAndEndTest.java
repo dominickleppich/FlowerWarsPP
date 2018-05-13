@@ -21,33 +21,33 @@ public class BoardDitchMoveInvalidSameStartAndEndTest {
         board = new BoardImpl(BOARD_SIZE);
         viewer = board.viewer();
 
-        // Place three lands to make 6 bridges possible
-        // Red lands
-        Flower w1, w2, w3, w4;
-        w1 = new Flower(new Position(5, 5), new Position(6, 5), new Position(5,
+        // Place three flowers to make 6 bridges possible
+        // Red flowers
+        Flower r1, r2, r3, r4;
+        r1 = new Flower(new Position(5, 5), new Position(6, 5), new Position(5,
                 6));
-        w2 = new Flower(new Position(4, 4), new Position(5, 4), new Position(4,
+        r2 = new Flower(new Position(4, 4), new Position(5, 4), new Position(4,
                 5));
-        w3 = new Flower(new Position(7, 4), new Position(8, 4), new Position(7,
+        r3 = new Flower(new Position(7, 4), new Position(8, 4), new Position(7,
                 5));
-        w4 = new Flower(new Position(4, 7), new Position(5, 7), new Position(4,
+        r4 = new Flower(new Position(4, 7), new Position(5, 7), new Position(4,
                 8));
 
-        // Green lands
-        Flower r1, r2, r3, r4;
-        r1 = new Flower(new Position(2, 2), new Position(3, 2), new Position(2,
+        // Blue flowers
+        Flower b1, b2, b3, b4;
+        b1 = new Flower(new Position(2, 2), new Position(3, 2), new Position(2,
                 3));
-        r2 = new Flower(new Position(3, 2), new Position(4, 2), new Position(3,
+        b2 = new Flower(new Position(3, 2), new Position(4, 2), new Position(3,
                 3));
-        r3 = new Flower(new Position(3, 2), new Position(2, 3), new Position(3,
+        b3 = new Flower(new Position(3, 2), new Position(2, 3), new Position(3,
                 3));
-        r4 = new Flower(new Position(2, 3), new Position(3, 3), new Position(2,
+        b4 = new Flower(new Position(2, 3), new Position(3, 3), new Position(2,
                 4));
         // Set up test scenario
-        board.make(new Move(w1, w2));
         board.make(new Move(r1, r2));
-        board.make(new Move(w3, w4));
+        board.make(new Move(b1, b2));
         board.make(new Move(r3, r4));
+        board.make(new Move(b3, b4));
     }
 
     // ------------------------------------------------------------
@@ -63,7 +63,7 @@ public class BoardDitchMoveInvalidSameStartAndEndTest {
     @Test
     public void testBridgeMove() {
         board.make(new Move(ditch));
-        assertEquals("Invalid ditch (start == end) " + ditch.toString(), expectedStatus, viewer
+        assertEquals("Invalid ditch with same start and end " + ditch.toString(), expectedStatus, viewer
                 .getStatus());
     }
 

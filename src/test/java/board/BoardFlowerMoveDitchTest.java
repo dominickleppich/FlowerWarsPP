@@ -35,7 +35,7 @@ public class BoardFlowerMoveDitchTest {
     // ------------------------------------------------------------
 
     @Test
-    public void validLandMoveForRedPlayer() {
+    public void validFlowerMoveForRedPlayer() {
         board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3)), new Flower(new Position(3, 1), new
                 Position(2, 2), new Position(3, 2))));
@@ -44,7 +44,7 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldByRedPlayerOnFirstBlockedFieldByFirstLand() {
+    public void invalidFlowerMoveOnDitchBlockedFieldByRedPlayerOnFirstBlockedFieldByFirstFlower() {
         Flower validFlower = new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3));
 
@@ -54,7 +54,7 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldByRedPlayerOnSecondBlockedFieldByFirstLand() {
+    public void invalidFlowerMoveOnDitchBlockedFieldByRedPlayerOnSecondBlockedFieldByFirstFlower() {
         Flower validFlower = new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3));
 
@@ -64,7 +64,7 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldByRedPlayerOnFirstBlockedFieldBySecondLand() {
+    public void invalidFlowerMoveOnDitchBlockedFieldByRedPlayerOnFirstBlockedFieldBySecondFlower() {
         Flower validFlower = new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3));
 
@@ -74,7 +74,7 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldByRedPlayerOnSecondBlockedFieldBySecondLand() {
+    public void invalidFlowerMoveOnDitchBlockedFieldByRedPlayerOnSecondBlockedFieldBySecondFlower() {
         Flower validFlower = new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3));
 
@@ -84,14 +84,14 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldsByRedPlayerOnBothBlockedFields() {
+    public void invalidFlowerMoveOnDitchBlockedFieldsByRedPlayerOnBothBlockedFields() {
         board.make(new Move(FIRST_BLOCKED_FLOWER, SECOND_BLOCKED_FLOWER));
 
         assertEquals(Status.Illegal, viewer.getStatus());
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldByWhitePlayerOnFirstBlockedFieldByFirstLand() {
+    public void invalidFlowerMoveOnDitchBlockedFieldByWhitePlayerOnFirstBlockedFieldByFirstFlower() {
         // Do red move before
         board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3)), new Flower(new Position(3, 1), new
@@ -106,7 +106,7 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldByWhitePlayerOnSecondBlockedFieldByFirstLand() {
+    public void invalidFlowerMoveOnDitchBlockedFieldByWhitePlayerOnSecondBlockedFieldByFirstFlower() {
         // Do red move before
         board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3)), new Flower(new Position(3, 1), new
@@ -121,7 +121,7 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldByWhitePlayerOnFirstBlockedFieldBySecondLand() {
+    public void invalidFlowerMoveOnDitchBlockedFieldByWhitePlayerOnFirstBlockedFieldBySecondFlower() {
         // Do red move before
         board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3)), new Flower(new Position(3, 1), new
@@ -136,7 +136,7 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldByWhitePlayerOnSecondBlockedFieldBySecondLand() {
+    public void invalidFlowerMoveOnDitchBlockedFieldByWhitePlayerOnSecondBlockedFieldBySecondFlower() {
         // Do red move before
         board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3)), new Flower(new Position(3, 1), new
@@ -151,7 +151,7 @@ public class BoardFlowerMoveDitchTest {
     }
 
     @Test
-    public void invalidLandMoveOnBridgeBlockedFieldsByWhitePlayerOnBothBlockedFields() {
+    public void invalidFlowerMoveOnDitchBlockedFieldsByWhitePlayerOnBothBlockedFields() {
         // Do red move before
         board.make(new Move(new Flower(new Position(1, 2), new Position(2, 2),
                 new Position(1, 3)), new Flower(new Position(3, 1), new
