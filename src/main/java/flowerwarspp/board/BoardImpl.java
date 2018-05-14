@@ -1,7 +1,6 @@
 package flowerwarspp.board;
 
 import flowerwarspp.preset.*;
-import javafx.geometry.*;
 import org.slf4j.*;
 
 import java.util.*;
@@ -224,7 +223,8 @@ public class BoardImpl implements Board {
         // Find touched flower beds
         Set<FlowerBed> neighboringBeds = new HashSet<>();
         for (FlowerBed fb : getFlowerBed(turn))
-            if (fb.getBoundingFlowers().contains(flower))
+            if (fb.getBoundingFlowers()
+                  .contains(flower))
                 neighboringBeds.add(fb);
 
         // If no flower bed touched, create a new one
@@ -303,6 +303,9 @@ public class BoardImpl implements Board {
                     if (!isValidFlower(f))
                         return false;
 
+                if (!isValidFlowerCombination(flowers[0], flowers[1]))
+                    return false;
+
                 break;
             case Ditch:
                 if (!isValidDitch(move.getDitch()))
@@ -355,7 +358,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * Checks if a flower is valid (can be set on the board)
+     * Checks if a flower is valid (can be set on the board). Garden rules are not fully checked in this method. To fully validate a flower move you need to call {@link #isValidFlowerCombination(Flower, Flower)}.
      *
      * @param flower the flower to check
      * @return true, if the flower is valid
@@ -376,15 +379,44 @@ public class BoardImpl implements Board {
         if (ditchBlocked.contains(flower))
             return false;
 
+        // Garden cannot be touched
+        for (FlowerBed fb : getFlowerBed(turn)) {
+            // Skip normal flower beds
+            if (fb.size() != GARDEN_SIZE)
+                continue;
+
+            // If flower shares points with bounding gardens, error
+            Set<Position> sharedPositions = getFlowerPositionSet(flower);
+            sharedPositions.retainAll(fb.getPositions());
+            if (!sharedPositions.isEmpty())
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if a flower combination is valid (can be set together on the board)
+     *
+     * @param a first flower to check
+     * @param b second flower to check
+     * @return true, if the two flowers are a valid combination
+     */
+    private boolean isValidFlowerCombination(Flower a, Flower b) {
         // Garden rules
 
-        // Garden size cannot be exceed
-        {
+        Set<FlowerBed> relevantFlowerBeds = new HashSet<>(getFlowerBed(turn));
+
+        Flower[] flowers = new Flower[]{a, b};
+
+        for (Flower f : flowers) {
+            // Garden size cannot be exceed
+
+            // Get all neighboring flower beds
             Set<FlowerBed> neighboringBeds = new HashSet<>();
-            Set<FlowerBed> relevantFlowerBeds = new HashSet<>(getFlowerBed(turn));
             for (FlowerBed fb : relevantFlowerBeds)
                 if (fb.getBoundingFlowers()
-                      .contains(flower))
+                      .contains(f))
                     neighboringBeds.add(fb);
             relevantFlowerBeds.removeAll(neighboringBeds);
 
@@ -392,7 +424,7 @@ public class BoardImpl implements Board {
             if (!neighboringBeds.isEmpty()) {
                 // Create a fusioned flower bed
                 FlowerBed newFlowerBed = new FlowerBed(neighboringBeds);
-                newFlowerBed.addFlower(flower);
+                newFlowerBed.addFlower(f);
                 // If size is exceed, error
                 if (newFlowerBed.size() > GARDEN_SIZE)
                     return false;
@@ -408,21 +440,10 @@ public class BoardImpl implements Board {
                     if (!gardenPositions.isEmpty())
                         return false;
                 }
-            }
-        }
-        // Garden cannot be touched
-        {
-            for (FlowerBed fb : getFlowerBed(turn)) {
-                // Skip normal flower beds
-                if (fb.size() != GARDEN_SIZE)
-                    continue;
 
-                // If flower shares points with bounding gardens, error
-                Set<Position> sharedPositions = getFlowerPositionSet(flower);
-                sharedPositions.retainAll(fb.getPositions());
-                if (!sharedPositions.isEmpty())
-                    return false;
-            }
+                relevantFlowerBeds.add(newFlowerBed);
+            } else
+                relevantFlowerBeds.add(new FlowerBed(f));
         }
 
         return true;
@@ -572,6 +593,7 @@ public class BoardImpl implements Board {
     }
 
     private Set<Move> getPossibleMoves() {
+        long start = System.currentTimeMillis();
         Set<Move> moves = new HashSet<>();
 
         Set<Flower> validFlowers = getAllPossibleFlowers();
@@ -614,6 +636,10 @@ public class BoardImpl implements Board {
         // TODO test this
         if (validFlowers.size() < 2)
             moves.add(new Move(MoveType.End));
+
+        long stop = System.currentTimeMillis();
+
+        logger.debug(String.format("Possible moves calculated in %.3f s", (double) (stop - start) / 1000.0));
 
         return moves;
     }
