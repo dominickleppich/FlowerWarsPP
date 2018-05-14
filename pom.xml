@@ -50,7 +50,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>flowerwarspp.test.MiniGameTest</mainClass>
+                            <mainClass>flowerwarspp.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -60,7 +60,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>flowerwarspp.test.MiniGameTest</mainClass>
+                            <mainClass>flowerwarspp.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
