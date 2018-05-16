@@ -68,7 +68,7 @@ public class Main {
             //            if (viewer.getStatus() != Status.Illegal)
             if (viewer.getStatus() != Status.RedWin && viewer.getStatus() != Status.BlueWin)
                 moves.add(move);
-            //            Thread.sleep(3000);
+                        Thread.sleep(1000);
         }
 
         logger.debug("Game ended with status: " + viewer.getStatus());
