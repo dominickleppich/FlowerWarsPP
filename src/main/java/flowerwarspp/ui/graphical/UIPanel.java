@@ -1,14 +1,20 @@
 package flowerwarspp.ui.graphical;
 
-import flowerwarspp.board.*;
+import flowerwarspp.board.BoardImpl;
 import flowerwarspp.preset.*;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.*;
-import java.util.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UIPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(UIPanel.class);
@@ -69,8 +75,7 @@ public class UIPanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public synchronized void mouseClicked(MouseEvent mouseEvent) {
-                if (!inputEnabled)
-                    return;
+                if (!inputEnabled) return;
 
                 // Select with left mouse button
                 if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
@@ -82,8 +87,7 @@ public class UIPanel extends JPanel {
                     }
                     if (hoverFlower != null) {
                         p += hoverFlower.toString();
-                        if (moveFirstFlower == null)
-                            moveFirstFlower = hoverFlower;
+                        if (moveFirstFlower == null) moveFirstFlower = hoverFlower;
                         else {
                             moveSecondFlower = hoverFlower;
                             createMove();
@@ -107,16 +111,13 @@ public class UIPanel extends JPanel {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public synchronized void mouseMoved(MouseEvent mouseEvent) {
-                if (!inputEnabled)
-                    return;
+                if (!inputEnabled) return;
 
                 clearHover();
 
-                hoverDitch = pointToDitch(mouseEvent.getPoint());
-                if (hoverDitch == null)
-                    hoverFlower = pointToFlower(mouseEvent.getPoint());
-                else
-                    hoverFlower = null;
+                if (moveFirstFlower == null) hoverDitch = pointToDitch(mouseEvent.getPoint());
+                if (hoverDitch == null) hoverFlower = pointToFlower(mouseEvent.getPoint());
+                else hoverFlower = null;
 
                 // Check if this is a valid move
                 if (hoverDitch != null) {
@@ -128,11 +129,9 @@ public class UIPanel extends JPanel {
                 } else if (hoverFlower != null) {
                     // Check if it is the first flower
                     if (moveFirstFlower == null) {
-                        if (possibleMoves.stream()
-                                         .filter(move -> move.getType() == MoveType.Flower)
-                                         .filter(move -> hoverFlower.equals(
-                                                 move.getFirstFlower()) || hoverFlower.equals(move.getSecondFlower()))
-                                         .count() == 0) {
+                        if (possibleMoves.stream().filter(move -> move.getType() == MoveType.Flower).filter(move ->
+                                hoverFlower.equals(move.getFirstFlower()) || hoverFlower.equals(move.getSecondFlower
+                                        ())).count() == 0) {
                             hoverFlower = null;
                             return;
                         }
@@ -145,8 +144,8 @@ public class UIPanel extends JPanel {
                     }
                 }
 
-                repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent.getY() - UNIT), (int) UNIT * 2,
-                        (int) UNIT * 2);
+                repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent.getY() - UNIT), (int) UNIT * 2, (int)
+                        UNIT * 2);
             }
         });
         addKeyListener(new KeyAdapter() {
@@ -201,22 +200,20 @@ public class UIPanel extends JPanel {
 
     private synchronized void createMove() {
         clearHover();
-        if (moveFirstFlower != null && moveSecondFlower != null && !moveFirstFlower.equals(
-                moveSecondFlower) && moveDitch == null)
+        if (moveFirstFlower != null && moveSecondFlower != null && !moveFirstFlower.equals(moveSecondFlower) &&
+                moveDitch == null)
             move = new Move(moveFirstFlower, moveSecondFlower);
-        else if (moveFirstFlower == null && moveSecondFlower == null && moveDitch != null)
-            move = new Move(moveDitch);
+        else if (moveFirstFlower == null && moveSecondFlower == null && moveDitch != null) move = new Move(moveDitch);
 
-        logger.debug(
-                "moveFirstFlower: " + moveFirstFlower + ", " + "moveSecondFlower: " + moveSecondFlower + ", moveDitch: " + moveDitch + ", move: " + move);
+        logger.debug("moveFirstFlower: " + moveFirstFlower + ", " + "moveSecondFlower: " + moveSecondFlower + ", " +
+                "moveDitch: " + moveDitch + ", move: " + move);
 
         clearFlowerSelection();
         moveFirstFlower = null;
         moveSecondFlower = null;
         moveDitch = null;
 
-        if (move != null)
-            confirmMove();
+        if (move != null) confirmMove();
     }
 
     private void confirmMove() {
@@ -248,10 +245,8 @@ public class UIPanel extends JPanel {
     // ------------------------------------------------------------
 
     public void update() {
-        WIDTH = parentWindow.getContentPane()
-                            .getWidth();
-        HEIGHT = parentWindow.getContentPane()
-                             .getHeight();
+        WIDTH = parentWindow.getContentPane().getWidth();
+        HEIGHT = parentWindow.getContentPane().getHeight();
         //        logger.debug("Constants updated to new window constraints: WIDTH =
         // " + WIDTH + ", HEIGHT = " + HEIGHT);
 
@@ -259,12 +254,11 @@ public class UIPanel extends JPanel {
     }
 
     private synchronized void updateUIPositions() {
-        if (viewer == null)
-            return;
+        if (viewer == null) return;
 
         int boardSize = viewer.getSize();
-        double fieldWidth = Math.min(WIDTH / boardSize,
-                (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 - BORDER_SIZE);
+        double fieldWidth = Math.min(WIDTH / boardSize, (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 -
+                BORDER_SIZE);
         UNIT = (float) fieldWidth;
         double fieldHeight = Math.sin(Math.toRadians(60)) * fieldWidth;
 
@@ -276,10 +270,9 @@ public class UIPanel extends JPanel {
         // Create game board points
         for (int r = 0; r <= boardSize; r++) {
             for (int c = 0; c <= boardSize; c++) {
-                if (r + c > boardSize)
-                    continue;
-                Point2D p = new Point2D.Double(xOffset + c * fieldWidth + r * fieldWidth / 2,
-                        HEIGHT - yOffset - r * fieldHeight);
+                if (r + c > boardSize) continue;
+                Point2D p = new Point2D.Double(xOffset + c * fieldWidth + r * fieldWidth / 2, HEIGHT - yOffset - r *
+                        fieldHeight);
                 positionPoints.put(new Position(c + 1, r + 1), p);
             }
         }
@@ -338,9 +331,7 @@ public class UIPanel extends JPanel {
 
     private synchronized Flower pointToFlower(Point point) {
         for (Map.Entry<Polygon, Flower> e : polygonFlowerMap.entrySet()) {
-            if (e.getKey()
-                 .contains(point))
-                return e.getValue();
+            if (e.getKey().contains(point)) return e.getValue();
         }
         return null;
     }
@@ -370,34 +361,24 @@ public class UIPanel extends JPanel {
         Point2D firstPoint = positionPoints.get(first);
         Point2D secondPoint = positionPoints.get(second);
 
-        pStart1 = rotateAroundCenter(
-                new Point2D.Double(firstPoint.getX(), firstPoint.getY() + UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH),
-                firstPoint, angle);
-        pStart2 = rotateAroundCenter(
-                new Point2D.Double(firstPoint.getX(), firstPoint.getY() - UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH),
-                firstPoint, angle);
-        pEnd1 = rotateAroundCenter(
-                new Point2D.Double(secondPoint.getX(), secondPoint.getY() - UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH),
-                secondPoint, angle);
-        pEnd2 = rotateAroundCenter(
-                new Point2D.Double(secondPoint.getX(), secondPoint.getY() + UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH),
-                secondPoint, angle);
+        pStart1 = rotateAroundCenter(new Point2D.Double(firstPoint.getX(), firstPoint.getY() + UNIT *
+                BOARD_GRID_NEUTRAL_LINE_STRENGTH), firstPoint, angle);
+        pStart2 = rotateAroundCenter(new Point2D.Double(firstPoint.getX(), firstPoint.getY() - UNIT *
+                BOARD_GRID_NEUTRAL_LINE_STRENGTH), firstPoint, angle);
+        pEnd1 = rotateAroundCenter(new Point2D.Double(secondPoint.getX(), secondPoint.getY() - UNIT *
+                BOARD_GRID_NEUTRAL_LINE_STRENGTH), secondPoint, angle);
+        pEnd2 = rotateAroundCenter(new Point2D.Double(secondPoint.getX(), secondPoint.getY() + UNIT *
+                BOARD_GRID_NEUTRAL_LINE_STRENGTH), secondPoint, angle);
 
-        x = new int[]{
-                (int) pStart1.getX(), (int) pStart2.getX(), (int) pEnd1.getX(), (int) pEnd2.getX()
-        };
-        y = new int[]{
-                (int) pStart1.getY(), (int) pStart2.getY(), (int) pEnd1.getY(), (int) pEnd2.getY()
-        };
+        x = new int[]{(int) pStart1.getX(), (int) pStart2.getX(), (int) pEnd1.getX(), (int) pEnd2.getX()};
+        y = new int[]{(int) pStart1.getY(), (int) pStart2.getY(), (int) pEnd1.getY(), (int) pEnd2.getY()};
 
         return new Polygon(x, y, 4);
     }
 
     private Ditch pointToDitch(Point point) {
         for (Map.Entry<Polygon, Ditch> e : polygonDitchMap.entrySet()) {
-            if (e.getKey()
-                 .contains(point))
-                return e.getValue();
+            if (e.getKey().contains(point)) return e.getValue();
         }
         return null;
     }
@@ -433,8 +414,7 @@ public class UIPanel extends JPanel {
         // DO SOME GENERAL STUFF
 
         // CONTINUE, IF VIEWER IS SET
-        if (viewer == null)
-            return;
+        if (viewer == null) return;
 
         // *********************************************
         // GAME PAINTING LOGIC
@@ -448,21 +428,15 @@ public class UIPanel extends JPanel {
         bottomLeft = positionPoints.get(new Position(1, 1));
         bottomRight = positionPoints.get(new Position(boardSize + 1, 1));
         top = positionPoints.get(new Position(1, boardSize + 1));
-        g.fill(new Polygon(new int[]{
-                (int) bottomLeft.getX(), (int) bottomRight.getX(), (int) top.getX()
-        }, new int[]{
-                (int) bottomLeft.getY(), (int) bottomRight.getY(), (int) top.getY()
-        }, 3));
+        g.fill(new Polygon(new int[]{(int) bottomLeft.getX(), (int) bottomRight.getX(), (int) top.getX()}, new int[]{
+                (int) bottomLeft.getY(), (int) bottomRight.getY(), (int) top.getY()}, 3));
 
 
         // Draw filled fields
         for (PlayerColor pc : PlayerColor.values()) {
-            if (pc == PlayerColor.Red)
-                g.setColor(RED_PLAYER_COLOR);
-            else if (pc == PlayerColor.Blue)
-                g.setColor(BLUE_PLAYER_COLOR);
-            else
-                throw new IllegalStateException("only red and blue player supported");
+            if (pc == PlayerColor.Red) g.setColor(RED_PLAYER_COLOR);
+            else if (pc == PlayerColor.Blue) g.setColor(BLUE_PLAYER_COLOR);
+            else throw new IllegalStateException("only red and blue player supported");
 
             for (Flower f : viewer.getFlowers(pc)) {
                 g.fill(flowerToPolygon(f));
@@ -499,12 +473,10 @@ public class UIPanel extends JPanel {
                 Ditch d = new Ditch(e.getKey(), neighbor);
 
                 // Determine color
-                if (viewer.getDitches(PlayerColor.Red)
-                          .contains(d)) {
+                if (viewer.getDitches(PlayerColor.Red).contains(d)) {
                     g.setColor(RED_PLAYER_COLOR);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
-                } else if (viewer.getDitches(PlayerColor.Blue)
-                                 .contains(d)) {
+                } else if (viewer.getDitches(PlayerColor.Blue).contains(d)) {
                     g.setColor(BLUE_PLAYER_COLOR);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                 }
@@ -527,8 +499,7 @@ public class UIPanel extends JPanel {
         }
 
         // Draw grid numbers
-        g.setFont(g.getFont()
-                   .deriveFont(Font.BOLD, UNIT * BOARD_GRID_POINT_LABEL_FONT_SIZE));
+        g.setFont(g.getFont().deriveFont(Font.BOLD, UNIT * BOARD_GRID_POINT_LABEL_FONT_SIZE));
         FontMetrics fm = g.getFontMetrics();
         if (BOARD_GRID_POINT_LABEL_COLOR != null) {
             g.setColor(BOARD_GRID_POINT_LABEL_COLOR);
@@ -538,8 +509,7 @@ public class UIPanel extends JPanel {
                 Position pos = e.getKey();
                 String s = "" + pos.getColumn() + "," + pos.getRow();
 
-                if (p == null)
-                    continue;
+                if (p == null) continue;
 
                 float x = (float) (p.getX() - fm.stringWidth(s) / 2);
                 float y = (float) (p.getY() + fm.getAscent() / 2);
