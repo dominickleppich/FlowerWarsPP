@@ -54,16 +54,19 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
     class Marker {
         Flower flower;
         Ditch ditch;
-        PlayerColor color;
+        int colorIndex;
 
-        Marker(Flower flower, Ditch ditch, PlayerColor color) {
+        Marker(Flower flower, Ditch ditch, int colorIndex) {
             this.flower = flower;
             this.ditch = ditch;
-            this.color = color;
+            this.colorIndex = colorIndex;
         }
     }
 
-    private PlayerColor selectedColor = PlayerColor.Red;
+    private static final Color[] MARKER_COLORS = new Color[]{
+            new Color(255, 0, 0), new Color(255, 190, 190), new Color(0, 0, 255), new Color(190, 190, 255)
+    };
+    private int selectedColor = 0;
 
     private List<Marker> markers;
 
@@ -115,25 +118,14 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public synchronized void mouseMoved(MouseEvent mouseEvent) {
-                clearHover();
-
-                hoverDitch = pointToDitch(mouseEvent.getPoint());
-                if (hoverDitch == null)
-                    hoverFlower = pointToFlower(mouseEvent.getPoint());
-                else
-                    hoverFlower = null;
-
-                repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent.getY() - UNIT), (int) UNIT * 2,
-                        (int) UNIT * 2);
+                updateHover(mouseEvent.getPoint());
             }
         });
         addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-                if (mouseWheelEvent.getScrollAmount() % 2 != 0) {
-                    selectedColor = selectedColor == PlayerColor.Red ? PlayerColor.Blue : PlayerColor.Red;
-                    clearHover();
-                }
+                selectedColor = (selectedColor + mouseWheelEvent.getWheelRotation()) % MARKER_COLORS.length;
+                updateHover(mouseWheelEvent.getPoint());
             }
         });
     }
@@ -153,6 +145,18 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
             hoverDitch = null;
             repaint(bounds);
         }
+    }
+
+    private void updateHover(Point point) {
+        clearHover();
+
+        hoverDitch = pointToDitch(point);
+        if (hoverDitch == null)
+            hoverFlower = pointToFlower(point);
+        else
+            hoverFlower = null;
+
+        repaint((int) (point.getX() - UNIT), (int) (point.getY() - UNIT), (int) UNIT * 2, (int) UNIT * 2);
     }
 
     // ------------------------------------------------------------
@@ -357,10 +361,7 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
 
         for (Marker m : markers) {
             if (m.flower != null) {
-                if (m.color == PlayerColor.Red)
-                    g.setColor(RED_PLAYER_COLOR);
-                else if (m.color == PlayerColor.Blue)
-                    g.setColor(BLUE_PLAYER_COLOR);
+                g.setColor(MARKER_COLORS[m.colorIndex]);
                 g.fill(flowerToPolygon(m.flower));
             }
         }
@@ -370,7 +371,7 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
 
         // Draw hover flower
         if (hoverFlower != null) {
-            g.setColor(selectedColor == PlayerColor.Red ? RED_HOVER_COLOR : BLUE_HOVER_COLOR);
+            g.setColor(MARKER_COLORS[selectedColor]);
             g.fill(flowerToPolygon(hoverFlower));
         }
 
@@ -385,14 +386,10 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
             }
         }
 
-        Set<Ditch> redDitches = new HashSet<>();
-        Set<Ditch> blueDitches = new HashSet<>();
+        Map<Ditch, Color> ditchMap = new HashMap<>();
         for (Marker m : markers) {
             if (m.ditch != null) {
-                if (m.color == PlayerColor.Red)
-                    redDitches.add(m.ditch);
-                else
-                    blueDitches.add(m.ditch);
+                ditchMap.put(m.ditch, MARKER_COLORS[m.colorIndex]);
             }
         }
 
@@ -402,18 +399,15 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
                 Ditch d = new Ditch(e.getKey(), neighbor);
 
                 // Determine color
-                if (redDitches.contains(d)) {
-                    g.setColor(RED_PLAYER_COLOR);
-                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
-                } else if (blueDitches.contains(d)) {
-                    g.setColor(BLUE_PLAYER_COLOR);
+                if (ditchMap.containsKey(d)) {
+                    g.setColor(ditchMap.get(d));
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                 }
 
                 // Draw hover ditch
                 if (d.equals(hoverDitch)) {
                     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, HOVER_ALPHA));
-                    g.setColor(selectedColor == PlayerColor.Red ? RED_HOVER_COLOR : BLUE_HOVER_COLOR);
+                    g.setColor(MARKER_COLORS[selectedColor]);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                     g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 }
