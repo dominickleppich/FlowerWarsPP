@@ -28,6 +28,7 @@ public class UIWindow extends JFrame implements UserInterface {
             }
         });
 
+//        setUndecorated(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(320, 240));
 
