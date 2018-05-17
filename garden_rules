@@ -23,7 +23,7 @@ Getestete Regeln:
 
 MORE STRUCTURE:
 
-Eine Blume:
+Eine Blume (die zweite Blume macht einen unkritischen Zug):
 + Blumenbeet über Ecke berühren
 + Blumenbeet über Seite berühren mit Blumenbeet <= 2
 + Blumenbeet über Seite berühren mit Blumenbeet == 3 und neu entstehender Garten keine anderen Blumenbeete über Seite oder Ecke berührt
@@ -37,3 +37,4 @@ Eine Blume:
 
 Zwei Blumen:
 + Zwei Blumenbeete mit Größen <= 2 werden über Seite berührt --> Blumenbeete werden vergrößert
+- Zwei Blumenbeete mit Größen <= 2 und == 3 werden über Seite berührt --> Ein Blumenbeet vergrößert, das andere zum Garten ausgebaut
