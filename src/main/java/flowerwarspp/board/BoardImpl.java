@@ -619,7 +619,7 @@ public class BoardImpl implements Board {
 
         Set<Move> invalidFlowerMoves = new HashSet<>();
         for (Move m : flowerMoves)
-            if (!isValidMove(m))
+            if (!isValidFlowerCombination(m.getFirstFlower(), m.getSecondFlower()))
                 invalidFlowerMoves.add(m);
 
         flowerMoves.removeAll(invalidFlowerMoves);
