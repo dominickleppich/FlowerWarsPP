@@ -14,7 +14,8 @@ import org.junit.runners.*;
         BoardFlowerMoveInvalidFusionFlowerBedsToOversizedGardenTest.class,
         BoardFlowerMoveInvalidFusionFlowerBedsToIllegalTouchingGardenTest.class,
         BoardFlowerMoveInvalidFusionFlowerBedsWithTwoFlowersToOversizedGardenTest.class,
-        BoardFlowerMoveInvalidFusionFlowerBedsWithTwoFlowersToIllegalTouchingGardenTest.class
+        BoardFlowerMoveInvalidFusionFlowerBedsWithTwoFlowersToIllegalTouchingGardenTest.class,
+        BoardFlowerMoveInvalidFusionFlowerBedsToGardenAndTouchingItInSameMoveTest.class
 })
 public class BoardFlowerMoveGardenRulesTests {
 }
