@@ -183,6 +183,11 @@ public class BoardImpl implements Board {
             public Collection<Move> getPossibleMoves() {
                 return BoardImpl.this.getPossibleMoves();
             }
+
+            @Override
+            public int getPoints(PlayerColor color) {
+                return BoardImpl.this.getPoints(color);
+            }
         };
     }
 
@@ -749,6 +754,10 @@ public class BoardImpl implements Board {
             for (Flower l : getDitchBlockedFlowers(b))
                 ditchBlocked.add(l);
         return ditchBlocked;
+    }
+
+    private int getPoints(PlayerColor color) {
+        return (int) getFlowerBed(color).stream().filter(bed -> bed.size() == GARDEN_SIZE).count();
     }
 
     // ------------------------------------------------------------

@@ -41,6 +41,7 @@ public class UIPanel extends JPanel {
     private static final float TEXT_FONT_SIZE = 0.3f;
     private static final float TEXT_MARGIN = 0.2f;
     private static final float TEXT_BORDER_SIZE = 0.05f;
+    private static final float POINT_TEXT_SIZE = 0.5f;
 
     private static final float TEXT_BACKGROUND_ARC = 0.3f;
 
@@ -562,16 +563,32 @@ public class UIPanel extends JPanel {
         for (Polygon p : polygonDitchMap.keySet())
             g.draw(p);*/
 
+        Font backupFont = g.getFont();
+
         if (turnString != null) {
             showTextBox(g, UNIT * 0.2f, UNIT * 0.2f, UNIT * 3.0f,
-                    viewer.getTurn() == PlayerColor.Red ? RED_PLAYER_COLOR : BLUE_PLAYER_COLOR, TEXT_BOX_BORDER_COLOR,
-                    TEXT_BOX_BACKGROUND_COLOR, turnString);
+                    viewer.getTurn() == PlayerColor.Red ? RED_PLAYER_COLOR : BLUE_PLAYER_COLOR, null,
+                    TEXT_BOX_BORDER_COLOR, TEXT_BOX_BACKGROUND_COLOR, backupFont.deriveFont(UNIT * TEXT_FONT_SIZE),
+                    turnString);
         }
+
+        int redPoints = viewer.getPoints(PlayerColor.Red);
+        int bluePoints = viewer.getPoints(PlayerColor.Blue);
+
+        // Red points
+        showTextBox(g, WIDTH - UNIT * 2.4f, UNIT * 0.2f, UNIT * 0.6f, null, backgroundPaint, TEXT_BOX_BORDER_COLOR,
+                RED_PLAYER_COLOR,
+                backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, UNIT * POINT_TEXT_SIZE),
+                "" + redPoints);
+        // Blue points
+        showTextBox(g, WIDTH - UNIT * 1.2f, UNIT * 0.2f, UNIT * 0.6f, null, backgroundPaint, TEXT_BOX_BORDER_COLOR,
+                BLUE_PLAYER_COLOR,
+                backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, UNIT * POINT_TEXT_SIZE),
+                "" + bluePoints);
     }
 
-    private void showTextBox(Graphics2D g, float x, float y, float minWidth, Color textColor, Color borderColor, Color backgroundColor, String text) {
-        Font backup = g.getFont();
-        g.setFont(backup.deriveFont(UNIT * TEXT_FONT_SIZE));
+    private void showTextBox(Graphics2D g, float x, float y, float minWidth, Color textColor, Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
+        g.setFont(font);
 
         FontMetrics fm = g.getFontMetrics();
         int textWidth = fm.stringWidth(text);
@@ -597,8 +614,11 @@ public class UIPanel extends JPanel {
             g.draw(s);
         }
 
-        if (textColor != null && text != null) {
-            g.setColor(textColor);
+        if (text != null && (textColor != null ^ textPaint != null)) {
+            if (textColor != null)
+                g.setColor(textColor);
+            else
+                g.setPaint(textPaint);
             g.drawString(text, x + (width - textWidth) / 2, y + UNIT * TEXT_MARGIN + (textHeight + fm.getAscent()) / 2);
         }
     }
