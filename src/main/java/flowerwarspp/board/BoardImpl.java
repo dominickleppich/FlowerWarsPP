@@ -447,8 +447,21 @@ public class BoardImpl implements Board {
                 }
 
                 relevantFlowerBeds.add(newFlowerBed);
-            } else
-                relevantFlowerBeds.add(new FlowerBed(f));
+            } else {
+                // New created flower bed cannot touch other gardens as well
+                FlowerBed newFlowerBed = new FlowerBed(f);
+
+                Set<Position> newFlowerBedPositions = newFlowerBed.getPositions();
+                Set<Position> otherPositions = new HashSet<>();
+                for (FlowerBed fb : relevantFlowerBeds)
+                    if (fb.size() == GARDEN_SIZE)
+                        otherPositions.addAll(fb.getPositions());
+                newFlowerBedPositions.retainAll(otherPositions);
+                if (!newFlowerBedPositions.isEmpty())
+                    return false;
+
+                relevantFlowerBeds.add(newFlowerBed);
+            }
         }
 
         return true;
