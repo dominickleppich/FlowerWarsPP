@@ -22,6 +22,7 @@ public class UIPanel extends JPanel {
     private static final double BORDER_SIZE = 0.2;
 
     private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
+    private static final Color BOARD_BLOCKED_COLOR = new Color(64, 93, 41);
     private static final Color BOARD_GRID_LINE_COLOR = new Color(44, 44, 44);
     private static final Color BOARD_GRID_POINT_COLOR = new Color(44, 44, 44);
     private static final double BOARD_GRID_POINT_SIZE = 0.3;
@@ -57,6 +58,7 @@ public class UIPanel extends JPanel {
     private Map<Position, Point2D> positionPoints;
     private Map<Polygon, Flower> polygonFlowerMap;
     private Map<Polygon, Ditch> polygonDitchMap;
+    private Set<Flower> blockedFlowers;
     private Color hoverColor;
     private Flower hoverFlower;
     private Ditch hoverDitch;
@@ -93,8 +95,11 @@ public class UIPanel extends JPanel {
                     }
                     if (hoverFlower != null) {
                         p += hoverFlower.toString();
-                        if (moveFirstFlower == null)
+                        if (moveFirstFlower == null) {
                             moveFirstFlower = hoverFlower;
+                            updateBlockedFlowers();
+                            repaint();
+                        }
                         else {
                             moveSecondFlower = hoverFlower;
                             createMove();
@@ -110,11 +115,14 @@ public class UIPanel extends JPanel {
 
                     clearHover();
                     clearFlowerSelection();
+                    updateBlockedFlowers();
+                    repaint();
 
                     logger.debug("Input cleared");
                 }
             }
         });
+
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public synchronized void mouseMoved(MouseEvent mouseEvent) {
@@ -231,34 +239,34 @@ public class UIPanel extends JPanel {
             confirmMove();
     }
 
-    private void confirmMove() {
-        synchronized (moveWaitingMonitor) {
-            moveWaitingMonitor.notify();
-        }
+    private synchronized void confirmMove() {
+
+        logger.debug("Move confirmed");
+        notify();
     }
 
-    public Move request() throws InterruptedException {
-        synchronized (moveWaitingMonitor) {
-            move = null;
-            hoverColor = viewer.getTurn() == PlayerColor.Red ? RED_HOVER_COLOR : BLUE_HOVER_COLOR;
-            possibleMoves = viewer.getPossibleMoves();
-            turnString = viewer.getTurn() == PlayerColor.Red ? "Red players turn" : "Blue players turn";
-            inputEnabled = true;
-            repaint();
-            logger.debug("Start waiting for ui to create a move");
-            while (move == null) {
-                logger.debug("Wait...");
-                moveWaitingMonitor.wait();
-            }
-            turnString = null;
-            inputEnabled = false;
-            hoverFlower = null;
-            hoverDitch = null;
-            repaint();
-
-            logger.debug("UI created move: " + move);
-            return move;
+    public synchronized Move request() throws InterruptedException {
+        move = null;
+        hoverColor = viewer.getTurn() == PlayerColor.Red ? RED_HOVER_COLOR : BLUE_HOVER_COLOR;
+        possibleMoves = viewer.getPossibleMoves();
+        updateBlockedFlowers();
+        inputEnabled = true;
+        repaint();
+        turnString = viewer.getTurn() == PlayerColor.Red ? "Red players turn" : "Blue players turn";
+        logger.debug("Start waiting for ui to create a move");
+        while (move == null) {
+            logger.debug("Wait...");
+            wait();
         }
+        inputEnabled = false;
+        blockedFlowers = null;
+        turnString = null;
+        hoverFlower = null;
+        hoverDitch = null;
+        repaint();
+
+        logger.debug("UI created move: " + move);
+        return move;
     }
 
     // ------------------------------------------------------------
@@ -330,6 +338,36 @@ public class UIPanel extends JPanel {
                     Ditch d = new Ditch(new Position(c, r), new Position(c - 1, r + 1));
                     polygonDitchMap.put(ditchToPolygon(d), d);
                 }
+            }
+        }
+    }
+
+    private synchronized void updateBlockedFlowers() {
+        blockedFlowers = BoardImpl.getAllPossibleFlowers(viewer.getSize());
+
+        if (moveFirstFlower == null) {
+            for (Move m : possibleMoves) {
+                if (m.getType() != MoveType.Flower)
+                    continue;
+
+                Flower f1 = m.getFirstFlower();
+                Flower f2 = m.getSecondFlower();
+
+                blockedFlowers.remove(f1);
+                blockedFlowers.remove(f2);
+            }
+        } else {
+            for (Move m : possibleMoves) {
+                if (m.getType() != MoveType.Flower)
+                    continue;
+
+                Flower f1 = m.getFirstFlower();
+                Flower f2 = m.getSecondFlower();
+
+                if (moveFirstFlower.equals(f1))
+                    blockedFlowers.remove(f2);
+                else if (moveFirstFlower.equals(f2))
+                    blockedFlowers.remove(f1);
             }
         }
     }
@@ -464,6 +502,13 @@ public class UIPanel extends JPanel {
                 (int) bottomLeft.getY(), (int) bottomRight.getY(), (int) top.getY()
         }, 3));
 
+
+        // Draw blocked fields
+        if (blockedFlowers != null) {
+            g.setColor(BOARD_BLOCKED_COLOR);
+            for (Flower f : blockedFlowers)
+                g.fill(flowerToPolygon(f));
+        }
 
         // Draw filled fields
         for (PlayerColor pc : PlayerColor.values()) {
