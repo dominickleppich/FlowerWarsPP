@@ -60,7 +60,7 @@ unterschiedlicher Farbe dürfen beliebig nebeneinander liegen oder sich über Ec
 ## Gräben
 - Ein Graben verbindet zwei Blumen über dessen Eckpunkte. Diese Verbindung darf maximal einen Schritt
 entlang der Gitternetzlinien des Spielfeldes lang sein.
-- Ein *Punkt* kann nur ein Brückenende tragen und ist somit für zukünftige Gräben blockiert.
+- Ein *Punkt* kann nur ein Grabenende tragen und ist somit für zukünftige Gräben blockiert.
 - Die beiden Felder, die sich mit dem Graben eine gemeinsame Seite teilen, müssen beim Bau
 des Grabens leer sein. Dieselben Felder gelten nach Bau des Grabens als unfruchtbar und dürfen
 von keinen Blumen, unabhängig von der Farbe, bepflanzt werden. Auf den Bau von Gräben haben
@@ -104,4 +104,8 @@ Spiel unentschieden.
 Das Projekt basiert auf dem Build-System **Maven**. Folgendermaßen kann ein ausführbares jar-Archiv erzeugt werden:
 ```
 mvn compile assembly:single
+```
+Dieses erzeugte Jar-Archiv kann wie folgt gestartet werden:
+```
+java -jar target/NAME_OF_THE_JAR_FILE.jar -size <BOARD_SIZE>
 ```
