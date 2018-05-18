@@ -73,6 +73,9 @@ public class BoardFlowerMoveInvalidFusionFlowerBedsToGardenAndTouchingItInSameMo
                         new Move(new Flower(new Position(3, 2), new Position(4, 2), new Position(3, 3)),
                                 new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4))), Status.Illegal
                 }, {
+                        new Move(new Flower(new Position(4, 2), new Position(5, 2), new Position(4, 3)),
+                                new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4))), Status.Illegal
+                }, {
                         new Move(new Flower(new Position(5, 2), new Position(6, 2), new Position(5, 3)),
                                 new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4))), Status.Illegal
                 }, {
@@ -83,76 +86,22 @@ public class BoardFlowerMoveInvalidFusionFlowerBedsToGardenAndTouchingItInSameMo
                                 new Flower(new Position(5, 3), new Position(6, 3), new Position(5, 4))), Status.Illegal
                 }, {
                         new Move(new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4)),
-                                new Flower(new Position(2, 5), new Position(3, 5), new Position(2, 6))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4)),
-                                new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6))), Status.Illegal
+                                new Flower(new Position(4, 4), new Position(5, 4), new Position(4, 5))), Status.Illegal
                 }, {
                         new Move(new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4)),
                                 new Flower(new Position(3, 5), new Position(4, 5), new Position(3, 6))), Status.Illegal
                 }, {
                         new Move(new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4)),
-                                new Flower(new Position(2, 4), new Position(3, 4), new Position(2, 5))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(4, 2), new Position(5, 2), new Position(4, 3)),
-                                new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4))), Status.Illegal
+                                new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6))), Status.Illegal
                 }, {
                         new Move(new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4)),
-                                new Flower(new Position(4, 4), new Position(5, 4), new Position(4, 5))), Status.Illegal
+                                new Flower(new Position(2, 5), new Position(3, 5), new Position(2, 6))), Status.Illegal
                 }, {
-                        new Move(new Flower(new Position(2, 7), new Position(3, 7), new Position(2, 8)),
-                                new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 6), new Position(2, 7), new Position(3, 7)),
-                                new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 6), new Position(4, 6), new Position(3, 7)),
-                                new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(2, 12), new Position(3, 12), new Position(2, 13)),
-                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14)),
-                                new Flower(new Position(2, 14), new Position(3, 14), new Position(2, 15))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14)),
-                                new Flower(new Position(3, 14), new Position(2, 15), new Position(3, 15))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14)),
-                                new Flower(new Position(3, 14), new Position(4, 14), new Position(3, 15))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 11), new Position(2, 12), new Position(3, 12)),
-                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(4, 10), new Position(3, 11), new Position(4, 11)),
-                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(4, 10), new Position(5, 10), new Position(4, 11)),
-                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(5, 10), new Position(4, 11), new Position(5, 11)),
-                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(5, 11), new Position(4, 12), new Position(5, 12)),
-                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14)),
-                                new Flower(new Position(4, 13), new Position(5, 13), new Position(4, 14))),
-                        Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(5, 12), new Position(4, 13), new Position(5, 13)),
-                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
-                        Status.Illegal
-                }, {
+                        new Move(new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4)),
+                                new Flower(new Position(2, 4), new Position(3, 4), new Position(2, 5))), Status.Illegal
+                },
+
+                {
                         new Move(new Flower(new Position(7, 4), new Position(6, 5), new Position(7, 5)),
                                 new Flower(new Position(8, 4), new Position(9, 4), new Position(8, 5))), Status.Illegal
                 }, {
@@ -188,6 +137,147 @@ public class BoardFlowerMoveInvalidFusionFlowerBedsToGardenAndTouchingItInSameMo
                 }, {
                         new Move(new Flower(new Position(7, 4), new Position(6, 5), new Position(7, 5)),
                                 new Flower(new Position(8, 5), new Position(7, 6), new Position(8, 6))), Status.Illegal
+                },
+
+                {
+                        new Move(new Flower(new Position(3, 6), new Position(4, 6), new Position(3, 7)),
+                                new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 6), new Position(2, 7), new Position(3, 7)),
+                                new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(2, 7), new Position(3, 7), new Position(2, 8)),
+                                new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8)),
+                                new Flower(new Position(2, 8), new Position(3, 8), new Position(2, 9))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8)),
+                                new Flower(new Position(2, 9), new Position(3, 9), new Position(2, 10))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8)),
+                                new Flower(new Position(3, 9), new Position(2, 10), new Position(3, 10))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8)),
+                                new Flower(new Position(4, 9), new Position(3, 10), new Position(4, 10))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8)),
+                                new Flower(new Position(4, 9), new Position(5, 9), new Position(4, 10))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8)),
+                                new Flower(new Position(5, 8), new Position(4, 9), new Position(5, 9))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8)),
+                                new Flower(new Position(5, 7), new Position(4, 8), new Position(5, 8))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(5, 6), new Position(4, 7), new Position(5, 7)),
+                                new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 6), new Position(5, 6), new Position(4, 7)),
+                                new Flower(new Position(4, 7), new Position(3, 8), new Position(4, 8))), Status.Illegal
+                },
+
+                {
+                        new Move(new Flower(new Position(5, 10), new Position(4, 11), new Position(5, 11)),
+                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 10), new Position(5, 10), new Position(4, 11)),
+                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 10), new Position(3, 11), new Position(4, 11)),
+                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 11), new Position(2, 12), new Position(3, 12)),
+                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(2, 12), new Position(3, 12), new Position(2, 13)),
+                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(2, 13), new Position(3, 13), new Position(2, 14)),
+                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14)),
+                                new Flower(new Position(2, 14), new Position(3, 14), new Position(2, 15))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14)),
+                                new Flower(new Position(3, 14), new Position(2, 15), new Position(3, 15))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14)),
+                                new Flower(new Position(3, 14), new Position(4, 14), new Position(3, 15))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14)),
+                                new Flower(new Position(4, 13), new Position(5, 13), new Position(4, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(5, 12), new Position(4, 13), new Position(5, 13)),
+                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(5, 11), new Position(4, 12), new Position(5, 12)),
+                                new Flower(new Position(3, 13), new Position(4, 13), new Position(3, 14))),
+                        Status.Illegal
+                },
+
+
+                {
+                        new Move(new Flower(new Position(5, 10), new Position(4, 11), new Position(5, 11)),
+                                new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 10), new Position(5, 10), new Position(4, 11)),
+                                new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(4, 10), new Position(3, 11), new Position(4, 11)),
+                                new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 11), new Position(2, 12), new Position(3, 12)),
+                                new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(2, 12), new Position(1, 13), new Position(2, 13)),
+                                new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13)),
+                                new Flower(new Position(1, 13), new Position(2, 13), new Position(1, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13)),
+                                new Flower(new Position(2, 13), new Position(1, 14), new Position(2, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13)),
+                                new Flower(new Position(3, 13), new Position(2, 14), new Position(3, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13)),
+                                new Flower(new Position(4, 13), new Position(3, 14), new Position(4, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13)),
+                                new Flower(new Position(4, 13), new Position(5, 13), new Position(4, 14))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13)),
+                                new Flower(new Position(5, 12), new Position(4, 13), new Position(5, 13))),
+                        Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(5, 11), new Position(4, 12), new Position(5, 12)),
+                                new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13))),
+                        Status.Illegal
                 }
         });
     }
