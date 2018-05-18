@@ -434,7 +434,6 @@ public class BoardImpl implements Board {
                 if (newFlowerBed.size() > GARDEN_SIZE)
                     return false;
 
-
                 // If new flower bed arises to garden and touches other flower beds, error
                 if (newFlowerBed.size() == GARDEN_SIZE) {
                     Set<Position> gardenPositions = newFlowerBed.getPositions();
@@ -445,6 +444,20 @@ public class BoardImpl implements Board {
                     if (!gardenPositions.isEmpty())
                         return false;
                 }
+
+                // New flower bed can still touch gardens :/
+                else {
+                    Set<Position> newFlowerBedPositions = newFlowerBed.getPositions();
+                    Set<Position> otherPositions = new HashSet<>();
+                    for (FlowerBed fb : relevantFlowerBeds)
+                        if (fb.size() == GARDEN_SIZE)
+                            otherPositions.addAll(fb.getPositions());
+                    newFlowerBedPositions.retainAll(otherPositions);
+                    if (!newFlowerBedPositions.isEmpty())
+                        return false;
+                }
+
+
 
                 relevantFlowerBeds.add(newFlowerBed);
             } else {
