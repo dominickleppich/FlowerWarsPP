@@ -568,18 +568,16 @@ public class BoardImpl implements Board {
     private Set<Flower> getNeighborFlowers(Flower flower) {
         Set<Flower> flowers = new HashSet<>();
 
-        // TODO fix this veeery stupid approach
-        Set<Position> myPositions = getFlowerPositionSet(flower);
+        Ditch[] flowerNeighboringDitches = new Ditch[3];
+        Position[] flowerPositions = new Position[]{flower.getFirst(), flower.getSecond(), flower.getThird()};
 
-        for (Flower f : getAllPossibleFlowers()) {
-            Set<Position> positions = getFlowerPositionSet(f);
+        for (int i = 0; i < 3; i++)
+            flowerNeighboringDitches[i] = new Ditch(flowerPositions[i], flowerPositions[(i+1)%3]);
 
-            // Flower is a neighbor, if same positions are 2
-            positions.retainAll(myPositions);
+        for (Ditch d : flowerNeighboringDitches)
+            flowers.addAll(getDitchBlockedFlowers(d));
 
-            if (positions.size() == 2)
-                flowers.add(f);
-        }
+        flowers.remove(flower);
 
         return flowers;
     }
