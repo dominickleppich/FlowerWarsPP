@@ -67,6 +67,7 @@ von keinen Blumen, unabhängig von der Farbe, bepflanzt werden. Auf den Bau von 
 unfruchtbare *Felder* keinen Einfluss.
 
 # Spielende
+- Kann ein Spieler keinen Zug mehr machen, endet das Spiel sofort.
 - Kann ein Spieler keine 2 Blumen mehr anpflanzen und verzichtet auf das Bauen eines Grabens, kann er das Spiel beenden.
 - Nach Zugende werden für beide Spieler die Punkte nach diesen Regeln ermittelt:
     - Ein einzelner Garten, der nicht über einen Graben mit anderen Gärten verbunden ist,
