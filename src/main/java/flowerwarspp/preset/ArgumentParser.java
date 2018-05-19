@@ -205,16 +205,8 @@ public class ArgumentParser {
 
     // ------------------------------------------------------------
 
-    public boolean isDebug() throws ArgumentParserException {
-        return getFlag("debug");
-    }
-
     public int getSize() throws ArgumentParserException {
         return Integer.parseInt((String) getSetting("size"));
-    }
-
-    public int getDelay() throws ArgumentParserException {
-        return Integer.parseInt((String) getSetting("delay"));
     }
 
     public PlayerType getRed() throws ArgumentParserException {
@@ -225,8 +217,17 @@ public class ArgumentParser {
         return parsePlayerType((String) getSetting("blue"));
     }
 
+    public int getDelay() throws ArgumentParserException {
+        return Integer.parseInt((String) getSetting("delay"));
+    }
+
+    public boolean isDebug() throws ArgumentParserException {
+        return getFlag("debug");
+    }
+
     // ********************************************************************
     //  Hier koennen weitere Schalter und Einstellungen ergaenzt werden...
     // ********************************************************************
+
 
 }
