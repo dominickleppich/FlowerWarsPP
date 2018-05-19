@@ -176,6 +176,8 @@ public class BoardImpl implements Board {
                 status = Status.RedWin;
             else
                 status = Status.BlueWin;
+
+            logger.debug("Winner found by points: " + redPoints + " (red) - " + bluePoints + " (blue)");
             return;
         } else {
             // The player with most gardens wins
@@ -190,6 +192,7 @@ public class BoardImpl implements Board {
                     status = Status.RedWin;
                 else
                     status = Status.BlueWin;
+                logger.debug("Winner found by gardens: " + redGardens + " (red) - " + blueGardens + " (blue)");
                 return;
             }
             // Both players still have the same amount of gardens
@@ -202,9 +205,12 @@ public class BoardImpl implements Board {
                         status = Status.RedWin;
                     else
                         status = Status.BlueWin;
+                    logger.debug("Winner found by ditches: " + redDitches + " (red) - " + blueDitches + " (blue)");
                     return;
-                } else
+                } else {
                     status = Status.Draw;
+                    logger.debug("No winner!");
+                }
             }
         }
     }
