@@ -20,6 +20,10 @@ public class UIPanel extends JPanel {
 
     private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
     private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
+    private static final Color BACKGROUND_RED_COLOR_A = new Color(197, 110, 25);
+    private static final Color BACKGROUND_RED_COLOR_B = new Color(200, 73, 30);
+    private static final Color BACKGROUND_BLUE_COLOR_A = new Color(37, 166, 197);
+    private static final Color BACKGROUND_BLUE_COLOR_B = new Color(45, 73, 200);
     private static final double BORDER_SIZE = 0.2;
 
     private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
@@ -39,15 +43,6 @@ public class UIPanel extends JPanel {
     private static final Color BLUE_HOVER_COLOR = new Color(122, 122, 154);
     private static final float HOVER_ALPHA = 0.8f;
 
-    private static final Color TEXT_BOX_BACKGROUND_COLOR = new Color(200, 124, 25);
-    private static final Color TEXT_BOX_BORDER_COLOR = new Color(70, 70, 70);
-    private static final float TEXT_FONT_SIZE = 0.3f;
-    private static final float TEXT_MARGIN = 0.2f;
-    private static final float TEXT_BORDER_SIZE = 0.05f;
-    private static final float POINT_TEXT_SIZE = 0.5f;
-
-    private static final float TEXT_BACKGROUND_ARC = 0.3f;
-
     // ------------------------------------------------------------
     // ------------------------------------------------------------
 
@@ -66,13 +61,12 @@ public class UIPanel extends JPanel {
     private Ditch hoverDitch;
 
     private Collection<Move> possibleMoves;
+    private PlayerColor turn;
     private boolean inputEnabled = false;
     private Move move;
     private Flower moveFirstFlower;
     private Flower moveSecondFlower;
     private Ditch moveDitch;
-
-    private String turnString;
 
     // ------------------------------------------------------------
 
@@ -101,8 +95,7 @@ public class UIPanel extends JPanel {
                             moveFirstFlower = hoverFlower;
                             updateBlockedFlowers();
                             repaint();
-                        }
-                        else {
+                        } else {
                             moveSecondFlower = hoverFlower;
                             createMove();
                         }
@@ -200,6 +193,10 @@ public class UIPanel extends JPanel {
                 logger.debug("Surrender button typed");
                 move = new Move(MoveType.Surrender);
                 createMove();
+            } else if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                logger.debug("End button typed");
+                move = new Move(MoveType.End);
+                createMove();
             }
         }
     }
@@ -261,15 +258,15 @@ public class UIPanel extends JPanel {
         updateBlockedFlowers();
         inputEnabled = true;
         repaint();
-        turnString = viewer.getTurn() == PlayerColor.Red ? "Red players turn" : "Blue players turn";
+        turn = viewer.getTurn();
         logger.debug("Start waiting for ui to create a move");
         while (move == null) {
             logger.debug("Wait...");
             wait();
         }
         inputEnabled = false;
+        turn = null;
         blockedFlowers = null;
-        turnString = null;
         hoverFlower = null;
         hoverDitch = null;
         repaint();
@@ -485,7 +482,21 @@ public class UIPanel extends JPanel {
         g.fill(new Rectangle2D.Float(midX - 10, midY - 10, 20, 20));
         g.setColor(Color.RED);
         g.draw(new Rectangle2D.Float(10, 10, WIDTH - 20, HEIGHT - 20));*/
-        Paint backgroundPaint = new GradientPaint(0, 0, BACKGROUND_COLOR_A, WIDTH, HEIGHT, BACKGROUND_COLOR_B);
+
+        Color a = BACKGROUND_COLOR_A;
+        Color b = BACKGROUND_COLOR_B;
+
+        if (turn != null) {
+            if (turn == PlayerColor.Red) {
+                a = BACKGROUND_RED_COLOR_A;
+                b = BACKGROUND_RED_COLOR_B;
+            } else {
+                a = BACKGROUND_BLUE_COLOR_A;
+                b = BACKGROUND_BLUE_COLOR_B;
+            }
+        }
+
+        Paint backgroundPaint = new GradientPaint(0, 0, a, WIDTH, HEIGHT, b);
         g.setPaint(backgroundPaint);
         g.fill(new Rectangle2D.Float(0, 0, WIDTH, HEIGHT));
 
@@ -630,13 +641,6 @@ public class UIPanel extends JPanel {
             g.draw(p);*/
 
         Font backupFont = g.getFont();
-
-        if (turnString != null) {
-            showTextBox(g, UNIT * 0.2f, UNIT * 0.2f, UNIT * 3.0f,
-                    viewer.getTurn() == PlayerColor.Red ? RED_PLAYER_COLOR : BLUE_PLAYER_COLOR, null,
-                    TEXT_BOX_BORDER_COLOR, TEXT_BOX_BACKGROUND_COLOR, backupFont.deriveFont(UNIT * TEXT_FONT_SIZE),
-                    turnString);
-        }
 
         int redPoints = viewer.getPoints(PlayerColor.Red);
         int bluePoints = viewer.getPoints(PlayerColor.Blue);
