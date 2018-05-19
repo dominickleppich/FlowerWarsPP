@@ -8,7 +8,8 @@ import org.junit.runners.*;
         BoardSimpleLogicTest.class,
         BoardFlowerMoveTests.class,
         BoardDitchMoveTests.class,
-        BoardPointCalculationTest.class
+        BoardPointCalculationTest.class,
+        BoardPossibleMovesTest.class
 })
 public class BoardTests {
 }
