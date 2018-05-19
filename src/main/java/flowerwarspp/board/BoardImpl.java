@@ -1,6 +1,7 @@
 package flowerwarspp.board;
 
 import flowerwarspp.preset.*;
+import javafx.scene.effect.*;
 import org.slf4j.*;
 
 import java.util.*;
@@ -19,6 +20,9 @@ public class BoardImpl implements Board {
 
     private Set<FlowerBed> redFlowerBeds, blueFlowerBeds;
     private Set<Ditch> redDitches, blueDitches;
+
+    private Set<Move> redMoves, blueMoves;
+    private int redPoints, bluePoints;
 
 
     /**
@@ -116,6 +120,11 @@ public class BoardImpl implements Board {
         redDitches = new HashSet<>();
         blueDitches = new HashSet<>();
 
+        redMoves = null;
+        blueMoves = null;
+        redPoints = -1;
+        bluePoints = -1;
+
         logger.debug("New board instantiated");
     }
 
@@ -127,7 +136,7 @@ public class BoardImpl implements Board {
         if (status != Status.Ok)
             throw new IllegalStateException("cannot perform moves on this board anymore");
 
-        if (!isValidMoveFormat(move) || !isValidMove(move)) {
+        if (!isValidMoveFormat(move) || !isValidMove(move, turn)) {
             status = Status.Illegal;
             return;
         }
@@ -140,10 +149,64 @@ public class BoardImpl implements Board {
             return;
         }
 
-        setMoveOnBoard(move);
+        if (move.getType() == MoveType.End) {
+            endGame();
+            return;
+        }
+
+        setMoveOnBoard(move, turn);
 
         // Change to next player
         nextPlayer();
+
+        // TODO test this
+        // If next player only has Surrender and End move left..
+        if (getPossibleMoves(turn).size() == 2)
+            endGame();
+    }
+
+    private void endGame() {
+        // Compare points
+        int redPoints = getPoints(PlayerColor.Red);
+        int bluePoints = getPoints(PlayerColor.Blue);
+
+        // If points differ, the player with most points win!
+        if (redPoints != bluePoints) {
+            if (redPoints > bluePoints)
+                status = Status.RedWin;
+            else
+                status = Status.BlueWin;
+            return;
+        } else {
+            // The player with most gardens wins
+            int redGardens = (int) getFlowerBed(PlayerColor.Red).stream()
+                                                                .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                                .count();
+            int blueGardens = (int) getFlowerBed(PlayerColor.Blue).stream()
+                                                                .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                                .count();
+            if (redGardens != blueGardens) {
+                if (redGardens > blueGardens)
+                    status = Status.RedWin;
+                else
+                    status = Status.BlueWin;
+                return;
+            }
+            // Both players still have the same amount of gardens
+            else {
+                int redDitches = getDitchSet(PlayerColor.Red).size();
+                int blueDitches = getDitchSet(PlayerColor.Blue).size();
+
+                if (redDitches != blueDitches) {
+                    if (redDitches > blueDitches)
+                        status = Status.RedWin;
+                    else
+                        status = Status.BlueWin;
+                    return;
+                } else
+                    status = Status.Draw;
+            }
+        }
     }
 
     /**
@@ -181,7 +244,7 @@ public class BoardImpl implements Board {
 
             @Override
             public Collection<Move> getPossibleMoves() {
-                return BoardImpl.this.getPossibleMoves();
+                return BoardImpl.this.getPossibleMoves(turn);
             }
 
             @Override
@@ -206,14 +269,30 @@ public class BoardImpl implements Board {
      *
      * @param move the move to set on the board
      */
-    private void setMoveOnBoard(Move move) {
+    private void setMoveOnBoard(Move move, PlayerColor color) {
         switch (move.getType()) {
             case Flower:
                 setFlowerOnBoard(move.getFirstFlower());
                 setFlowerOnBoard(move.getSecondFlower());
+
+                // Mark possible moves and points to be updated
+                redMoves = null;
+                blueMoves = null;
+                if (color == PlayerColor.Red)
+                    redPoints = -1;
+                else
+                    bluePoints = -1;
                 break;
             case Ditch:
                 getDitchSet(turn).add(move.getDitch());
+
+                // Mark possible moves and points to be updated
+                redMoves = null;
+                blueMoves = null;
+                if (color == PlayerColor.Red)
+                    redPoints = -1;
+                else
+                    bluePoints = -1;
                 break;
             case Surrender:
             case End:
@@ -293,7 +372,7 @@ public class BoardImpl implements Board {
      * @param move the move to check
      * @return true, if the move is valid
      */
-    private boolean isValidMove(Move move) {
+    private boolean isValidMove(Move move, PlayerColor color) {
         // Check rules depending on the move type
         switch (move.getType()) {
             case Flower:
@@ -303,7 +382,7 @@ public class BoardImpl implements Board {
                 };
 
                 // TODO even if two separate flowers are valid, the combination can make it invalid!
-                Set<FlowerBed> flowerBeds = getFlowerBed(turn);
+                Set<FlowerBed> flowerBeds = getFlowerBed(color);
                 Set<Flower> invalidFlowers = getFlowerSet(null);
                 invalidFlowers.addAll(getAllDitchBlockedFlowers());
                 Set<Position> gardenPositions = flowerBeds.stream()
@@ -316,20 +395,19 @@ public class BoardImpl implements Board {
                     if (!isValidFlower(f, flowerBeds, invalidFlowers, gardenPositions))
                         return false;
 
-                if (!isValidFlowerCombination(flowers[0], flowers[1]))
+                if (!isValidFlowerCombination(flowers[0], flowers[1], color))
                     return false;
 
                 break;
             case Ditch:
-                if (!isValidDitch(move.getDitch()))
+                if (!isValidDitch(move.getDitch(), color))
                     return false;
 
                 break;
             case Surrender:
                 return true;
             case End:
-                // TODO check
-                return false;
+                return getPossibleMoves(color).contains(new Move(MoveType.End));
             default:
                 throw new IllegalArgumentException("illegal move type: " + move.getType());
         }
@@ -371,7 +449,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * Checks if a flower is valid (can be set on the board). Garden rules are not fully checked in this method. To fully validate a flower move you need to call {@link #isValidFlowerCombination(Flower, Flower)}.
+     * Checks if a flower is valid (can be set on the board). Garden rules are not fully checked in this method. To fully validate a flower move you need to call {@link #isValidFlowerCombination(Flower, Flower, PlayerColor)}.
      *
      * @param flower the flower to check
      * @return true, if the flower is valid
@@ -432,10 +510,10 @@ public class BoardImpl implements Board {
      * @param b second flower to check
      * @return true, if the two flowers are a valid combination
      */
-    private boolean isValidFlowerCombination(Flower a, Flower b) {
+    private boolean isValidFlowerCombination(Flower a, Flower b, PlayerColor color) {
         // Garden rules
 
-        Set<FlowerBed> relevantFlowerBeds = new HashSet<>(getFlowerBed(turn));
+        Set<FlowerBed> relevantFlowerBeds = new HashSet<>(getFlowerBed(color));
 
         Flower[] flowers = new Flower[]{a, b};
 
@@ -510,7 +588,7 @@ public class BoardImpl implements Board {
      * @param ditch the ditch to check
      * @return true, if the ditch is valid
      */
-    private boolean isValidDitch(Ditch ditch) {
+    private boolean isValidDitch(Ditch ditch, PlayerColor color) {
         // Extract both positions
         Position[] positions = new Position[]{ditch.getFirst(), ditch.getSecond()};
 
@@ -521,7 +599,7 @@ public class BoardImpl implements Board {
                 return false;
 
         // Ditch needs to be build next to own flowers
-        Set<Position> flowerPositionSet = getAllFlowerPositionSet(turn);
+        Set<Position> flowerPositionSet = getAllFlowerPositionSet(color);
         for (Position p : positions)
             if (!flowerPositionSet.contains(p))
                 return false;
@@ -645,74 +723,85 @@ public class BoardImpl implements Board {
         return getNeighborPositions(position, size);
     }
 
-    private Set<Move> getPossibleMoves() {
-        long start = System.currentTimeMillis();
-        Set<Move> moves = new HashSet<>();
+    private Set<Move> getPossibleMoves(PlayerColor color) {
+        // Check if there is a need to recalculate moves
+        if ((color == PlayerColor.Red && redMoves == null) || (color == PlayerColor.Blue && blueMoves == null)) {
+            long start = System.currentTimeMillis();
+            Set<Move> moves = new HashSet<>();
 
-        Set<FlowerBed> flowerBeds = getFlowerBed(turn);
-        Set<Flower> invalidFlowers = getFlowerSet(null);
-        invalidFlowers.addAll(getAllDitchBlockedFlowers());
-        Set<Position> gardenPositions = flowerBeds.stream()
-                                                  .filter(bed -> bed.size() == GARDEN_SIZE)
-                                                  .flatMap(bed -> bed.getPositions()
-                                                                     .stream())
-                                                  .collect(toSet());
+            Set<FlowerBed> flowerBeds = getFlowerBed(color);
+            Set<Flower> invalidFlowers = getFlowerSet(null);
+            invalidFlowers.addAll(getAllDitchBlockedFlowers());
+            Set<Position> gardenPositions = flowerBeds.stream()
+                                                      .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                      .flatMap(bed -> bed.getPositions()
+                                                                         .stream())
+                                                      .collect(toSet());
 
-        Set<Flower> validFlowers = getAllPossibleFlowers();
+            Set<Flower> validFlowers = getAllPossibleFlowers();
 
-        // Remove all flowers which are already invalid
-        validFlowers.removeAll(invalidFlowers);
+            // Remove all flowers which are already invalid
+            validFlowers.removeAll(invalidFlowers);
 
-        // Remove non valid flowers
-        Set<Flower> nonValidFlowers = new HashSet<>();
-        for (Flower f : validFlowers)
-            if (!isValidFlower(f, flowerBeds, invalidFlowers, gardenPositions))
-                nonValidFlowers.add(f);
-        validFlowers.removeAll(nonValidFlowers);
+            // Remove non valid flowers
+            Set<Flower> nonValidFlowers = new HashSet<>();
+            for (Flower f : validFlowers)
+                if (!isValidFlower(f, flowerBeds, invalidFlowers, gardenPositions))
+                    nonValidFlowers.add(f);
+            validFlowers.removeAll(nonValidFlowers);
 
-        Set<Move> flowerMoves = new HashSet<>();
-        // Create cartesian product
-        for (Flower f1 : validFlowers)
-            for (Flower f2 : validFlowers)
-                if (!f1.equals(f2))
-                    flowerMoves.add(new Move(f1, f2));
+            Set<Move> flowerMoves = new HashSet<>();
+            // Create cartesian product
+            for (Flower f1 : validFlowers)
+                for (Flower f2 : validFlowers)
+                    if (!f1.equals(f2))
+                        flowerMoves.add(new Move(f1, f2));
 
-        int maxDistance = 3;
-        Set<Move> invalidFlowerMoves = new HashSet<>();
-        for (Move m : flowerMoves) {
-            Flower f1 = m.getFirstFlower();
-            Flower f2 = m.getSecondFlower();
+            int maxDistance = 3;
+            Set<Move> invalidFlowerMoves = new HashSet<>();
+            for (Move m : flowerMoves) {
+                Flower f1 = m.getFirstFlower();
+                Flower f2 = m.getSecondFlower();
 
-            // Only check combinations with higher column or row distance than predefined
-            if (Math.abs(f1.getFirst()
-                           .getColumn() - f2.getFirst()
-                                            .getColumn()) <= maxDistance && Math.abs(f1.getFirst()
-                                                                                       .getRow() - f2.getFirst()
-                                                                                                     .getRow()) <= maxDistance && !isValidFlowerCombination(
-                    m.getFirstFlower(), m.getSecondFlower()))
-                invalidFlowerMoves.add(m);
+                // Only check combinations with higher column or row distance than predefined
+                if (Math.abs(f1.getFirst()
+                               .getColumn() - f2.getFirst()
+                                                .getColumn()) <= maxDistance && Math.abs(f1.getFirst()
+                                                                                           .getRow() - f2.getFirst()
+                                                                                                         .getRow()) <= maxDistance && !isValidFlowerCombination(
+                        m.getFirstFlower(), m.getSecondFlower(), color))
+                    invalidFlowerMoves.add(m);
+            }
+
+            flowerMoves.removeAll(invalidFlowerMoves);
+            moves.addAll(flowerMoves);
+
+            moves.add(new Move(MoveType.Surrender));
+
+            // Ditch moves
+            moves.addAll(getAllPossibleDitches().stream()
+                                                .filter(ditch -> isValidDitch(ditch, color))
+                                                .map(Move::new)
+                                                .collect(toSet()));
+
+            // TODO test this
+            if (validFlowers.size() < 2)
+                moves.add(new Move(MoveType.End));
+
+            long stop = System.currentTimeMillis();
+
+            logger.debug(String.format("Possible moves calculated in %.3f s", (double) (stop - start) / 1000.0));
+
+            if (color == PlayerColor.Red)
+                redMoves = moves;
+            else
+                blueMoves = moves;
         }
 
-        flowerMoves.removeAll(invalidFlowerMoves);
-        moves.addAll(flowerMoves);
-
-        moves.add(new Move(MoveType.Surrender));
-
-        // Ditch moves
-        moves.addAll(getAllPossibleDitches().stream()
-                                            .filter(this::isValidDitch)
-                                            .map(Move::new)
-                                            .collect(toSet()));
-
-        // TODO test this
-        if (validFlowers.size() < 2)
-            moves.add(new Move(MoveType.End));
-
-        long stop = System.currentTimeMillis();
-
-        logger.debug(String.format("Possible moves calculated in %.3f s", (double) (stop - start) / 1000.0));
-
-        return moves;
+        if (color == PlayerColor.Red)
+            return redMoves;
+        else
+            return blueMoves;
     }
 
     // ------------------------------------------------------------
@@ -823,40 +912,50 @@ public class BoardImpl implements Board {
     }
 
     private int getPoints(PlayerColor color) {
-        // TODO test this
-        Set<FlowerBed> ownGardens = getFlowerBed(color).stream()
-                                                       .filter(bed -> bed.size() == GARDEN_SIZE)
-                                                       .collect(toSet());
+        if ((color == PlayerColor.Red && redPoints == -1) || (color == PlayerColor.Blue && bluePoints == -1)) {
+            // TODO test this
+            Set<FlowerBed> ownGardens = getFlowerBed(color).stream()
+                                                           .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                           .collect(toSet());
 
-        Set<FlowerBed> visitedFlowerBeds = new HashSet<>();
+            Set<FlowerBed> visitedFlowerBeds = new HashSet<>();
 
-        int score = 0;
+            int score = 0;
 
-        // Iterate over all own gardens and try to find all connected gardens
-        while (!ownGardens.isEmpty()) {
+            // Iterate over all own gardens and try to find all connected gardens
+            while (!ownGardens.isEmpty()) {
 
-            // Take a garden from the garden set
-            FlowerBed startGarden = ownGardens.iterator()
-                                              .next();
+                // Take a garden from the garden set
+                FlowerBed startGarden = ownGardens.iterator()
+                                                  .next();
 
-            // CONNECTION LOGIC START
+                // CONNECTION LOGIC START
 
-            Set<FlowerBed> connected = new HashSet<>();
-            findConnectedFlowerBeds(startGarden, color, connected, visitedFlowerBeds);
+                Set<FlowerBed> connected = new HashSet<>();
+                findConnectedFlowerBeds(startGarden, color, connected, visitedFlowerBeds);
 
-            Set<FlowerBed> connectedGardens = connected.stream()
-                                                       .filter(bed -> bed.size() == GARDEN_SIZE)
-                                                       .collect(toSet());
+                Set<FlowerBed> connectedGardens = connected.stream()
+                                                           .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                           .collect(toSet());
 
-            score += calculateConnectionScore(connectedGardens.size());
+                score += calculateConnectionScore(connectedGardens.size());
 
-            // CONNECTION LOGIC END
+                // CONNECTION LOGIC END
 
-            // Remove all visited flower beds
-            ownGardens.removeAll(connected);
+                // Remove all visited flower beds
+                ownGardens.removeAll(connected);
+            }
+
+            if (color == PlayerColor.Red)
+                redPoints = score;
+            else
+                bluePoints = score;
         }
 
-        return score;
+        if (color == PlayerColor.Red)
+            return redPoints;
+        else
+            return bluePoints;
     }
 
     private void findConnectedFlowerBeds(FlowerBed flowerBed, PlayerColor color, Set<FlowerBed> resultSet, Set<FlowerBed> visited) {
@@ -900,7 +999,7 @@ public class BoardImpl implements Board {
     private int calculateConnectionScore(int n) {
         if (n <= 1)
             return 1;
-        return n + calculateConnectionScore(n-1);
+        return n + calculateConnectionScore(n - 1);
     }
 
     // ------------------------------------------------------------
