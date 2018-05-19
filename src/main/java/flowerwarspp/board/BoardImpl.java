@@ -823,6 +823,7 @@ public class BoardImpl implements Board {
     }
 
     private int getPoints(PlayerColor color) {
+        // TODO test this
         Set<FlowerBed> ownGardens = getFlowerBed(color).stream()
                                                        .filter(bed -> bed.size() == GARDEN_SIZE)
                                                        .collect(toSet());
