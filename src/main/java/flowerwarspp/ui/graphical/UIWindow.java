@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class UIWindow extends JFrame implements UserInterface {
+public class UIWindow extends JFrame implements Display, Requestable {
     private static final Logger logger = LoggerFactory.getLogger(UIWindow.class);
 
     private UIPanel panel;
@@ -44,19 +44,30 @@ public class UIWindow extends JFrame implements UserInterface {
     }
 
     @Override
+    public void reset() {
+        panel.reset();
+    }
+
+    @Override
     public void update(Move move) {
         // TODO Something useful with the move done
         logger.debug("Move done: " + move);
+
         panel.repaint();
     }
 
     @Override
-    public Move request() throws InterruptedException {
-        return panel.request();
+    public void showStatus(Status status) {
+        panel.showStatus(status);
     }
 
     @Override
     public void close() {
         dispose();
+    }
+
+    @Override
+    public Move request() throws InterruptedException {
+        return panel.request();
     }
 }

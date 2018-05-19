@@ -78,6 +78,8 @@ public class UIPanel extends JPanel {
     private Flower moveSecondFlower;
     private Ditch moveDitch;
 
+    private Status status;
+
     // ------------------------------------------------------------
 
     public UIPanel(UIWindow parentWindow) {
@@ -287,6 +289,14 @@ public class UIPanel extends JPanel {
 
         logger.debug("UI created move: " + move);
         return move;
+    }
+
+    public synchronized void reset() {
+        status = null;
+    }
+
+    public synchronized void showStatus(Status status) {
+        this.status = status;
     }
 
     // ------------------------------------------------------------
@@ -679,6 +689,9 @@ public class UIPanel extends JPanel {
                 BLUE_PLAYER_COLOR,
                 backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + bluePoints);
+
+        if (status != null)
+            drawStatus(g);
     }
 
     private void showTextBox(Graphics2D g, float x, float y, float minWidth, float scale, Color textColor, Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
@@ -715,6 +728,12 @@ public class UIPanel extends JPanel {
                 g.setPaint(textPaint);
             g.drawString(text, x + (width - textWidth) / 2, y + scale * TEXT_MARGIN + (textHeight + fm.getAscent()) / 2);
         }
+    }
+
+    private void drawStatus(Graphics2D g) {
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+        g.setColor(Color.BLACK);
+        g.fill(new Rectangle2D.Float(0, 0, WIDTH, HEIGHT));
     }
 
 
