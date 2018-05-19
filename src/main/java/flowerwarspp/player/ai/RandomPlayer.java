@@ -9,6 +9,8 @@ import java.util.*;
 public class RandomPlayer extends AbstractPlayer {
     private static final Logger logger = LoggerFactory.getLogger(RandomPlayer.class);
 
+    private static final Move SURRENDER_MOVE = new Move(MoveType.Surrender);
+
     private Random random;
 
     // ------------------------------------------------------------
@@ -22,6 +24,10 @@ public class RandomPlayer extends AbstractPlayer {
     @Override
     protected Move provideMove() throws Exception {
         List<Move> possibleMoves = new LinkedList<>(viewer.getPossibleMoves());
+
+        // Don't surrender
+        possibleMoves.remove(SURRENDER_MOVE);
+
         Move m = possibleMoves.get(random.nextInt(possibleMoves.size()));
 
         logger.debug("Chose random move: " + m);
