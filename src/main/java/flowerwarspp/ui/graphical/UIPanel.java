@@ -296,6 +296,7 @@ public class UIPanel extends JPanel {
 
     public synchronized void reset() {
         status = null;
+        repaint();
     }
 
     public synchronized void showStatus(Status status) {
