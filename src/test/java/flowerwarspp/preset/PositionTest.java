@@ -239,4 +239,45 @@ public class PositionTest {
         assertNotNull(p.toString());
         assertTrue(p.toString().contains("7"));
     }
+
+    // ------------------------------------------------------------
+    // * Parse *
+
+    @Test (expected = PositionFormatException.class)
+    public void parsePositionForNullStringThrowsException() {
+        Position.parsePositions(null);
+    }
+
+    @Test (expected = PositionFormatException.class)
+    public void parsePositionForEmptyStringThrowsException() {
+        Position.parsePositions("");
+    }
+
+    @Test (expected = PositionFormatException.class)
+    public void parsePositionForWrongFormatStringThrowsException() {
+        Position.parsePositions("5,7");
+    }
+
+    @Test (expected = PositionFormatException.class)
+    public void parsePositionForWrongNumberOfArgumentsThrowsException() {
+        Position.parsePositions("(1,2,3)");
+    }
+
+    @Test (expected = PositionFormatException.class)
+    public void parsePositionForWrongColumnNumberFormatThrowsException() {
+        Position.parsePositions("(a,3)");
+    }
+
+    @Test (expected = PositionFormatException.class)
+    public void parsePositionForWrongRowNumberFormatThrowsException() {
+        Position.parsePositions("(2,b)");
+    }
+
+    @Test
+    public void parsePositionCreatesCorrectPosition() {
+        Position p = Position.parsePositions("(5,7)");
+
+        assertEquals(5, p.getColumn());
+        assertEquals(7, p.getRow());
+    }
 }
