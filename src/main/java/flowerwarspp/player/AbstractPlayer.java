@@ -29,6 +29,10 @@ public abstract class AbstractPlayer implements Player {
         return color;
     }
 
+    public Viewer getViewer() {
+        return viewer;
+    }
+
     private void verifyState(State check) throws Exception {
         if (expectedState != check)
             throw new Exception("Wrong player usage! Expected " + expectedState + " but tried " + check);

@@ -1,6 +1,8 @@
 package flowerwarspp.preset;
 
-public interface Player {
+import java.rmi.*;
+
+public interface Player extends Remote {
     Move request() throws Exception;
     void confirm(Status status) throws Exception;
     void update(Move opponentMove, Status status) throws Exception;
