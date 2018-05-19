@@ -303,9 +303,17 @@ public class BoardImpl implements Board {
                 };
 
                 // TODO even if two separate flowers are valid, the combination can make it invalid!
+                Set<FlowerBed> flowerBeds = getFlowerBed(turn);
+                Set<Flower> invalidFlowers = getFlowerSet(null);
+                invalidFlowers.addAll(getAllDitchBlockedFlowers());
+                Set<Position> gardenPositions = flowerBeds.stream()
+                                                          .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                          .flatMap(bed -> bed.getPositions()
+                                                                             .stream())
+                                                          .collect(toSet());
 
                 for (Flower f : flowers)
-                    if (!isValidFlower(f))
+                    if (!isValidFlower(f, flowerBeds, invalidFlowers, gardenPositions))
                         return false;
 
                 if (!isValidFlowerCombination(flowers[0], flowers[1]))
@@ -368,33 +376,50 @@ public class BoardImpl implements Board {
      * @param flower the flower to check
      * @return true, if the flower is valid
      */
-    private boolean isValidFlower(Flower flower) {
+    private boolean isValidFlower(Flower flower, Set<FlowerBed> flowerBeds, Set<Flower> invalidFlowers, Set<Position> gardenBlockedPositions) {
+        Set<Position> flowerPositions = getFlowerPositionSet(flower);
+
         // Flower needs to be on the board
-        if (!isPositionOnBoard(flower.getFirst()) | !isPositionOnBoard(flower.getSecond()) | !isPositionOnBoard(
-                flower.getThird()))
-            return false;
+        for (Position p : flowerPositions)
+            if (!isPositionOnBoard(p))
+                return false;
 
-        // Flower cannot be placed on other flower
-        Set<Flower> flowerSet = getFlowerSet(null);
-        if (flowerSet.contains(flower))
-            return false;
-
-        // Flower cannot be placed on ditch blocked fields
-        Set<Flower> ditchBlocked = getAllDitchBlockedFlowers();
-        if (ditchBlocked.contains(flower))
+        // Flower cannot be placed on other flower or on ditch blocked field
+        if (invalidFlowers.contains(flower))
             return false;
 
         // Garden cannot be touched
-        for (FlowerBed fb : getFlowerBed(turn)) {
-            // Skip normal flower beds
-            if (fb.size() != GARDEN_SIZE)
-                continue;
-
-            // If flower shares points with bounding gardens, error
-            Set<Position> sharedPositions = getFlowerPositionSet(flower);
-            sharedPositions.retainAll(fb.getPositions());
-            if (!sharedPositions.isEmpty())
+        for (Position p : flowerPositions) {
+            // If flower shares points with any garden, error
+            if (gardenBlockedPositions.contains(p))
                 return false;
+        }
+
+        // If Flower touches other flower bed and arises to garden, no other flower beds or garden can be touched
+        Set<FlowerBed> neighboringBeds = new HashSet<>();
+        for (FlowerBed fb : flowerBeds)
+            if (fb.getBoundingFlowers()
+                  .contains(flower))
+                neighboringBeds.add(fb);
+
+        if (!neighboringBeds.isEmpty()) {
+            FlowerBed newFlowerBed = new FlowerBed(neighboringBeds);
+            newFlowerBed.addFlower(flower);
+
+            if (newFlowerBed.size() > GARDEN_SIZE)
+                return false;
+
+            if (newFlowerBed.size() == GARDEN_SIZE) {
+                Set<Position> gardenPositions = newFlowerBed.getPositions();
+                Set<Position> otherPositions = new HashSet<>();
+                for (FlowerBed fb : flowerBeds)
+                    if (!neighboringBeds.contains(fb))
+                        otherPositions.addAll(fb.getPositions());
+
+                for (Position p : gardenPositions)
+                    if (otherPositions.contains(p))
+                        return false;
+            }
         }
 
         return true;
@@ -456,7 +481,6 @@ public class BoardImpl implements Board {
                     if (!newFlowerBedPositions.isEmpty())
                         return false;
                 }
-
 
 
                 relevantFlowerBeds.add(newFlowerBed);
@@ -585,7 +609,7 @@ public class BoardImpl implements Board {
         Position[] flowerPositions = new Position[]{flower.getFirst(), flower.getSecond(), flower.getThird()};
 
         for (int i = 0; i < 3; i++)
-            flowerNeighboringDitches[i] = new Ditch(flowerPositions[i], flowerPositions[(i+1)%3]);
+            flowerNeighboringDitches[i] = new Ditch(flowerPositions[i], flowerPositions[(i + 1) % 3]);
 
         for (Ditch d : flowerNeighboringDitches)
             flowers.addAll(getDitchBlockedFlowers(d));
@@ -625,17 +649,24 @@ public class BoardImpl implements Board {
         long start = System.currentTimeMillis();
         Set<Move> moves = new HashSet<>();
 
+        Set<FlowerBed> flowerBeds = getFlowerBed(turn);
+        Set<Flower> invalidFlowers = getFlowerSet(null);
+        invalidFlowers.addAll(getAllDitchBlockedFlowers());
+        Set<Position> gardenPositions = flowerBeds.stream()
+                                                  .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                  .flatMap(bed -> bed.getPositions()
+                                                                     .stream())
+                                                  .collect(toSet());
+
         Set<Flower> validFlowers = getAllPossibleFlowers();
 
-        // Remove all flowers which are already set
-        validFlowers.removeAll(getFlowerSet(null));
-        // Remove all ditch blocked flowers
-        validFlowers.removeAll(getAllDitchBlockedFlowers());
+        // Remove all flowers which are already invalid
+        validFlowers.removeAll(invalidFlowers);
 
         // Remove non valid flowers
         Set<Flower> nonValidFlowers = new HashSet<>();
         for (Flower f : validFlowers)
-            if (!isValidFlower(f))
+            if (!isValidFlower(f, flowerBeds, invalidFlowers, gardenPositions))
                 nonValidFlowers.add(f);
         validFlowers.removeAll(nonValidFlowers);
 
@@ -646,10 +677,21 @@ public class BoardImpl implements Board {
                 if (!f1.equals(f2))
                     flowerMoves.add(new Move(f1, f2));
 
+        int maxDistance = 3;
         Set<Move> invalidFlowerMoves = new HashSet<>();
-        for (Move m : flowerMoves)
-            if (!isValidFlowerCombination(m.getFirstFlower(), m.getSecondFlower()))
+        for (Move m : flowerMoves) {
+            Flower f1 = m.getFirstFlower();
+            Flower f2 = m.getSecondFlower();
+
+            // Only check combinations with higher column or row distance than predefined
+            if (Math.abs(f1.getFirst()
+                           .getColumn() - f2.getFirst()
+                                            .getColumn()) <= maxDistance && Math.abs(f1.getFirst()
+                                                                                       .getRow() - f2.getFirst()
+                                                                                                     .getRow()) <= maxDistance && !isValidFlowerCombination(
+                    m.getFirstFlower(), m.getSecondFlower()))
                 invalidFlowerMoves.add(m);
+        }
 
         flowerMoves.removeAll(invalidFlowerMoves);
         moves.addAll(flowerMoves);
@@ -781,7 +823,9 @@ public class BoardImpl implements Board {
     }
 
     private int getPoints(PlayerColor color) {
-        return (int) getFlowerBed(color).stream().filter(bed -> bed.size() == GARDEN_SIZE).count();
+        return (int) getFlowerBed(color).stream()
+                                        .filter(bed -> bed.size() == GARDEN_SIZE)
+                                        .count();
     }
 
     // ------------------------------------------------------------
