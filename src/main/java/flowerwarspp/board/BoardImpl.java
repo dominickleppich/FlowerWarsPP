@@ -823,9 +823,83 @@ public class BoardImpl implements Board {
     }
 
     private int getPoints(PlayerColor color) {
-        return (int) getFlowerBed(color).stream()
-                                        .filter(bed -> bed.size() == GARDEN_SIZE)
-                                        .count();
+        Set<FlowerBed> ownGardens = getFlowerBed(color).stream()
+                                                       .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                       .collect(toSet());
+
+        Set<FlowerBed> visitedFlowerBeds = new HashSet<>();
+
+        int score = 0;
+
+        // Iterate over all own gardens and try to find all connected gardens
+        while (!ownGardens.isEmpty()) {
+
+            // Take a garden from the garden set
+            FlowerBed startGarden = ownGardens.iterator()
+                                              .next();
+
+            // CONNECTION LOGIC START
+
+            Set<FlowerBed> connected = new HashSet<>();
+            findConnectedFlowerBeds(startGarden, color, connected, visitedFlowerBeds);
+
+            Set<FlowerBed> connectedGardens = connected.stream()
+                                                       .filter(bed -> bed.size() == GARDEN_SIZE)
+                                                       .collect(toSet());
+
+            score += calculateConnectionScore(connectedGardens.size());
+
+            // CONNECTION LOGIC END
+
+            // Remove all visited flower beds
+            ownGardens.removeAll(connected);
+        }
+
+        return score;
+    }
+
+    private void findConnectedFlowerBeds(FlowerBed flowerBed, PlayerColor color, Set<FlowerBed> resultSet, Set<FlowerBed> visited) {
+        // Visit current flower bed
+        visited.add(flowerBed);
+        resultSet.add(flowerBed);
+
+        Set<Position> flowerBedPositions = flowerBed.getPositions();
+
+        // Search for all ditches starting anywhere on the flower bed
+        Set<Ditch> connectionDitches = getDitchSet(color).stream()
+                                                         .filter(ditch -> {
+                                                             Position p1 = ditch.getFirst();
+                                                             Position p2 = ditch.getSecond();
+                                                             return flowerBedPositions.contains(
+                                                                     p1) || flowerBedPositions.contains(p2);
+                                                         })
+                                                         .collect(toSet());
+        Set<Position> connectionDitchPositions = new HashSet<>();
+        for (Ditch d : connectionDitches) {
+            connectionDitchPositions.add(d.getFirst());
+            connectionDitchPositions.add(d.getSecond());
+        }
+
+        // Test all non visited flower beds for a connection
+        Set<FlowerBed> availableFlowerBeds = new HashSet<>(getFlowerBed(color));
+        availableFlowerBeds.removeAll(visited);
+
+        for (FlowerBed fb : availableFlowerBeds) {
+            // Add only flower beds, which are connected through a ditch
+            Set<Position> fbPositions = fb.getPositions();
+            fbPositions.retainAll(connectionDitchPositions);
+
+            // If a connected flower bed is found, add it and look recursively for other ones
+            if (!fbPositions.isEmpty()) {
+                findConnectedFlowerBeds(fb, color, resultSet, visited);
+            }
+        }
+    }
+
+    private int calculateConnectionScore(int n) {
+        if (n <= 1)
+            return 1;
+        return n + calculateConnectionScore(n-1);
     }
 
     // ------------------------------------------------------------
