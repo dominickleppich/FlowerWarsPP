@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.*;
+import java.util.stream.*;
 
 public class UIPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(UIPanel.class);
@@ -22,7 +23,8 @@ public class UIPanel extends JPanel {
     private static final double BORDER_SIZE = 0.2;
 
     private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
-    private static final Color BOARD_BLOCKED_COLOR = new Color(64, 93, 41);
+    private static final Color BLOCKED_FLOWER_COLOR = new Color(64, 93, 41);
+    private static final Color POSSIBLE_DITCH_COLOR = new Color(120, 157, 52);
     private static final Color BOARD_GRID_LINE_COLOR = new Color(44, 44, 44);
     private static final Color BOARD_GRID_POINT_COLOR = new Color(44, 44, 44);
     private static final double BOARD_GRID_POINT_SIZE = 0.3;
@@ -129,6 +131,9 @@ public class UIPanel extends JPanel {
                 if (!inputEnabled)
                     return;
 
+                Flower lastHoverFlower = hoverFlower;
+                Ditch lastHoverDitch = hoverDitch;
+
                 clearHover();
 
                 if (moveFirstFlower == null)
@@ -165,8 +170,12 @@ public class UIPanel extends JPanel {
                     }
                 }
 
-                repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent.getY() - UNIT), (int) UNIT * 2,
-                        (int) UNIT * 2);
+                /*repaint((int) (mouseEvent.getX() - UNIT), (int) (mouseEvent.getY() - UNIT), (int) UNIT * 2,
+                        (int) UNIT * 2);*/
+
+                // Repaint of something changed
+                if (lastHoverFlower != hoverFlower || lastHoverDitch != hoverDitch)
+                    repaint();
             }
         });
         addKeyListener(new KeyAdapter() {
@@ -505,7 +514,7 @@ public class UIPanel extends JPanel {
 
         // Draw blocked fields
         if (blockedFlowers != null) {
-            g.setColor(BOARD_BLOCKED_COLOR);
+            g.setColor(BLOCKED_FLOWER_COLOR);
             for (Flower f : blockedFlowers)
                 g.fill(flowerToPolygon(f));
         }
@@ -548,10 +557,22 @@ public class UIPanel extends JPanel {
             }
         }
 
+        // Determine possible ditches
+        Set<Ditch> possibleDitches = possibleMoves.stream()
+                                                  .filter(move -> move.getType() == MoveType.Ditch)
+                                                  .map(move -> move.getDitch())
+                                                  .collect(Collectors.toSet());
+
         g.setStroke(new BasicStroke(UNIT * BOARD_GRID_DITCH_LINE_STRENGTH));
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
             for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
                 Ditch d = new Ditch(e.getKey(), neighbor);
+
+                // Show possible ditches
+                if (possibleDitches.contains(d)) {
+                    g.setColor(POSSIBLE_DITCH_COLOR);
+                    g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
+                }
 
                 // Determine color
                 if (viewer.getDitches(PlayerColor.Red)
@@ -667,6 +688,8 @@ public class UIPanel extends JPanel {
             g.drawString(text, x + (width - textWidth) / 2, y + UNIT * TEXT_MARGIN + (textHeight + fm.getAscent()) / 2);
         }
     }
+
+
 
     // ------------------------------------------------------------
 
