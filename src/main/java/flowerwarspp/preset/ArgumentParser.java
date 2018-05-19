@@ -205,10 +205,6 @@ public class ArgumentParser {
 
     // ------------------------------------------------------------
 
-    public boolean isTextMode() throws ArgumentParserException {
-        return getFlag("text");
-    }
-
     public boolean isDebug() throws ArgumentParserException {
         return getFlag("debug");
     }
