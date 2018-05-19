@@ -44,6 +44,9 @@ public class UIPanel extends JPanel {
     private static final Color BLUE_HOVER_COLOR = new Color(122, 122, 154);
     private static final float HOVER_ALPHA = 0.8f;
 
+    private static final Color STATUS_TEXT_COLOR_A = new Color(197, 177, 42);
+    private static final Color STATUS_TEXT_COLOR_B = new Color(197, 88, 20);
+    private static final float STATUS_TEXT_SIZE = 1.5f;
     private static final Color TEXT_BOX_BACKGROUND_COLOR = new Color(200, 124, 25);
     private static final Color TEXT_BOX_BORDER_COLOR = new Color(70, 70, 70);
     private static final float TEXT_FONT_SIZE = 0.3f;
@@ -672,26 +675,26 @@ public class UIPanel extends JPanel {
 
         // End
         if (possibleMoves != null && possibleMoves.contains(new Move(MoveType.End)))
-            showTextBox(g, (float) (uiScale * BORDER_SIZE), (float) (uiScale * BORDER_SIZE), 0.0f, uiScale, Color.WHITE, null,
-                    TEXT_BOX_BORDER_COLOR, END_MOVE_COLOR, backupFont.deriveFont(Font.ITALIC, uiScale * END_TEXT_SIZE),
-                    " Press SPACE to end ");
+            showTextBox(g, (float) (uiScale * BORDER_SIZE), (float) (uiScale * BORDER_SIZE), 0.0f, uiScale, Color.WHITE,
+                    null, TEXT_BOX_BORDER_COLOR, END_MOVE_COLOR,
+                    backupFont.deriveFont(Font.ITALIC, uiScale * END_TEXT_SIZE), " Press SPACE to end ");
 
         int redPoints = viewer.getPoints(PlayerColor.Red);
         int bluePoints = viewer.getPoints(PlayerColor.Blue);
 
         // Red points
-        showTextBox(g, WIDTH - uiScale * 2.4f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null, TEXT_BOX_BORDER_COLOR,
-                RED_PLAYER_COLOR,
+        showTextBox(g, WIDTH - uiScale * 2.4f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null,
+                TEXT_BOX_BORDER_COLOR, RED_PLAYER_COLOR,
                 backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + redPoints);
         // Blue points
-        showTextBox(g, WIDTH - uiScale * 1.2f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null, TEXT_BOX_BORDER_COLOR,
-                BLUE_PLAYER_COLOR,
+        showTextBox(g, WIDTH - uiScale * 1.2f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null,
+                TEXT_BOX_BORDER_COLOR, BLUE_PLAYER_COLOR,
                 backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + bluePoints);
 
         if (status != null)
-            drawStatus(g);
+            drawStatus(g, backupFont.deriveFont(Font.BOLD, uiScale * STATUS_TEXT_SIZE));
     }
 
     private void showTextBox(Graphics2D g, float x, float y, float minWidth, float scale, Color textColor, Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
@@ -726,14 +729,43 @@ public class UIPanel extends JPanel {
                 g.setColor(textColor);
             else
                 g.setPaint(textPaint);
-            g.drawString(text, x + (width - textWidth) / 2, y + scale * TEXT_MARGIN + (textHeight + fm.getAscent()) / 2);
+            g.drawString(text, x + (width - textWidth) / 2,
+                    y + scale * TEXT_MARGIN + (textHeight + fm.getAscent()) / 2);
         }
     }
 
-    private void drawStatus(Graphics2D g) {
+    private void drawStatus(Graphics2D g, Font font) {
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
         g.setColor(Color.BLACK);
         g.fill(new Rectangle2D.Float(0, 0, WIDTH, HEIGHT));
+
+        g.setFont(font);
+        Paint paint = new GradientPaint(0, 0, STATUS_TEXT_COLOR_A, WIDTH, HEIGHT, STATUS_TEXT_COLOR_B);
+        g.setPaint(paint);
+
+        FontMetrics fm = g.getFontMetrics();
+
+        String statusText = "";
+        switch (status) {
+            case RedWin:
+                statusText = "Red won!";
+                break;
+            case BlueWin:
+                statusText = "Blue won!";
+                break;
+            case Draw:
+                statusText = "Draw!";
+                break;
+            case Illegal:
+                statusText = "Illegal state!!!";
+                break;
+            default:
+                throw new IllegalStateException("Unknown state!");
+        }
+
+        int textWidth = fm.stringWidth(statusText);
+
+        g.drawString(statusText, WIDTH / 2 - textWidth / 2, HEIGHT / 2 + fm.getAscent() / 2);
     }
 
 
