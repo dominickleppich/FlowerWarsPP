@@ -43,6 +43,14 @@ public class UIPanel extends JPanel {
     private static final Color BLUE_HOVER_COLOR = new Color(122, 122, 154);
     private static final float HOVER_ALPHA = 0.8f;
 
+    private static final Color TEXT_BOX_BACKGROUND_COLOR = new Color(200, 124, 25);
+    private static final Color TEXT_BOX_BORDER_COLOR = new Color(70, 70, 70);
+    private static final float TEXT_FONT_SIZE = 0.3f;
+    private static final float TEXT_MARGIN = 0.2f;
+    private static final float TEXT_BORDER_SIZE = 0.05f;
+    private static final float POINT_TEXT_SIZE = 0.5f;
+    private static final float TEXT_BACKGROUND_ARC = 0.3f;
+
     // ------------------------------------------------------------
     // ------------------------------------------------------------
 
@@ -646,12 +654,12 @@ public class UIPanel extends JPanel {
         int bluePoints = viewer.getPoints(PlayerColor.Blue);
 
         // Red points
-        showTextBox(g, WIDTH - UNIT * 2.4f, UNIT * 0.2f, UNIT * 0.6f, null, backgroundPaint, TEXT_BOX_BORDER_COLOR,
+        showTextBox(g, WIDTH - UNIT * 2.4f, UNIT * 0.2f, UNIT * 0.6f, Color.WHITE, null, TEXT_BOX_BORDER_COLOR,
                 RED_PLAYER_COLOR,
                 backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, UNIT * POINT_TEXT_SIZE),
                 "" + redPoints);
         // Blue points
-        showTextBox(g, WIDTH - UNIT * 1.2f, UNIT * 0.2f, UNIT * 0.6f, null, backgroundPaint, TEXT_BOX_BORDER_COLOR,
+        showTextBox(g, WIDTH - UNIT * 1.2f, UNIT * 0.2f, UNIT * 0.6f, Color.WHITE, null, TEXT_BOX_BORDER_COLOR,
                 BLUE_PLAYER_COLOR,
                 backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, UNIT * POINT_TEXT_SIZE),
                 "" + bluePoints);
