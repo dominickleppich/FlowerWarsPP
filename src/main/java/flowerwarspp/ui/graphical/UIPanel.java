@@ -658,28 +658,30 @@ public class UIPanel extends JPanel {
 
         Font backupFont = g.getFont();
 
+        float uiScale = WIDTH / 10;
+
         // End
         if (possibleMoves != null && possibleMoves.contains(new Move(MoveType.End)))
-            showTextBox(g, (float) (UNIT * BORDER_SIZE), (float) (UNIT * BORDER_SIZE), 0.0f, Color.WHITE, null,
-                    TEXT_BOX_BORDER_COLOR, END_MOVE_COLOR, backupFont.deriveFont(Font.ITALIC, UNIT * END_TEXT_SIZE),
+            showTextBox(g, (float) (uiScale * BORDER_SIZE), (float) (uiScale * BORDER_SIZE), 0.0f, uiScale, Color.WHITE, null,
+                    TEXT_BOX_BORDER_COLOR, END_MOVE_COLOR, backupFont.deriveFont(Font.ITALIC, uiScale * END_TEXT_SIZE),
                     " Press SPACE to end ");
 
         int redPoints = viewer.getPoints(PlayerColor.Red);
         int bluePoints = viewer.getPoints(PlayerColor.Blue);
 
         // Red points
-        showTextBox(g, WIDTH - UNIT * 2.4f, UNIT * 0.2f, UNIT * 0.6f, Color.WHITE, null, TEXT_BOX_BORDER_COLOR,
+        showTextBox(g, WIDTH - uiScale * 2.4f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null, TEXT_BOX_BORDER_COLOR,
                 RED_PLAYER_COLOR,
-                backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, UNIT * POINT_TEXT_SIZE),
+                backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + redPoints);
         // Blue points
-        showTextBox(g, WIDTH - UNIT * 1.2f, UNIT * 0.2f, UNIT * 0.6f, Color.WHITE, null, TEXT_BOX_BORDER_COLOR,
+        showTextBox(g, WIDTH - uiScale * 1.2f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null, TEXT_BOX_BORDER_COLOR,
                 BLUE_PLAYER_COLOR,
-                backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, UNIT * POINT_TEXT_SIZE),
+                backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + bluePoints);
     }
 
-    private void showTextBox(Graphics2D g, float x, float y, float minWidth, Color textColor, Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
+    private void showTextBox(Graphics2D g, float x, float y, float minWidth, float scale, Color textColor, Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
         g.setFont(font);
 
         FontMetrics fm = g.getFontMetrics();
@@ -689,11 +691,11 @@ public class UIPanel extends JPanel {
         float width = textWidth;
         if (width < minWidth)
             width = minWidth;
-        float height = textHeight + 2 * UNIT * TEXT_MARGIN;
-        width += 2 * UNIT * TEXT_MARGIN;
+        float height = textHeight + 2 * scale * TEXT_MARGIN;
+        width += 2 * scale * TEXT_MARGIN;
 
-        Shape s = new RoundRectangle2D.Double(x, y, width, height, UNIT * TEXT_BACKGROUND_ARC,
-                UNIT * TEXT_BACKGROUND_ARC);
+        Shape s = new RoundRectangle2D.Double(x, y, width, height, scale * TEXT_BACKGROUND_ARC,
+                scale * TEXT_BACKGROUND_ARC);
 
         if (backgroundColor != null) {
             g.setColor(backgroundColor);
@@ -702,7 +704,7 @@ public class UIPanel extends JPanel {
 
         if (borderColor != null) {
             g.setColor(borderColor);
-            g.setStroke(new BasicStroke(UNIT * TEXT_BORDER_SIZE));
+            g.setStroke(new BasicStroke(scale * TEXT_BORDER_SIZE));
             g.draw(s);
         }
 
@@ -711,7 +713,7 @@ public class UIPanel extends JPanel {
                 g.setColor(textColor);
             else
                 g.setPaint(textPaint);
-            g.drawString(text, x + (width - textWidth) / 2, y + UNIT * TEXT_MARGIN + (textHeight + fm.getAscent()) / 2);
+            g.drawString(text, x + (width - textWidth) / 2, y + scale * TEXT_MARGIN + (textHeight + fm.getAscent()) / 2);
         }
     }
 
