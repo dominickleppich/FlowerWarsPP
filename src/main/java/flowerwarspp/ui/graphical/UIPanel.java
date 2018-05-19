@@ -18,6 +18,7 @@ public class UIPanel extends JPanel {
     // ------------------------------------------------------------
     // * Customizable settings *
 
+    private static final Color END_MOVE_COLOR = new Color(53, 11, 71);
     private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
     private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
     private static final Color BACKGROUND_RED_COLOR_A = new Color(197, 110, 25);
@@ -49,6 +50,7 @@ public class UIPanel extends JPanel {
     private static final float TEXT_MARGIN = 0.2f;
     private static final float TEXT_BORDER_SIZE = 0.05f;
     private static final float POINT_TEXT_SIZE = 0.5f;
+    private static final float END_TEXT_SIZE = 0.2f;
     private static final float TEXT_BACKGROUND_ARC = 0.3f;
 
     // ------------------------------------------------------------
@@ -202,6 +204,9 @@ public class UIPanel extends JPanel {
                 move = new Move(MoveType.Surrender);
                 createMove();
             } else if (keyEvent.getKeyCode() == KeyEvent.VK_SPACE) {
+                // Ignore end move if not legal
+                if (!possibleMoves.contains(new Move(MoveType.End)))
+                    return;
                 logger.debug("End button typed");
                 move = new Move(MoveType.End);
                 createMove();
@@ -273,6 +278,7 @@ public class UIPanel extends JPanel {
             wait();
         }
         inputEnabled = false;
+        possibleMoves = null;
         turn = null;
         blockedFlowers = null;
         hoverFlower = null;
@@ -577,10 +583,12 @@ public class UIPanel extends JPanel {
         }
 
         // Determine possible ditches
-        Set<Ditch> possibleDitches = possibleMoves.stream()
-                                                  .filter(move -> move.getType() == MoveType.Ditch)
-                                                  .map(move -> move.getDitch())
-                                                  .collect(Collectors.toSet());
+        Set<Ditch> possibleDitches = null;
+        if (possibleMoves != null)
+            possibleDitches = possibleMoves.stream()
+                                           .filter(move -> move.getType() == MoveType.Ditch)
+                                           .map(move -> move.getDitch())
+                                           .collect(Collectors.toSet());
 
         g.setStroke(new BasicStroke(UNIT * BOARD_GRID_DITCH_LINE_STRENGTH));
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
@@ -588,7 +596,7 @@ public class UIPanel extends JPanel {
                 Ditch d = new Ditch(e.getKey(), neighbor);
 
                 // Show possible ditches
-                if (possibleDitches.contains(d)) {
+                if (possibleDitches != null && possibleDitches.contains(d)) {
                     g.setColor(POSSIBLE_DITCH_COLOR);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                 }
@@ -650,6 +658,12 @@ public class UIPanel extends JPanel {
 
         Font backupFont = g.getFont();
 
+        // End
+        if (possibleMoves != null && possibleMoves.contains(new Move(MoveType.End)))
+            showTextBox(g, (float) (UNIT * BORDER_SIZE), (float) (UNIT * BORDER_SIZE), 0.0f, Color.WHITE, null,
+                    TEXT_BOX_BORDER_COLOR, END_MOVE_COLOR, backupFont.deriveFont(Font.ITALIC, UNIT * END_TEXT_SIZE),
+                    " Press SPACE to end ");
+
         int redPoints = viewer.getPoints(PlayerColor.Red);
         int bluePoints = viewer.getPoints(PlayerColor.Blue);
 
@@ -700,7 +714,6 @@ public class UIPanel extends JPanel {
             g.drawString(text, x + (width - textWidth) / 2, y + UNIT * TEXT_MARGIN + (textHeight + fm.getAscent()) / 2);
         }
     }
-
 
 
     // ------------------------------------------------------------
