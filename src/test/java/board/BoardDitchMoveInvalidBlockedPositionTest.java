@@ -1,6 +1,5 @@
 package board;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -13,16 +12,38 @@ import static org.junit.Assert.*;
 @RunWith(Parameterized.class)
 public class BoardDitchMoveInvalidBlockedPositionTest {
     private static final int BOARD_SIZE = 15;
+    private static final String MESSAGE = "Invalid ditch move on blocked position";
     private Board board;
     private Viewer viewer;
 
-    private static final String MESSAGE = "Invalid ditch move on blocked position";
+    // ------------------------------------------------------------
+    private Move move;
+
+    // ------------------------------------------------------------
+    private Status expectedStatus;
 
     // ------------------------------------------------------------
 
+    public BoardDitchMoveInvalidBlockedPositionTest(Move move, Status expected) {
+        this.move = move;
+        this.expectedStatus = expected;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {new Move(new Ditch(new Position(3, 3), new Position(3, 4))), Status.Illegal},
+                {new Move(new Ditch(new Position(4, 3), new Position(3, 4))), Status.Illegal},
+                {new Move(new Ditch(new Position(3, 3), new Position(4, 3))), Status.Illegal},
+                {new Move(new Ditch(new Position(3, 2), new Position(3, 3))), Status.Illegal},
+                {new Move(new Ditch(new Position(3, 4), new Position(3, 5))), Status.Illegal},
+                {new Move(new Ditch(new Position(5, 2), new Position(4, 3))), Status.Illegal}
+        });
+    }
+
     @Before
     public void init() {
-        board = new BoardImpl(BOARD_SIZE);
+        board = TestBoardFactory.createInstance(BOARD_SIZE);
         viewer = board.viewer();
 
         // Set up board
@@ -49,30 +70,6 @@ public class BoardDitchMoveInvalidBlockedPositionTest {
 
         for (Move m : replayMoves)
             board.make(m);
-    }
-
-    // ------------------------------------------------------------
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {new Move(new Ditch(new Position(3, 3), new Position(3, 4))), Status.Illegal},
-                {new Move(new Ditch(new Position(4, 3), new Position(3, 4))), Status.Illegal},
-                {new Move(new Ditch(new Position(3, 3), new Position(4, 3))), Status.Illegal},
-                {new Move(new Ditch(new Position(3, 2), new Position(3, 3))), Status.Illegal},
-                {new Move(new Ditch(new Position(3, 4), new Position(3, 5))), Status.Illegal},
-                {new Move(new Ditch(new Position(5, 2), new Position(4, 3))), Status.Illegal}
-        });
-    }
-
-    // ------------------------------------------------------------
-
-    private Move move;
-    private Status expectedStatus;
-
-    public BoardDitchMoveInvalidBlockedPositionTest(Move move, Status expected) {
-        this.move = move;
-        this.expectedStatus = expected;
     }
 
     @Test

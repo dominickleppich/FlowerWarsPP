@@ -1,6 +1,5 @@
 package board;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.junit.*;
 
@@ -31,7 +30,7 @@ public class BoardFlowerMoveDitchTest {
 
     @Before
     public void init() {
-        board = new BoardImpl(BOARD_SIZE);
+        board = TestBoardFactory.createInstance(BOARD_SIZE);
         viewer = board.viewer();
 
         // Set up board
@@ -40,7 +39,8 @@ public class BoardFlowerMoveDitchTest {
 
         replayMoves.add(new Move(new Flower(new Position(2, 2), new Position(3, 2), new Position(2, 3)),
                 new Flower(new Position(3, 3), new Position(2, 4), new Position(3, 4))));
-        replayMoves.add(new Move(new Flower(new Position(8, 2), new Position(9, 2), new Position(8, 3)), new Flower(new Position(7, 3), new Position(6, 4), new Position(7, 4))));
+        replayMoves.add(new Move(new Flower(new Position(8, 2), new Position(9, 2), new Position(8, 3)),
+                new Flower(new Position(7, 3), new Position(6, 4), new Position(7, 4))));
         replayMoves.add(new Move(new Ditch(new Position(3, 2), new Position(3, 3))));
 
         for (Move m : replayMoves)

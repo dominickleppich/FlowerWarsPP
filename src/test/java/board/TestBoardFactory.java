@@ -16,7 +16,8 @@ public class TestBoardFactory {
 
     // ------------------------------------------------------------
 
-    public static void setBoardClassName(String boardClassName) {
+    public static void setBoardClassName(String boardClassName) throws ClassNotFoundException {
+        Class.forName(boardClassName);
         TestBoardFactory.boardClassName = boardClassName;
     }
 
@@ -25,7 +26,7 @@ public class TestBoardFactory {
             Class boardClass = Class.forName(boardClassName);
 
             // Correct parameterList
-            Class[] correctParameterTypes = new Class[] {int.class};
+            Class[] correctParameterTypes = new Class[]{int.class};
 
             // Check all constructors until one matches
             for (Constructor<Board> constructor : boardClass.getConstructors()) {

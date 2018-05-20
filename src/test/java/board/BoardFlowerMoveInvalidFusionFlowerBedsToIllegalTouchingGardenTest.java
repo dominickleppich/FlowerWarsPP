@@ -1,6 +1,5 @@
 package board;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -13,16 +12,43 @@ import static org.junit.Assert.*;
 @RunWith(Parameterized.class)
 public class BoardFlowerMoveInvalidFusionFlowerBedsToIllegalTouchingGardenTest {
     private static final int BOARD_SIZE = 15;
+    private static final String MESSAGE = "Invalid move fusion flower beds to illegal touching garden";
     private Board board;
     private Viewer viewer;
 
-    private static final String MESSAGE = "Invalid move fusion flower beds to illegal touching garden";
+    // ------------------------------------------------------------
+    private Move move;
+
+    // ------------------------------------------------------------
+    private Status expectedStatus;
 
     // ------------------------------------------------------------
 
+    public BoardFlowerMoveInvalidFusionFlowerBedsToIllegalTouchingGardenTest(Move move, Status expected) {
+        this.move = move;
+        this.expectedStatus = expected;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {
+                        new Move(new Flower(new Position(3, 2), new Position(2, 3), new Position(3, 3)),
+                                new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6)),
+                                new Flower(new Position(3, 9), new Position(4, 9), new Position(3, 10))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6)),
+                                new Flower(new Position(4, 11), new Position(3, 12), new Position(4, 12))),
+                        Status.Illegal
+                }
+        });
+    }
+
     @Before
     public void init() {
-        board = new BoardImpl(BOARD_SIZE);
+        board = TestBoardFactory.createInstance(BOARD_SIZE);
         viewer = board.viewer();
 
         // Set up board
@@ -56,35 +82,6 @@ public class BoardFlowerMoveInvalidFusionFlowerBedsToIllegalTouchingGardenTest {
 
         for (Move m : replayMoves)
             board.make(m);
-    }
-
-    // ------------------------------------------------------------
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {
-                        new Move(new Flower(new Position(3, 2), new Position(2, 3), new Position(3, 3)),
-                                new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6)),
-                                new Flower(new Position(3, 9), new Position(4, 9), new Position(3, 10))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6)),
-                                new Flower(new Position(4, 11), new Position(3, 12), new Position(4, 12))),
-                        Status.Illegal
-                }
-        });
-    }
-
-    // ------------------------------------------------------------
-
-    private Move move;
-    private Status expectedStatus;
-
-    public BoardFlowerMoveInvalidFusionFlowerBedsToIllegalTouchingGardenTest(Move move, Status expected) {
-        this.move = move;
-        this.expectedStatus = expected;
     }
 
     @Test

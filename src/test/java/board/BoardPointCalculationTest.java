@@ -1,6 +1,5 @@
 package board;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.junit.*;
 
@@ -15,7 +14,7 @@ public class BoardPointCalculationTest {
 
     @Before
     public void init() {
-        board = new BoardImpl(BOARD_SIZE);
+        board = TestBoardFactory.createInstance(BOARD_SIZE);
         viewer = board.viewer();
 
         List<Move> replayMoves = new LinkedList<>();

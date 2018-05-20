@@ -1,6 +1,5 @@
 package board;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -13,40 +12,22 @@ import static org.junit.Assert.*;
 @RunWith(Parameterized.class)
 public class BoardFlowerMoveValidTouchFlowerBedTest {
     private static final int BOARD_SIZE = 15;
+    private static final String MESSAGE = "Valid move touching a flower bed";
     private Board board;
     private Viewer viewer;
 
-    private static final String MESSAGE = "Valid move touching a flower bed";
+    // ------------------------------------------------------------
+    private Move move;
+
+    // ------------------------------------------------------------
+    private Status expectedStatus;
 
     // ------------------------------------------------------------
 
-    @Before
-    public void init() {
-        board = new BoardImpl(BOARD_SIZE);
-        viewer = board.viewer();
-
-        // Set up board
-
-        List<Move> replayMoves = new LinkedList<>();
-
-        replayMoves.add(new Move(new Flower(new Position(3, 3), new Position(4, 3), new Position(3, 4)),
-                new Flower(new Position(3, 11), new Position(4, 11), new Position(3, 12))));
-        replayMoves.add(new Move(new Flower(new Position(13, 2), new Position(14, 2), new Position(13, 3)),
-                new Flower(new Position(12, 3), new Position(11, 4), new Position(12, 4))));
-        replayMoves.add(new Move(new Flower(new Position(6, 6), new Position(5, 7), new Position(6, 7)),
-                new Flower(new Position(4, 10), new Position(3, 11), new Position(4, 11))));
-        replayMoves.add(new Move(new Flower(new Position(11, 2), new Position(12, 2), new Position(11, 3)),
-                new Flower(new Position(10, 5), new Position(11, 5), new Position(10, 6))));
-        replayMoves.add(new Move(new Flower(new Position(7, 5), new Position(6, 6), new Position(7, 6)),
-                new Flower(new Position(6, 6), new Position(7, 6), new Position(6, 7))));
-        replayMoves.add(new Move(new Flower(new Position(9, 2), new Position(10, 2), new Position(9, 3)),
-                new Flower(new Position(10, 3), new Position(9, 4), new Position(10, 4))));
-
-        for (Move m : replayMoves)
-            board.make(m);
+    public BoardFlowerMoveValidTouchFlowerBedTest(Move move, Status expected) {
+        this.move = move;
+        this.expectedStatus = expected;
     }
-
-    // ------------------------------------------------------------
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -127,14 +108,30 @@ public class BoardFlowerMoveValidTouchFlowerBedTest {
         });
     }
 
-    // ------------------------------------------------------------
+    @Before
+    public void init() {
+        board = TestBoardFactory.createInstance(BOARD_SIZE);
+        viewer = board.viewer();
 
-    private Move move;
-    private Status expectedStatus;
+        // Set up board
 
-    public BoardFlowerMoveValidTouchFlowerBedTest(Move move, Status expected) {
-        this.move = move;
-        this.expectedStatus = expected;
+        List<Move> replayMoves = new LinkedList<>();
+
+        replayMoves.add(new Move(new Flower(new Position(3, 3), new Position(4, 3), new Position(3, 4)),
+                new Flower(new Position(3, 11), new Position(4, 11), new Position(3, 12))));
+        replayMoves.add(new Move(new Flower(new Position(13, 2), new Position(14, 2), new Position(13, 3)),
+                new Flower(new Position(12, 3), new Position(11, 4), new Position(12, 4))));
+        replayMoves.add(new Move(new Flower(new Position(6, 6), new Position(5, 7), new Position(6, 7)),
+                new Flower(new Position(4, 10), new Position(3, 11), new Position(4, 11))));
+        replayMoves.add(new Move(new Flower(new Position(11, 2), new Position(12, 2), new Position(11, 3)),
+                new Flower(new Position(10, 5), new Position(11, 5), new Position(10, 6))));
+        replayMoves.add(new Move(new Flower(new Position(7, 5), new Position(6, 6), new Position(7, 6)),
+                new Flower(new Position(6, 6), new Position(7, 6), new Position(6, 7))));
+        replayMoves.add(new Move(new Flower(new Position(9, 2), new Position(10, 2), new Position(9, 3)),
+                new Flower(new Position(10, 3), new Position(9, 4), new Position(10, 4))));
+
+        for (Move m : replayMoves)
+            board.make(m);
     }
 
     @Test

@@ -1,42 +1,40 @@
 import board.*;
-import ch.qos.logback.classic.*;
 import org.junit.runner.*;
 import org.junit.runner.notification.*;
-import org.slf4j.*;
 
-public class BoardTest {
+public class BoardTestMain {
     private static int executedTestCounter = 0;
 
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println(
-                    "No board class name provided!\nCorrect usage: java -jar BoardTest.jar <FULL_BOARD_CLASS_NAME>");
+                    "No board class name provided!\nCorrect usage: java -jar BoardTestMain.jar <FULL_BOARD_CLASS_NAME>");
             System.exit(1);
         }
 
-        // Disable logging
-        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-        lc.stop();
+        try {
+            TestBoardFactory.setBoardClassName(args[0]);
 
-        TestBoardFactory.setBoardClassName(args[0]);
+            JUnitCore junit = new JUnitCore();
 
-        JUnitCore junit = new JUnitCore();
-
-        junit.addListener(new RunListener() {
-            @Override
-            public void testFinished(Description description) {
-                System.out.print(".");
-                executedTestCounter++;
-                if (executedTestCounter >= 50) {
-                    executedTestCounter = 0;
-                    System.out.println();
+            junit.addListener(new RunListener() {
+                @Override
+                public void testFinished(Description description) {
+                    System.out.print(".");
+                    executedTestCounter++;
+                    if (executedTestCounter >= 50) {
+                        executedTestCounter = 0;
+                        System.out.println();
+                    }
                 }
-            }
-        });
-        System.out.println("Starting tests...\n");
-        Result result = junit.run(BoardTests.class);
+            });
+            System.out.println("Starting tests...\n");
+            Result result = junit.run(BoardTests.class);
 
-        System.exit(printStatistics(result));
+            System.exit(printStatistics(result));
+        } catch (ClassNotFoundException e) {
+            System.err.println("Unable to locate board class: " + args[0]);
+        }
     }
 
     private static int printStatistics(Result result) {

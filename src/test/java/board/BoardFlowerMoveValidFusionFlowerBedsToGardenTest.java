@@ -1,6 +1,5 @@
 package board;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -13,16 +12,48 @@ import static org.junit.Assert.*;
 @RunWith(Parameterized.class)
 public class BoardFlowerMoveValidFusionFlowerBedsToGardenTest {
     private static final int BOARD_SIZE = 15;
+    private static final String MESSAGE = "Valid move fusion flower beds to garden";
     private Board board;
     private Viewer viewer;
 
-    private static final String MESSAGE = "Valid move fusion flower beds to garden";
+    // ------------------------------------------------------------
+    private Move move;
+
+    // ------------------------------------------------------------
+    private Status expectedStatus;
 
     // ------------------------------------------------------------
 
+    public BoardFlowerMoveValidFusionFlowerBedsToGardenTest(Move move, Status expected) {
+        this.move = move;
+        this.expectedStatus = expected;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {
+                        new Move(new Flower(new Position(3, 2), new Position(2, 3), new Position(3, 3)),
+                                new Flower(new Position(5, 4), new Position(6, 4), new Position(5, 5))), Status.Ok
+                }, {
+                        new Move(new Flower(new Position(3, 6), new Position(2, 7), new Position(3, 7)),
+                                new Flower(new Position(3, 6), new Position(4, 6), new Position(3, 7))), Status.Ok
+                }, {
+                        new Move(new Flower(new Position(3, 7), new Position(2, 8), new Position(3, 8)),
+                                new Flower(new Position(3, 7), new Position(4, 7), new Position(3, 8))), Status.Ok
+                }, {
+                        new Move(new Flower(new Position(5, 4), new Position(6, 4), new Position(5, 5)),
+                                new Flower(new Position(3, 10), new Position(4, 10), new Position(3, 11))), Status.Ok
+                }, {
+                        new Move(new Flower(new Position(5, 4), new Position(6, 4), new Position(5, 5)),
+                                new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13))), Status.Ok
+                }
+        });
+    }
+
     @Before
     public void init() {
-        board = new BoardImpl(BOARD_SIZE);
+        board = TestBoardFactory.createInstance(BOARD_SIZE);
         viewer = board.viewer();
 
         // Set up board
@@ -56,40 +87,6 @@ public class BoardFlowerMoveValidFusionFlowerBedsToGardenTest {
 
         for (Move m : replayMoves)
             board.make(m);
-    }
-
-    // ------------------------------------------------------------
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {
-                        new Move(new Flower(new Position(3, 2), new Position(2, 3), new Position(3, 3)),
-                                new Flower(new Position(5, 4), new Position(6, 4), new Position(5, 5))), Status.Ok
-                }, {
-                        new Move(new Flower(new Position(3, 6), new Position(2, 7), new Position(3, 7)),
-                                new Flower(new Position(3, 6), new Position(4, 6), new Position(3, 7))), Status.Ok
-                }, {
-                        new Move(new Flower(new Position(3, 7), new Position(2, 8), new Position(3, 8)),
-                                new Flower(new Position(3, 7), new Position(4, 7), new Position(3, 8))), Status.Ok
-                }, {
-                        new Move(new Flower(new Position(5, 4), new Position(6, 4), new Position(5, 5)),
-                                new Flower(new Position(3, 10), new Position(4, 10), new Position(3, 11))), Status.Ok
-                }, {
-                        new Move(new Flower(new Position(5, 4), new Position(6, 4), new Position(5, 5)),
-                                new Flower(new Position(3, 12), new Position(2, 13), new Position(3, 13))), Status.Ok
-                }
-        });
-    }
-
-    // ------------------------------------------------------------
-
-    private Move move;
-    private Status expectedStatus;
-
-    public BoardFlowerMoveValidFusionFlowerBedsToGardenTest(Move move, Status expected) {
-        this.move = move;
-        this.expectedStatus = expected;
     }
 
     @Test

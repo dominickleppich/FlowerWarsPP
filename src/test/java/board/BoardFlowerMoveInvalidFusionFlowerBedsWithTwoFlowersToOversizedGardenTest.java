@@ -1,6 +1,5 @@
 package board;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -13,16 +12,54 @@ import static org.junit.Assert.*;
 @RunWith(Parameterized.class)
 public class BoardFlowerMoveInvalidFusionFlowerBedsWithTwoFlowersToOversizedGardenTest {
     private static final int BOARD_SIZE = 15;
+    private static final String MESSAGE = "Invalid move fusion flower beds with two flowers to oversized garden";
     private Board board;
     private Viewer viewer;
 
-    private static final String MESSAGE = "Invalid move fusion flower beds with two flowers to oversized garden";
+    // ------------------------------------------------------------
+    private Move move;
+
+    // ------------------------------------------------------------
+    private Status expectedStatus;
 
     // ------------------------------------------------------------
 
+    public BoardFlowerMoveInvalidFusionFlowerBedsWithTwoFlowersToOversizedGardenTest(Move move, Status expected) {
+        this.move = move;
+        this.expectedStatus = expected;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {
+                        new Move(new Flower(new Position(3, 2), new Position(2, 3), new Position(3, 3)),
+                                new Flower(new Position(4, 2), new Position(3, 3), new Position(4, 3))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(6, 2), new Position(7, 2), new Position(6, 3)),
+                                new Flower(new Position(8, 2), new Position(7, 3), new Position(8, 3))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(6, 2), new Position(7, 2), new Position(6, 3)),
+                                new Flower(new Position(6, 3), new Position(7, 3), new Position(6, 4))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(3, 4), new Position(4, 4), new Position(3, 5)),
+                                new Flower(new Position(4, 4), new Position(3, 5), new Position(4, 5))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(2, 5), new Position(3, 5), new Position(2, 6)),
+                                new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(5, 5), new Position(6, 5), new Position(5, 6)),
+                                new Flower(new Position(5, 6), new Position(4, 7), new Position(5, 7))), Status.Illegal
+                }, {
+                        new Move(new Flower(new Position(5, 5), new Position(6, 5), new Position(5, 6)),
+                                new Flower(new Position(6, 5), new Position(5, 6), new Position(6, 6))), Status.Illegal
+                }
+        });
+    }
+
     @Before
     public void init() {
-        board = new BoardImpl(BOARD_SIZE);
+        board = TestBoardFactory.createInstance(BOARD_SIZE);
         viewer = board.viewer();
 
         // Set up board
@@ -61,46 +98,6 @@ public class BoardFlowerMoveInvalidFusionFlowerBedsWithTwoFlowersToOversizedGard
 
         for (Move m : replayMoves)
             board.make(m);
-    }
-
-    // ------------------------------------------------------------
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {
-                        new Move(new Flower(new Position(3, 2), new Position(2, 3), new Position(3, 3)),
-                                new Flower(new Position(4, 2), new Position(3, 3), new Position(4, 3))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(6, 2), new Position(7, 2), new Position(6, 3)),
-                                new Flower(new Position(8, 2), new Position(7, 3), new Position(8, 3))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(6, 2), new Position(7, 2), new Position(6, 3)),
-                                new Flower(new Position(6, 3), new Position(7, 3), new Position(6, 4))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(3, 4), new Position(4, 4), new Position(3, 5)),
-                                new Flower(new Position(4, 4), new Position(3, 5), new Position(4, 5))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(2, 5), new Position(3, 5), new Position(2, 6)),
-                                new Flower(new Position(3, 5), new Position(2, 6), new Position(3, 6))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(5, 5), new Position(6, 5), new Position(5, 6)),
-                                new Flower(new Position(5, 6), new Position(4, 7), new Position(5, 7))), Status.Illegal
-                }, {
-                        new Move(new Flower(new Position(5, 5), new Position(6, 5), new Position(5, 6)),
-                                new Flower(new Position(6, 5), new Position(5, 6), new Position(6, 6))), Status.Illegal
-                }
-        });
-    }
-
-    // ------------------------------------------------------------
-
-    private Move move;
-    private Status expectedStatus;
-
-    public BoardFlowerMoveInvalidFusionFlowerBedsWithTwoFlowersToOversizedGardenTest(Move move, Status expected) {
-        this.move = move;
-        this.expectedStatus = expected;
     }
 
     @Test

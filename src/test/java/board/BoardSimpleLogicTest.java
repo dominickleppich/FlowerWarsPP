@@ -1,6 +1,5 @@
 package board;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.junit.*;
 
@@ -13,7 +12,7 @@ public class BoardSimpleLogicTest {
 
     @Before
     public void init() {
-        board = new BoardImpl(BOARD_SIZE);
+        board = TestBoardFactory.createInstance(BOARD_SIZE);
         viewer = board.viewer();
     }
 
@@ -22,7 +21,6 @@ public class BoardSimpleLogicTest {
 
     @Test
     public void createNewBoardWorks() {
-        board = new BoardImpl(BOARD_SIZE);
         assertNotNull(board);
     }
 
