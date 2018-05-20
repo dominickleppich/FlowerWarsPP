@@ -686,7 +686,7 @@ public class BoardImpl implements Board {
         return getAllPossibleDitches(size);
     }
 
-    private Set<Flower> getNeighborFlowers(Flower flower) {
+    public static Set<Flower> getNeighborFlowers(Flower flower) {
         Set<Flower> flowers = new HashSet<>();
 
         Ditch[] flowerNeighboringDitches = new Ditch[3];
@@ -873,7 +873,7 @@ public class BoardImpl implements Board {
         return resultSet;
     }
 
-    private Set<Flower> getDitchBlockedFlowers(Ditch ditch) {
+    public static Set<Flower> getDitchBlockedFlowers(Ditch ditch) {
         Position start, end;
         start = ditch.getFirst();
         end = ditch.getSecond();

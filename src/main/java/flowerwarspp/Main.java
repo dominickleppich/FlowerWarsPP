@@ -4,6 +4,7 @@ import flowerwarspp.game.*;
 import flowerwarspp.net.*;
 import flowerwarspp.player.*;
 import flowerwarspp.player.ai.*;
+import flowerwarspp.player.ai.simple.*;
 import flowerwarspp.preset.*;
 import flowerwarspp.ui.graphical.*;
 import org.slf4j.*;
@@ -98,6 +99,8 @@ public class Main {
                 return new InteractivePlayer(requestable);
             case RANDOM_AI:
                 return new RandomPlayer();
+            case SIMPLE_AI:
+                return new SimpleAI();
             case REMOTE:
                 // List all Players
                 Set<Map.Entry<String, Player>> players = rmi.list().entrySet();
