@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="FlowerWarsPP-BoardTester" default="jar" basedir=".">
+	<!-- Settings -->
+	<property name="target.jre" value="1.8" />
+	<property name="source.jre" value="1.8" />
+
+    <property name="project.name" value="FlowerWarsPP-BoardTester" />
+
+    <property name="test.source.dir" value="src/test/java" />
+    <property name="project.source.dir" value="src/main/java" />
+    <property name="main.class" value="BoardTestMain" />
+    <property name="source.dir" value="src/board-test" />
+	<property name="build.dir" location="target/board-test" />
+    <property name="jar.dir" value="target" />
+	<property name="lib.dir" location="lib" />
+
+	<path id="library-path">
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
+
+	<!-- ************************ Init stuff ************************ -->
+
+	<!-- Clean -->
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<!-- Update test files -->
+	<target name="update">
+		<delete dir="${source.dir}" />
+		<mkdir dir="${source.dir}" />
+
+		<!-- Copy test and preset classes -->
+        <copy file="${test.source.dir}/BoardTestMain.java" todir="${source.dir}" />
+        <copy todir="${source.dir}/board">
+            <fileset dir="${test.source.dir}/board" />
+        </copy>
+        <copy todir="${source.dir}/flowerwarspp/preset">
+            <fileset dir="${project.source.dir}/flowerwarspp/preset" />
+        </copy>
+	</target>
+
+	<!-- ************************ Create jar archive ************************ -->
+	<target description="create jar files" depends="build" name="jar">
+		<jar compress="true" destfile="${jar.dir}/${project.name}.jar" basedir="${build.dir}">
+            <zipgroupfileset dir="${lib.dir}" includes="*.jar" />
+
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- ************************ Compile ************************ -->
+	<target description="build the project" name="build">
+		<mkdir dir="${build.dir}" />
+		<javac debug="true" destdir="${build.dir}" srcdir="${source.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
+			<include name="**/*.java" />
+			<classpath refid="library-path" />
+		</javac>
+	</target>
+
+</project>
