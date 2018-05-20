@@ -51,13 +51,13 @@ public class UIWindow extends JFrame implements Display, Requestable {
     @Override
     public void update(Move move) {
         panel.showPerformedMove(move);
-
         panel.repaint();
     }
 
     @Override
     public void showStatus(Status status) {
         panel.showStatus(status);
+        panel.repaint();
     }
 
     @Override
