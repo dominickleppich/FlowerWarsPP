@@ -1,3 +1,6 @@
+# Ignore temporary board test project classes
+src/board-test/
+
 # IntelliJ
 .idea/
 *.iml
