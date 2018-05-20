@@ -15,6 +15,7 @@ public class Match {
     private Player[] players;
     private Display display;
     private Status status;
+    private long delay;
 
     private int currentPlayer;
 
@@ -27,6 +28,7 @@ public class Match {
         display.setViewer(viewer);
 
         currentPlayer = 0;
+        delay = 0L;
 
         initPlayers(boardSize, redPlayer, bluePlayer);
     }
@@ -40,6 +42,10 @@ public class Match {
         players = new Player[]{redPlayer, bluePlayer};
     }
 
+    public void setDelay(long delay) {
+        this.delay = delay;
+    }
+
     // ------------------------------------------------------------
 
     public Status play() {
@@ -49,6 +55,9 @@ public class Match {
         try {
             // Main game loop
             while (viewer.getStatus() == Status.Ok) {
+                // Start measuring move time
+                long start = System.currentTimeMillis();
+
                 // Request move
                 Move move = players[currentPlayer].request();
 
@@ -60,11 +69,19 @@ public class Match {
                 players[currentPlayer].confirm(status);
                 players[(currentPlayer + 1) % 2].update(move, status);
 
+                // End measuring time
+                long end = System.currentTimeMillis();
+
                 // Update display
                 display.update(move);
 
                 // Change to next player
                 currentPlayer = (currentPlayer + 1) % 2;
+
+                // Wait if move was too fast
+                long wait = delay - (end - start);
+                if (wait > 0)
+                    Thread.sleep(wait);
             }
 
             display.showStatus(status);

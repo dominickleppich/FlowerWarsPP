@@ -60,6 +60,8 @@ public class Main {
 
                 // Create match and start
                 Match match = new Match(ap.getSize(), red, blue, window);
+                if (ap.isSet("delay"))
+                    match.setDelay(ap.getDelay());
                 match.play();
             }
             // Network offer
