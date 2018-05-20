@@ -1,4 +1,4 @@
-package flowerwarspp.test.ui;
+package flowerwarspp.test;
 
 import ch.qos.logback.classic.*;
 import flowerwarspp.board.*;
