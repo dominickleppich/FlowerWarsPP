@@ -8,7 +8,7 @@
 
     <property name="test.source.dir" value="src/test/java" />
     <property name="project.source.dir" value="src/main/java" />
-    <property name="main.class" value="BoardTestMain" />
+    <property name="main.class" value="BoardTester" />
     <property name="source.dir" value="src/board-test" />
 	<property name="build.dir" location="target/board-test" />
     <property name="jar.dir" value="target" />
@@ -31,7 +31,7 @@
 		<mkdir dir="${source.dir}" />
 
 		<!-- Copy test and preset classes -->
-        <copy file="${test.source.dir}/BoardTestMain.java" todir="${source.dir}" />
+        <copy file="${test.source.dir}/BoardTester.java" todir="${source.dir}" />
         <copy todir="${source.dir}/board">
             <fileset dir="${test.source.dir}/board" />
         </copy>

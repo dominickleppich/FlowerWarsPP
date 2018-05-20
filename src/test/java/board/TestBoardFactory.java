@@ -16,9 +16,35 @@ public class TestBoardFactory {
 
     // ------------------------------------------------------------
 
-    public static void setBoardClassName(String boardClassName) throws ClassNotFoundException {
-        Class.forName(boardClassName);
-        TestBoardFactory.boardClassName = boardClassName;
+    public static void setBoardClassName(String boardClassName) throws Exception {
+        Class boardClass = Class.forName(boardClassName);
+
+        boolean foundCorrectConstructor = false;
+
+        // Correct parameterList
+        Class[] correctParameterTypes = new Class[]{int.class};
+
+        // Check all constructors until one matches
+        for (Constructor<Board> constructor : boardClass.getConstructors()) {
+            Parameter[] parameters = constructor.getParameters();
+
+            // Check number of arguments
+            if (parameters.length != correctParameterTypes.length)
+                continue;
+
+            // Check all types
+            for (int i = 0; i < parameters.length; i++)
+                if (parameters[i].getType() != correctParameterTypes[i])
+                    continue;
+
+            foundCorrectConstructor = true;
+            break;
+        }
+
+        if (foundCorrectConstructor)
+            TestBoardFactory.boardClassName = boardClassName;
+        else
+            throw new Exception("Board class has no valid constructor");
     }
 
     public static Board createInstance(int boardSize) {
