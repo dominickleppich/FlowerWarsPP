@@ -38,8 +38,10 @@ public class UIPanel extends JPanel {
     private static final float BOARD_GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
     private static final float BOARD_GRID_DITCH_LINE_STRENGTH = 0.05f;
 
-    private static final Color RED_PLAYER_COLOR = new Color(166, 55, 63);
-    private static final Color BLUE_PLAYER_COLOR = new Color(52, 52, 119);
+    private static final Color RED_PLAYER_COLOR = new Color(124, 45, 51);
+    private static final Color BLUE_PLAYER_COLOR = new Color(43, 43, 93);
+    private static final Color RED_HIGHLIGHT_COLOR = new Color(255, 77, 85);
+    private static final Color BLUE_HIGHLIGHT_COLOR = new Color(85, 85, 255);
     private static final Color RED_HOVER_COLOR = new Color(215, 161, 165);
     private static final Color BLUE_HOVER_COLOR = new Color(122, 122, 154);
     private static final float HOVER_ALPHA = 0.8f;
@@ -82,6 +84,7 @@ public class UIPanel extends JPanel {
     private Ditch moveDitch;
 
     private Status status;
+    private Move performedMove;
 
     // ------------------------------------------------------------
 
@@ -295,12 +298,18 @@ public class UIPanel extends JPanel {
     }
 
     public synchronized void reset() {
+        performedMove = null;
         status = null;
         repaint();
     }
 
     public synchronized void showStatus(Status status) {
         this.status = status;
+    }
+
+
+    public void showPerformedMove(Move move) {
+        this.performedMove = move;
     }
 
     // ------------------------------------------------------------
@@ -558,16 +567,28 @@ public class UIPanel extends JPanel {
                 g.fill(flowerToPolygon(f));
         }
 
+        // Show last performed move
+        Flower lastFlower1 = null;
+        Flower lastFlower2 = null;
+        if (performedMove != null && performedMove.getType() == MoveType.Flower) {
+            lastFlower1 = performedMove.getFirstFlower();
+            lastFlower2 = performedMove.getSecondFlower();
+        }
+
         // Draw filled fields
         for (PlayerColor pc : PlayerColor.values()) {
-            if (pc == PlayerColor.Red)
-                g.setColor(RED_PLAYER_COLOR);
-            else if (pc == PlayerColor.Blue)
-                g.setColor(BLUE_PLAYER_COLOR);
-            else
+            Color color, lastColor;
+            if (pc == PlayerColor.Red) {
+                color = RED_PLAYER_COLOR;
+                lastColor = RED_HIGHLIGHT_COLOR;
+            } else if (pc == PlayerColor.Blue) {
+                color = BLUE_PLAYER_COLOR;
+                lastColor = BLUE_HIGHLIGHT_COLOR;
+            } else
                 throw new IllegalStateException("only red and blue player supported");
 
             for (Flower f : viewer.getFlowers(pc)) {
+                g.setColor((f.equals(lastFlower1) || f.equals(lastFlower2)) ? lastColor : color);
                 g.fill(flowerToPolygon(f));
             }
         }
@@ -604,6 +625,11 @@ public class UIPanel extends JPanel {
                                            .map(move -> move.getDitch())
                                            .collect(Collectors.toSet());
 
+        // Last ditch
+        Ditch lastDitch = null;
+        if (performedMove != null && performedMove.getType() == MoveType.Ditch)
+            lastDitch = performedMove.getDitch();
+
         g.setStroke(new BasicStroke(UNIT * BOARD_GRID_DITCH_LINE_STRENGTH));
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
             for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
@@ -618,11 +644,11 @@ public class UIPanel extends JPanel {
                 // Determine color
                 if (viewer.getDitches(PlayerColor.Red)
                           .contains(d)) {
-                    g.setColor(RED_PLAYER_COLOR);
+                    g.setColor(d.equals(lastDitch) ? RED_HIGHLIGHT_COLOR : RED_PLAYER_COLOR);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                 } else if (viewer.getDitches(PlayerColor.Blue)
                                  .contains(d)) {
-                    g.setColor(BLUE_PLAYER_COLOR);
+                    g.setColor(d.equals(lastDitch) ? BLUE_HIGHLIGHT_COLOR : BLUE_PLAYER_COLOR);
                     g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
                 }
 

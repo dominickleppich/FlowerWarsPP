@@ -50,8 +50,7 @@ public class UIWindow extends JFrame implements Display, Requestable {
 
     @Override
     public void update(Move move) {
-        // TODO Something useful with the move done
-        logger.debug("Move done: " + move);
+        panel.showPerformedMove(move);
 
         panel.repaint();
     }
