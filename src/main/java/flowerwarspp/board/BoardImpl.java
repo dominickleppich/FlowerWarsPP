@@ -180,6 +180,12 @@ public class BoardImpl implements Board {
             logger.debug("Winner found by points: " + redPoints + " (red) - " + bluePoints + " (blue)");
             return;
         } else {
+            status = Status.Draw;
+            logger.debug("Points are equal, draw!");
+        }
+
+        // These rules were removed for simplicity
+        /*else {
             // The player with most gardens wins
             int redGardens = (int) getFlowerBed(PlayerColor.Red).stream()
                                                                 .filter(bed -> bed.size() == GARDEN_SIZE)
@@ -212,7 +218,7 @@ public class BoardImpl implements Board {
                     logger.debug("No winner!");
                 }
             }
-        }
+        }*/
     }
 
     /**
