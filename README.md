@@ -31,9 +31,9 @@ Hauptbestandteile von FlowerWarsPP.
 ![Spielbrett der Groesse 3](specification/images/board-3-situation1.png)
 
 > Auf diesem Spielbrett ist folgende Situation gezeigt:
-> - Der rote Spieler hat Blumen auf (`1,1`, `2,1`, `1,2`) und (`2,1`, `3,1`, `2,2`)
-> - Der blaue Spieler hat eine Blume auf (`1,3`, `2,3`, `1,4`)
-> - Der rote Spieler hat einen Graben von `1,2` nach `2,2`, mit der seine beiden Blumen verbunden werden
+>- Der rote Spieler hat Blumen auf (`1,1`, `2,1`, `1,2`) und (`2,1`, `3,1`, `2,2`)
+>- Der blaue Spieler hat eine Blume auf (`1,3`, `2,3`, `1,4`)
+>- Der rote Spieler hat einen Graben von `1,2` nach `2,2`, mit der seine beiden Blumen verbunden werden
 
 # Zugregeln
 - Es wird immer abwechselnd gezogen, Rot hat den ersten Zug.
@@ -62,25 +62,27 @@ unterschiedlicher Farbe dürfen beliebig nebeneinander liegen oder sich über Ec
 
 ### Beispiele
 ![Spielbrett der Groesse 5 - Gartenregel 1](specification/images/board-5-garden-rule-1.png)
-
+> Das ist die Ausgangsbasis für die folgenden Beispiele. Es ist ein roter Garten (oben) und ein rotes Blumenbeet der
+Größe `3` (unten) zu sehen.
 
 ![Spielbrett der Groesse 5 - Gartenregel 2](specification/images/board-5-garden-rule-2.png)
-
+> Das Blumenbeet darf auf diesem Feld nicht zu einem Garten ausgebaut werden, da sonst die Gartenabstandsregel verletzt wäre.
 
 ![Spielbrett der Groesse 5 - Gartenregel 3](specification/images/board-5-garden-rule-3.png)
-
+> Durch Pflanzen einer Blume auf genau einem der drei grünen Felder kann das Blumenbeet zu einem Garten aufgewertet werden.
 
 ![Spielbrett der Groesse 5 - Gartenregel 4](specification/images/board-5-garden-rule-4.png)
-
+> Durch Pflanzen einer Blume auf einem der grünen Felder wird ein neues Blumenbeet gepflanzt, welches das vorhandene über
+Ecke berührt.
 
 ![Spielbrett der Groesse 5 - Gartenregel 5](specification/images/board-5-garden-rule-5.png)
-
+> Durch das Pflanzen dieser Blume würde ein Garten der Größe `6` entstehen und damit die Maximalgröße überschreiten.
 
 ![Spielbrett der Groesse 5 - Gartenregel 6](specification/images/board-5-garden-rule-6.png)
-
+> Blumen unterschiedlicher Farbe dürfen sich beliebig über Seite oder Ecke berühren.
 
 ![Spielbrett der Groesse 5 - Gartenregel 7](specification/images/board-5-garden-rule-7.png)
-
+> Zusammenfassend sind hier alle Felder dargestellt, die durch den Garten nicht mehr bepflanzt werden dürfen.
 
 ## Gräben
 - Ein Graben verbindet zwei Blumen über dessen Eckpunkte. Diese Verbindung darf maximal einen Schritt
