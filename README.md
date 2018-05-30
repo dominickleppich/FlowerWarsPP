@@ -15,9 +15,10 @@ Gespielt wird auf einem dreieckigen Spielbrett mit einer Seitenlänge `3 <= n <=
 Die Gitterpunkte, im Folgenden **Punkte** genannt, werden mit Spalten- und Zeilenkoordinaten versehen, wobei unten links die 
 Koordinate `1,1` liegt. 
 
-Hier ist ein Spielbrett der Größe `n = 3` dargestellt:
-
+### Beispiel
 ![Spielbrett der Groesse 3](specification/images/board-3-empty.png)
+> Hier ist ein Spielbrett der Größe `n = 3` dargestellt.
+
 
 Das Spielfeld stellt eine dreieckige Wiese dar, die wiederum in kleine dreieckige Teilflächen aufgeteilt ist.
 
@@ -26,16 +27,16 @@ einem Punkt zu einem direkten Nachbarn kann ein Wassergraben, kurz
 **Graben**, gebaut werden. Ein Punkt hat hierbei stets maximal `6` direkte Nachbarn. Blumen und Gräben sind die 
 Hauptbestandteile von FlowerWarsPP.
 
+### Beispiel
 ![Spielbrett der Groesse 3](specification/images/board-3-situation1.png)
 
-Auf diesem Spielbrett ist folgende Situation gezeigt:
-
-- Der rote Spieler hat Blumen auf (`1,1`, `2,1`, `1,2`) und (`2,1`, `3,1`, `2,2`)
-- Der blaue Spieler hat eine Blume auf (`1,3`, `2,3`, `1,4`)
-- Der rote Spieler hat einen Graben von `1,2` nach `2,2`, mit der seine beiden Blumen verbunden werden
+> Auf diesem Spielbrett ist folgende Situation gezeigt:
+> - Der rote Spieler hat Blumen auf (`1,1`, `2,1`, `1,2`) und (`2,1`, `3,1`, `2,2`)
+> - Der blaue Spieler hat eine Blume auf (`1,3`, `2,3`, `1,4`)
+> - Der rote Spieler hat einen Graben von `1,2` nach `2,2`, mit der seine beiden Blumen verbunden werden
 
 # Zugregeln
-- Der rote Spieler hat den ersten Zug, danach wird beginnend mit dem blauen Spieler abwechselnd weiter gezogen.
+- Es wird immer abwechselnd gezogen, Rot hat den ersten Zug.
 - In einem Zug muss der Spieler sich entscheiden ob er **zwei** Blumen pflanzen *oder* **einen** Graben bauen möchte.
     - Die beiden Blumen können beliebig auf dem Spielbrett positioniert werden, müssen jedoch
     auf leeren Feldern unter Einhaltung der nachfolgenden Regeln für Blumenbeete, Gärten und Gräben
@@ -58,6 +59,28 @@ auch nicht über einen gemeinsamen Eckpunkt.
     - ... sie dann keine weiteren eigenen Gärten oder Blumenbeete berühren.
 - Diese Abstandsregeln gelten nicht für Blumenbeete und Gärten unterschiedlicher Farbe. Blumenbeete und Gärten
 unterschiedlicher Farbe dürfen beliebig nebeneinander liegen oder sich über Eckpunkte berühren.
+
+### Beispiele
+![Spielbrett der Groesse 5 - Gartenregel 1](specification/images/board-5-garden-rule-1.png)
+
+
+![Spielbrett der Groesse 5 - Gartenregel 2](specification/images/board-5-garden-rule-2.png)
+
+
+![Spielbrett der Groesse 5 - Gartenregel 3](specification/images/board-5-garden-rule-3.png)
+
+
+![Spielbrett der Groesse 5 - Gartenregel 4](specification/images/board-5-garden-rule-4.png)
+
+
+![Spielbrett der Groesse 5 - Gartenregel 5](specification/images/board-5-garden-rule-5.png)
+
+
+![Spielbrett der Groesse 5 - Gartenregel 6](specification/images/board-5-garden-rule-6.png)
+
+
+![Spielbrett der Groesse 5 - Gartenregel 7](specification/images/board-5-garden-rule-7.png)
+
 
 ## Gräben
 - Ein Graben verbindet zwei Blumen über dessen Eckpunkte. Diese Verbindung darf maximal einen Schritt
