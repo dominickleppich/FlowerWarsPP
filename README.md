@@ -93,6 +93,25 @@ des Grabens leer sein. Dieselben Felder gelten nach Bau des Grabens als unfrucht
 von keinen Blumen, unabhängig von der Farbe, bepflanzt werden. Auf den Bau von Gräben haben
 unfruchtbare *Felder* keinen Einfluss.
 
+### Beispiele
+![Spielbrett der Groesse 5 - Grabenregel 1](specification/images/board-5-ditch-rule-1.png)
+
+
+![Spielbrett der Groesse 5 - Grabenregel 2](specification/images/board-5-ditch-rule-2.png)
+
+
+![Spielbrett der Groesse 5 - Grabenregel 3](specification/images/board-5-ditch-rule-3.png)
+
+
+![Spielbrett der Groesse 5 - Grabenregel 4](specification/images/board-5-ditch-rule-4.png)
+
+
+![Spielbrett der Groesse 5 - Grabenregel 5](specification/images/board-5-ditch-rule-5.png)
+
+
+![Spielbrett der Groesse 5 - Grabenregel 6](specification/images/board-5-ditch-rule-6.png)
+
+
 # Spielende
 - Kann ein Spieler keinen Zug mehr machen, endet das Spiel sofort.
 - Kann ein Spieler keine 2 Blumen mehr anpflanzen und verzichtet auf das Bauen eines Grabens, kann er das Spiel beenden.
