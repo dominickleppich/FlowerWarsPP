@@ -102,7 +102,7 @@ möglich alle dieser drei Gräben zusammen zu bauen!
 > Es ist **nicht** möglich eine blaue Blume direkt neben einen Graben anzupflanzen.
 
 ![Spielbrett der Groesse 5 - Grabenregel 3](specification/images/board-5-ditch-rule-3.png)
-> Durch den Graben sind die beiden markierten Felder unfruchtbar und können nicht mehr bebaut werden.
+> Durch den Graben sind die beiden markierten Felder unfruchtbar und können von **beiden** Spielern nicht mehr bebaut werden.
 
 ![Spielbrett der Groesse 5 - Grabenregel 4](specification/images/board-5-ditch-rule-4.png)
 > Es ist nicht möglich beide rote Gräben zeitgleich zu bauen, da sich beide Gräben einen Gitterpunkt teilen.
