@@ -75,9 +75,7 @@ unfruchtbare *Felder* keinen Einfluss.
     - Miteinander verbundene Gärten (auch über einfache Blumenbeete hinweg) geben `p(n)` Punkte, wobei `n`
     die Anzahl der verbundenen Gärten beschreibt: `p(n) = p(n-1) + n`
     
-- Bei Punktegleichstand gewinnt der Spieler mit den meisten Gärten. Falls wiederum Gleichstand herrscht,
-gewinnt der Spieler mit den meisten Gräben. Sollte wieder Gleichstand herrschen, endet das
-Spiel unentschieden.
+- Bei Punktegleichstand endet das Spiel unentschieden.
 
 # ASCII board design
 ```
