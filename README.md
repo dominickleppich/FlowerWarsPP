@@ -95,22 +95,23 @@ unfruchtbare *Felder* keinen Einfluss.
 
 ### Beispiele
 ![Spielbrett der Groesse 5 - Grabenregel 1](specification/images/board-5-ditch-rule-1.png)
-
+> Das sind die einzigen drei gültigen Gräben, die zwischen den beiden roten Blumenbeeten gebaut werden können. Es ist nicht
+möglich alle dieser drei Gräben zusammen zu bauen!
 
 ![Spielbrett der Groesse 5 - Grabenregel 2](specification/images/board-5-ditch-rule-2.png)
-
+> Es ist **nicht** möglich eine blaue Blume direkt neben einen Graben anzupflanzen.
 
 ![Spielbrett der Groesse 5 - Grabenregel 3](specification/images/board-5-ditch-rule-3.png)
-
+> Durch den Graben sind die beiden markierten Felder unfruchtbar und können nicht mehr bebaut werden.
 
 ![Spielbrett der Groesse 5 - Grabenregel 4](specification/images/board-5-ditch-rule-4.png)
-
+> Es ist nicht möglich beide rote Gräben zeitgleich zu bauen, da sich beide Gräben einen Gitterpunkt teilen.
 
 ![Spielbrett der Groesse 5 - Grabenregel 5](specification/images/board-5-ditch-rule-5.png)
-
+> Es ist durchaus erlaubt zwei Blumenbeete mehrfach durch Gräben zu verbinden.
 
 ![Spielbrett der Groesse 5 - Grabenregel 6](specification/images/board-5-ditch-rule-6.png)
-
+> Gräben dürfen auch am Spielfeldrand gebaut werden.
 
 # Spielende
 - Kann ein Spieler keinen Zug mehr machen, endet das Spiel sofort.
@@ -118,10 +119,16 @@ unfruchtbare *Felder* keinen Einfluss.
 - Nach Zugende werden für beide Spieler die Punkte nach diesen Regeln ermittelt:
     - Ein einzelner Garten, der nicht über einen Graben mit anderen Gärten verbunden ist,
     zählt `p(1) = 1` Punkt.
-    - Miteinander verbundene Gärten (auch über einfache Blumenbeete hinweg) geben `p(n)` Punkte, wobei `n`
+    - Miteinander verbundene Gärten (auch über Blumenbeete hinweg) geben `p(n)` Punkte, wobei `n`
     die Anzahl der verbundenen Gärten beschreibt: `p(n) = p(n-1) + n`
     
 - Bei Punktegleichstand endet das Spiel unentschieden.
+
+### Beispiel
+![Spielbrett der Groesse 5 - Punktestand 1](specification/images/board-5-points-1.png)
+> Auf diesem Spielbrett hat der rote Spieler `3` Gärten. Der obere ist isoliert und gibt deshalb `1` Punkt. Die unteren
+beiden Gärten sind über das Blumenbeet der Größe `1` miteinander verbunden und geben deshalb `p(2) = 3` Punkte. Insgesamt
+hat der rote Spieler damit `4` Punkte.
 
 # ASCII board design
 ```
