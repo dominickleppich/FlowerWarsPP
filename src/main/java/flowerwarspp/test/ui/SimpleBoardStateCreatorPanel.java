@@ -26,7 +26,8 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
     private static final Color BOARD_GRID_LINE_COLOR = new Color(0, 0, 0);
     private static final Color BOARD_GRID_POINT_COLOR = new Color(0, 0, 0);
     private static final double BOARD_GRID_POINT_SIZE = 0.3;
-    private static final Color BOARD_GRID_POINT_LABEL_COLOR = new Color(255, 255, 255);
+//    private static final Color BOARD_GRID_POINT_LABEL_COLOR = new Color(255, 255, 255);
+    private static final Color BOARD_GRID_POINT_LABEL_COLOR = null;
     private static final float BOARD_GRID_POINT_LABEL_FONT_SIZE = 0.1f;
     private static final float BOARD_GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
     private static final float BOARD_GRID_DITCH_LINE_STRENGTH = 0.05f;
@@ -64,7 +65,8 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
     }
 
     private static final Color[] MARKER_COLORS = new Color[]{
-            new Color(255, 0, 0), new Color(255, 190, 190), new Color(0, 0, 255), new Color(190, 190, 255)
+            new Color(255, 0, 0), new Color(255, 190, 190), new Color(0, 0, 255), new Color(190, 190, 255),
+            new Color(53, 157, 38), new Color(70, 70, 70)
     };
     private int selectedColor = 0;
 
@@ -124,7 +126,7 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-                selectedColor = (selectedColor + mouseWheelEvent.getWheelRotation()) % MARKER_COLORS.length;
+                selectedColor = (selectedColor + mouseWheelEvent.getWheelRotation() + MARKER_COLORS.length) % MARKER_COLORS.length;
                 updateHover(mouseWheelEvent.getPoint());
             }
         });
