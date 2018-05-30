@@ -9,7 +9,7 @@ verzieren indem sie durch Gräben miteinander verbunden werden?
 # FlowerWars
 
 - [Spielregeln](specification/rules.md)
-- [Spielbrett-Implementierung](specification/board-implementation.md)
+- [Hilfestellungen zur Implementierung](specification/implementation-tips.md)
 - [Computerspieler Strategie](specification/simple-strategy.md)
 - [Diverses...](stuff.md)
 
