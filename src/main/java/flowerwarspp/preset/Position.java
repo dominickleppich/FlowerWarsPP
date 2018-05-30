@@ -1,7 +1,5 @@
 package flowerwarspp.preset;
 
-import javafx.geometry.*;
-
 import java.io.*;
 
 public class Position implements Serializable, Comparable<Position> {
@@ -50,7 +48,8 @@ public class Position implements Serializable, Comparable<Position> {
         if (!string.startsWith("(") || !string.endsWith(")"))
             throw new PositionFormatException("wrong outer format! correct format is: (COLUMN,ROW)");
 
-        String[] parts = string.substring(1, string.length() - 1).split(",");
+        String[] parts = string.substring(1, string.length() - 1)
+                               .split(",");
 
         if (parts.length != 2)
             throw new PositionFormatException("wrong number of arguments! correct format is: (COLUMN,ROW)");
@@ -58,7 +57,7 @@ public class Position implements Serializable, Comparable<Position> {
         try {
             return new Position(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
         } catch (NumberFormatException e) {
-            throw new PositionFormatException("wrong number format! correct format is: (COLUMN,ROW)");
+            throw new PositionFormatException("wrong number format! correct format is: (COLUMN,ROW)", e);
         }
     }
 
