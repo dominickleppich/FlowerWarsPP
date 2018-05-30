@@ -29,13 +29,9 @@ public class SimpleStrategy implements Rating {
             Flower f1 = move.getFirstFlower();
             Flower f2 = move.getSecondFlower();
 
-            //Give a bonus for connected flowers
-            if (BoardImpl.getNeighborFlowers(f1).contains(f2))
-                score += 3;
+
 
             // Give a bonus for flowers, connecting existing flowers
-
-
             Collection<Flower> flowersOnBoard = viewer.getFlowers(color);
 //            logger.debug("Found " + flowersOnBoard.size() +" flowers for player " + color);
 
@@ -45,7 +41,11 @@ public class SimpleStrategy implements Rating {
             f1Neighbors.retainAll(flowersOnBoard);
             f2Neighbors.retainAll(flowersOnBoard);
 
-            score += (f1Neighbors.size() * 5 + 1) * (f2Neighbors.size() * 5 + 1) - 2;
+            score += (f1Neighbors.size() * 5 + 1) * (f2Neighbors.size() * 5 + 1);
+
+            // Double score for connected flowers
+            if (BoardImpl.getNeighborFlowers(f1).contains(f2))
+                score += score;
         }
 
         return score;
