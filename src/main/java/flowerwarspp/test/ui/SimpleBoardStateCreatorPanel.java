@@ -66,7 +66,8 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
 
     private static final Color[] MARKER_COLORS = new Color[]{
             new Color(255, 0, 0), new Color(255, 190, 190), new Color(0, 0, 255), new Color(190, 190, 255),
-            new Color(53, 157, 38), new Color(70, 70, 70)
+            new Color(207, 199, 21), new Color(57, 177, 41), new Color(216, 65, 73), new Color(70, 70, 206),
+            new Color(99, 99, 99)
     };
     private int selectedColor = 0;
 
