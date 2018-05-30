@@ -1,8 +1,10 @@
 # FlowerWarsPP
 FlowerWarsPP ist eine Variation des Spiels [Ponte del Diavolo](https://www.brettspielnetz.de/spielregeln/ponte+del+diavolo.php).
 
-# Geschichte
-Hier wird eine lustige Geschichte über die Brüder Tim und Tom geschrieben, die sich im Garten bepflanzen duelieren.
+# Motivation
+Die Gebrüder Gartenpfleger Torsten und Torben streiten sich um Tamara und möchten sie durch das Herrichten einer hübschen Gartenlandschaft
+beeindrucken. Leider müssen sich die beiden die Wiese hierfür teilen. Wer schafft es die meisten Gärten zu bepflanzen und diese zu
+verzieren indem sie durch Gräben miteinander verbunden werden?
 
 # Das Spiel
 FlowerWarsPP ist ein Spiel für zwei Spieler, die mit den Farben **Rot** und **Blau** spielen. Das Ziel beider Spieler ist es 
