@@ -57,7 +57,7 @@ public class Position implements Serializable, Comparable<Position> {
         try {
             return new Position(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
         } catch (NumberFormatException e) {
-            throw new PositionFormatException("wrong number format! correct format is: (COLUMN,ROW)", e);
+            throw new PositionFormatException("wrong number format! valid numbers are 1 to " + MAX_VALUE, e);
         }
     }
 
