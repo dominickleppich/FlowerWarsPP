@@ -1,6 +1,6 @@
 # Das Spiel
 FlowerWarsPP ist ein Spiel für zwei Spieler, die mit den Farben **Rot** und **Blau** spielen. Das Ziel beider Spieler ist es 
-eine Wiese so weit wie möglich mit Gärten zu bepflanzen.
+eine Wiese so weit wie möglich mit ihren eigenen Gärten zu bepflanzen.
 
 # Das Spielbrett
 Gespielt wird auf einem dreieckigen Spielbrett mit einer Seitenlänge `3 <= n <= 30`.
@@ -14,7 +14,7 @@ Koordinate `1,1` liegt.
 
 Das Spielfeld stellt eine dreieckige Wiese dar, die wiederum in kleine dreieckige Teilflächen aufgeteilt ist.
 
-Die von drei Punkten eingeschlossenen Flächen werden können mit **Blumen** bepflanzt werden. Auf der Kante von 
+Die von drei Punkten eingeschlossenen Flächen können mit **Blumen** bepflanzt werden. Auf der Kante von 
 einem Punkt zu einem direkten Nachbarn kann ein Wassergraben, kurz 
 **Graben**, gebaut werden. Ein Punkt hat hierbei stets maximal `6` direkte Nachbarn. Blumen und Gräben sind die 
 Hauptbestandteile von FlowerWarsPP.
@@ -77,7 +77,7 @@ Ecke berührt.
 > Zusammenfassend sind hier alle Felder dargestellt, die durch den Garten nicht mehr bepflanzt werden dürfen.
 
 ## Gräben
-- Ein Graben verbindet zwei Blumen über dessen Eckpunkte. Diese Verbindung darf maximal einen Schritt
+- Ein Graben verbindet zwei Blumen über deren Eckpunkte. Diese Verbindung darf maximal einen Schritt
 entlang der Gitternetzlinien des Spielfeldes lang sein.
 - Ein *Punkt* kann nur ein Grabenende tragen und ist somit für zukünftige Gräben blockiert.
 - Die beiden Felder, die sich mit dem Graben eine gemeinsame Seite teilen, müssen beim Bau
