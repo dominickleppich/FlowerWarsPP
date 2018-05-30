@@ -4,6 +4,10 @@ import java.io.*;
 import java.util.*;
 
 public class Move implements Serializable, Comparable<Move> {
+    private static final long serialVersionUID = 1L;
+
+    // ------------------------------------------------------------
+
     private MoveType type;
     private Flower[] flowers;
     private Ditch ditch;

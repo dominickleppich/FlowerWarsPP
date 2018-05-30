@@ -4,6 +4,10 @@ import java.io.*;
 import java.util.*;
 
 public class Ditch implements Serializable, Comparable<Ditch> {
+    private static final long serialVersionUID = 1L;
+
+    // ------------------------------------------------------------
+
     private Position[] positions;
 
     // ------------------------------------------------------------

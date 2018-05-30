@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 
 public class Flower implements Serializable, Comparable<Flower> {
+    private static final long serialVersionUID = 1L;
+
     public static final int COMBINATIONS = Position.COMBINATIONS * 2 * Position.COMBINATIONS;
 
     // ------------------------------------------------------------

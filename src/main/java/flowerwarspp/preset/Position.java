@@ -3,6 +3,8 @@ package flowerwarspp.preset;
 import java.io.*;
 
 public class Position implements Serializable, Comparable<Position> {
+    private static final long serialVersionUID = 1L;
+
     public static final int MAX_VALUE = 31;
     public static final int COMBINATIONS = MAX_VALUE * MAX_VALUE;
 
