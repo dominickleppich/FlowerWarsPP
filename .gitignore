@@ -20,6 +20,9 @@ yguardlog.xml
 # Ignore class files
 *.class
 
+# Ignore documentation
+documentation/
+
 # Maven
 target/
 pom.xml.tag
