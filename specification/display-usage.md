@@ -1,6 +1,6 @@
 # Verwendung der Spielbrettanzeige
 Um das Spielbrett recht früh testen zu können, wird eine einfache Visualisierung mitgeliefert. Sie befindet sich im Archiv
-[`FlowerWarsPP-BoardDisplay.jar`](../FlowerWarsPP-BoardDisplay.jar).
+[`FlowerWarsPP-Display.jar`](../FlowerWarsPP-Display.jar).
 
 Die Verwendung ähnelt der bereits bekannten Visualisierung des Rot-Schwarz-Baumes...
 
