@@ -11,6 +11,8 @@ verzieren indem sie durch Gräben miteinander verbunden werden?
 - [Spielregeln](specification/rules.md)
 - [Hilfestellungen zur Implementierung](specification/implementation-tips.md)
 - [Computerspieler Strategie](specification/simple-strategy.md)
+- [Verwendung der automatischen Tests](specification/test-usage.md)
+- [Verwendung der Spielbrettanzeige](specification/display-usage.md)
 - [Diverses...](stuff.md)
 
 # Kompilieren und Starten
