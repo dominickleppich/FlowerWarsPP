@@ -1,9 +1,24 @@
-# Ignore temporary board test project classes
+# Ignore temporary board test and board display project classes
 src/board-test/
+src/board-display/
+
+# Ignore yguard output
+yguardlog.xml
+
+# Ignore latex temp files
+*.aux
+*.log
+*.out
+*.soc
+*.pdf
+*.synctex.gz
 
 # IntelliJ
 .idea/
 *.iml
+
+# Ignore class files
+*.class
 
 # Maven
 target/
