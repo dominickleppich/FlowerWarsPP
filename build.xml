@@ -64,7 +64,7 @@
     </target>
 
 	<!-- ************************ Create jar archive ************************ -->
-	<target description="create both jar files" depends="jar-tester" name="jar-all" />
+	<target description="create both jar files" depends="jar-tester, jar-viewer" name="jar-all" />
 
     <target description="create tester jar file" depends="build-tester" name="jar-tester">
         <jar compress="true" destfile="${jar.dir}/${project.tester.name}.jar" basedir="${build.tester.dir}">

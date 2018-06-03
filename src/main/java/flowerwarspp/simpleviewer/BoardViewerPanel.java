@@ -1,15 +1,11 @@
 package flowerwarspp.simpleviewer;
 
-import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
-import org.slf4j.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.geom.*;
 import java.util.*;
-import java.util.stream.*;
 
 public class BoardViewerPanel extends JPanel {
 
@@ -82,6 +78,25 @@ public class BoardViewerPanel extends JPanel {
 
     // ------------------------------------------------------------
 
+    private static Set<Position> getNeighborPositions(Position position, int boardSize) {
+        int c = position.getColumn();
+        int r = position.getRow();
+        Set<Position> neighbors = new HashSet<>();
+        if (c + r <= boardSize + 1) {
+            neighbors.add(new Position(c + 1, r));
+            neighbors.add(new Position(c, r + 1));
+        }
+        if (c > 1) {
+            neighbors.add(new Position(c - 1, r));
+            neighbors.add(new Position(c - 1, r + 1));
+        }
+        if (r > 1) {
+            neighbors.add(new Position(c, r - 1));
+            neighbors.add(new Position(c + 1, r - 1));
+        }
+
+        return neighbors;
+    }
 
     public synchronized void reset() {
         performedMove = null;
@@ -93,12 +108,11 @@ public class BoardViewerPanel extends JPanel {
         this.status = status;
     }
 
+    // ------------------------------------------------------------
 
     public void showPerformedMove(Move move) {
         this.performedMove = move;
     }
-
-    // ------------------------------------------------------------
 
     public void update() {
         WIDTH = parentWindow.getContentPane()
@@ -171,13 +185,12 @@ public class BoardViewerPanel extends JPanel {
         }
     }
 
+    // ------------------------------------------------------------
 
     public synchronized void setViewer(Viewer viewer) {
         this.viewer = viewer;
         updateUIPositions();
     }
-
-    // ------------------------------------------------------------
 
     private Polygon flowerToPolygon(Flower f) {
         Point2D p1, p2, p3;
@@ -251,6 +264,8 @@ public class BoardViewerPanel extends JPanel {
         return null;
     }
 
+    // ------------------------------------------------------------
+
     private Point2D rotateAroundCenter(Point2D p, Point2D center, double degree) {
         double x = p.getX();
         double y = p.getY();
@@ -265,8 +280,6 @@ public class BoardViewerPanel extends JPanel {
 
         return new Point2D.Double(newx + cx, newy + cy);
     }
-
-    // ------------------------------------------------------------
 
     private synchronized void render(Graphics2D g) {
         /*int midX = WIDTH / 2;
@@ -336,7 +349,7 @@ public class BoardViewerPanel extends JPanel {
         g.setStroke(new BasicStroke(UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH));
         g.setColor(BOARD_GRID_LINE_COLOR);
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
-            for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
+            for (Position neighbor : getNeighborPositions(e.getKey(), boardSize)) {
                 g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
             }
         }
@@ -348,7 +361,7 @@ public class BoardViewerPanel extends JPanel {
 
         g.setStroke(new BasicStroke(UNIT * BOARD_GRID_DITCH_LINE_STRENGTH));
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
-            for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
+            for (Position neighbor : getNeighborPositions(e.getKey(), boardSize)) {
                 Ditch d = new Ditch(e.getKey(), neighbor);
 
                 // Determine color
@@ -490,7 +503,6 @@ public class BoardViewerPanel extends JPanel {
 
         g.drawString(statusText, WIDTH / 2 - textWidth / 2, HEIGHT / 2 + fm.getAscent() / 2);
     }
-
 
     // ------------------------------------------------------------
 

@@ -25,7 +25,7 @@ public class BoardViewer extends JFrame {
             }
         });
 
-//        setUndecorated(true);
+        //        setUndecorated(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(320, 240));
 
