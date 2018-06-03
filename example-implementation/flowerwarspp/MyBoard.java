@@ -36,7 +36,8 @@ public class MyBoard implements Board {
             @Override
             public Collection<Flower> getFlowers(PlayerColor color) {
                 List<Flower> list = new LinkedList<>();
-
+                if (color == PlayerColor.Red)
+                    list.add(new Flower(new Position(2, 2), new Position(3, 2), new Position(2, 3)));
                 return list;
             }
 

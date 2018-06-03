@@ -18,6 +18,10 @@ aufgerufen werden. Die Anzeige wird dann aktualsieirt und der ausgeführte Zug w
 Zug aufgerufen werden, um den aktuellen Status anzuzeigen. Ist der Status `Ok`, passiert jedoch nichts.
 - `close()` Schließt das Fenster und beendet die grafische Anzeige.
 
+# Vorschau
+So in etwa sieht die Spielbrettanzeige aus:
+![Spielbrettanzeige](images/board-display-preview.png)
+
 ### Beispiel
 Es soll kurz an der [Beispielimplementation](../example-implementation) gezeigt werden, wie diese Klasse verwendet werden
 kann, um ein einfaches Spielbrett anzuzeigen:
