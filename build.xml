@@ -4,7 +4,7 @@
 	<property name="target.jre" value="1.8" />
 	<property name="source.jre" value="1.8" />
 
-    <property name="project.tester.name" value="FlowerWarsPP-BoardTester" />
+    <property name="project.tester.name" value="FlowerWarsPP-Tester" />
     <property name="project.display.name" value="FlowerWarsPP-Display" />
 
     <property name="test.source.dir" value="src/test/java" />
