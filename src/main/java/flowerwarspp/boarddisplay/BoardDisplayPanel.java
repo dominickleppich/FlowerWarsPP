@@ -1,4 +1,4 @@
-package flowerwarspp.boardviewer;
+package flowerwarspp.boarddisplay;
 
 import flowerwarspp.preset.*;
 
@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
 
-class BoardViewerPanel extends JPanel {
+class BoardDisplayPanel extends JPanel {
 
     // ------------------------------------------------------------
     // ------------------------------------------------------------
@@ -38,7 +38,7 @@ class BoardViewerPanel extends JPanel {
     // ------------------------------------------------------------
     // ------------------------------------------------------------
 
-    private BoardViewer parentWindow;
+    private BoardDisplay parentWindow;
     private Viewer viewer;
     private int WIDTH, HEIGHT;
     private float UNIT;
@@ -52,7 +52,7 @@ class BoardViewerPanel extends JPanel {
 
     // ------------------------------------------------------------
 
-    public BoardViewerPanel(BoardViewer parentWindow) {
+    public BoardDisplayPanel(BoardDisplay parentWindow) {
         this.parentWindow = parentWindow;
         setDoubleBuffered(true);
         update();

@@ -58,8 +58,8 @@
         <mkdir dir="${source.viewer.dir}" />
 
         <!-- Copy viewer and preset classes -->
-        <copy todir="${source.viewer.dir}/flowerwarspp/boardviewer">
-            <fileset dir="src/main/java/flowerwarspp/boardviewer" />
+        <copy todir="${source.viewer.dir}/flowerwarspp/boarddisplay">
+            <fileset dir="src/main/java/flowerwarspp/boarddisplay" />
         </copy>
         <copy todir="${source.viewer.dir}/flowerwarspp/preset">
             <fileset dir="${project.source.dir}/flowerwarspp/preset" />
@@ -113,7 +113,7 @@
                 <property name="digest" value="SHA-1"/>
                 <keep>
                     <class name="flowerwarspp.preset.*" classes="private" methods="private" fields="private"/>
-                    <class name="flowerwarspp.boardviewer.*" classes="public" methods="public" fields="none"/>
+                    <class name="flowerwarspp.boarddisplay.*" classes="public" methods="public" fields="none"/>
                 </keep>
             </obfuscate>
         </yguard>

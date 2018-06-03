@@ -1,4 +1,4 @@
-package flowerwarspp.boardviewer;
+package flowerwarspp.boarddisplay;
 
 import flowerwarspp.preset.*;
 
@@ -6,16 +6,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class BoardViewer extends JFrame {
+public class BoardDisplay extends JFrame {
 
-    private BoardViewerPanel panel;
+    private BoardDisplayPanel panel;
 
     // ------------------------------------------------------------
 
-    public BoardViewer() {
-        super("FlowerWarsPP Board-Viewer (Dominick Leppich)");
+    public BoardDisplay() {
+        super("FlowerWarsPP Board-Display (Dominick Leppich)");
 
-        this.panel = new BoardViewerPanel(this);
+        this.panel = new BoardDisplayPanel(this);
 
         add(panel);
         addComponentListener(new ComponentAdapter() {
