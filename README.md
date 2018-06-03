@@ -9,7 +9,7 @@ verzieren indem sie durch Gräben miteinander verbunden werden?
 # FlowerWars
 
 - [Spielregeln](specification/rules.md)
-- [JavaDoc Dokumentation](documentation/index.html)
+- [JavaDoc Dokumentation](documentation) (Am besten lokal öffnen, GitLab zeigt nur den Quellcode der Dokumentation an...)
 - [Hilfestellungen zur Implementierung](specification/implementation-tips.md)
 - [Computerspieler Strategie](specification/simple-strategy.md)
 - [Verwendung der automatischen Tests](specification/test-usage.md)
