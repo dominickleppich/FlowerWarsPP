@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project name="FlowerWarsPP-BoardTester" default="jar" basedir=".">
+<project name="FlowerWarsPP-Addons" default="jar-all" basedir=".">
 	<!-- Settings -->
 	<property name="target.jre" value="1.8" />
 	<property name="source.jre" value="1.8" />
 
-    <property name="project.name" value="FlowerWarsPP-BoardTester" />
+    <property name="project.tester.name" value="FlowerWarsPP-BoardTester" />
+    <property name="project.viewer.name" value="FlowerWarsPP-Viewer" />
 
     <property name="test.source.dir" value="src/test/java" />
     <property name="project.source.dir" value="src/main/java" />
-    <property name="main.class" value="BoardTester" />
-    <property name="source.dir" value="src/board-test" />
-	<property name="build.dir" location="target/board-test" />
+
+    <property name="main.tester.class" value="BoardTester" />
+    <property name="source.tester.dir" value="src/board-test" />
+    <property name="build.tester.dir" location="target/board-test" />
+
+    <property name="source.viewer.dir" value="src/board-viewer" />
+    <property name="build.viewer.dir" location="target/board-viewer" />
     <property name="jar.dir" value="target" />
 	<property name="lib.dir" location="lib" />
 
@@ -22,42 +27,74 @@
 
 	<!-- Clean -->
 	<target name="clean">
-		<delete dir="${build.dir}" />
+		<delete dir="${build.tester.dir}" />
+		<delete dir="${build.viewer.dir}" />
 	</target>
 
-	<!-- Update test files -->
-	<target name="update">
-		<delete dir="${source.dir}" />
-		<mkdir dir="${source.dir}" />
+    <!-- Update files -->
+    <target depends="update-tester, update-viewer" name="update" />
 
-		<!-- Copy test and preset classes -->
-        <copy file="${test.source.dir}/BoardTester.java" todir="${source.dir}" />
-        <copy todir="${source.dir}/board">
+	<!-- Update tester files -->
+    <target name="update-tester">
+        <delete dir="${source.tester.dir}" />
+        <mkdir dir="${source.tester.dir}" />
+
+        <!-- Copy test and preset classes -->
+        <copy file="${test.source.dir}/BoardTester.java" todir="${source.tester.dir}" />
+        <copy todir="${source.tester.dir}/board">
             <fileset dir="${test.source.dir}/board" />
         </copy>
-        <copy todir="${source.dir}/flowerwarspp/preset">
+        <copy todir="${source.tester.dir}/flowerwarspp/preset">
             <fileset dir="${project.source.dir}/flowerwarspp/preset" />
         </copy>
-	</target>
+    </target>
+
+    <!-- Update viewer files -->
+    <target name="update-viewer">
+        <delete dir="${source.viewer.dir}" />
+        <mkdir dir="${source.viewer.dir}" />
+
+        <!-- Copy viewer and preset classes -->
+        <copy todir="${source.viewer.dir}/flowerwarspp/simpleviewer">
+            <fileset dir="${project.source.dir}/flowerwarspp/simpleviewer" />
+        </copy>
+        <copy todir="${source.viewer.dir}/flowerwarspp/preset">
+            <fileset dir="${project.source.dir}/flowerwarspp/preset" />
+        </copy>
+    </target>
 
 	<!-- ************************ Create jar archive ************************ -->
-	<target description="create jar files" depends="build" name="jar">
-		<jar compress="true" destfile="${jar.dir}/${project.name}.jar" basedir="${build.dir}">
+	<target description="create both jar files" depends="jar-tester" name="jar-all" />
+
+    <target description="create tester jar file" depends="build-tester" name="jar-tester">
+        <jar compress="true" destfile="${jar.dir}/${project.tester.name}.jar" basedir="${build.tester.dir}">
             <zipgroupfileset dir="${lib.dir}" includes="*.jar" />
 
-			<manifest>
-				<attribute name="Main-Class" value="${main.class}" />
-			</manifest>
-		</jar>
-	</target>
+            <manifest>
+                <attribute name="Main-Class" value="${main.tester.class}" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target description="create viewer jar file" depends="build-viewer" name="jar-viewer">
+        <jar compress="true" destfile="${jar.dir}/${project.viewer.name}.jar" basedir="${build.viewer.dir}" />
+    </target>
 
 	<!-- ************************ Compile ************************ -->
-	<target description="build the project" name="build">
-		<mkdir dir="${build.dir}" />
-		<javac debug="true" destdir="${build.dir}" srcdir="${source.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
-			<include name="**/*.java" />
-			<classpath refid="library-path" />
-		</javac>
-	</target>
+    <target description="build the tester project" name="build-tester">
+        <mkdir dir="${build.tester.dir}" />
+        <javac debug="true" destdir="${build.tester.dir}" srcdir="${source.tester.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
+            <include name="**/*.java" />
+            <classpath refid="library-path" />
+        </javac>
+    </target>
+
+    <target description="build the viewer project" name="build-viewer">
+        <mkdir dir="${build.viewer.dir}" />
+        <javac debug="true" destdir="${build.viewer.dir}" srcdir="${source.viewer.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
+            <include name="**/*.java" />
+            <classpath refid="library-path" />
+        </javac>
+    </target>
 
 </project>
