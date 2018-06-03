@@ -4,7 +4,7 @@ Um das Spielbrett recht früh testen zu können, wird eine einfache Visualisieru
 
 Die Verwendung ähnelt der bereits bekannten Visualisierung des Rot-Schwarz-Baumes...
 
-Im Archiv gibt es eine Klasse `flowerwarspp.boarddisplay.BoardDisplay`, die ein beliebiges Spielbrett über die `flowerwarspp.preset.Viewer` 
+Im Archiv gibt es eine Klasse `flowerwarspp.boarddisplay.BoardDisplay`, die ein beliebiges Spielbrett über die [`flowerwarspp.preset.Viewer`](../src/flowerwarspp/preset/Viewer.java) 
 Schnittstelle anzeigen kann.
 
 Die Klasse `BoardDisplay` hat einen Standardkonstruktor ohne Argumente und wird ganz einfach mit `new BoardDisplay()` instanziiert.
