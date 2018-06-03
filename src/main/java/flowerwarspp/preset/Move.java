@@ -191,7 +191,7 @@ public class Move implements Serializable, Comparable<Move> {
         String s = "{";
         switch (getType()) {
             case Flower:
-                s += getFirstFlower().toString() + ", " + getSecondFlower().toString();
+                s += getFirstFlower().toString() + "," + getSecondFlower().toString();
                 break;
             case Ditch:
                 s += ditch.toString();
