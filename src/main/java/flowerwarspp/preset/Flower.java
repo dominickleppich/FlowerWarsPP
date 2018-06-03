@@ -62,6 +62,31 @@ public class Flower implements Serializable, Comparable<Flower> {
 
     // ------------------------------------------------------------
 
+    public static Flower parseFlower(String string) {
+        if (string == null || string.equals(""))
+            throw new FlowerFormatException("cannot parse empty string");
+
+        if (!string.startsWith("{") || !string.endsWith("}"))
+            throw new FlowerFormatException("wrong outer format! correct format is: {POSITION,POSITION,POSITION}");
+
+        // The splitting needs to be merged afterwards
+        String[] parts = string.substring(1, string.length() - 1)
+                               .split(",");
+
+        if (parts.length != 6)
+            throw new FlowerFormatException(
+                    "wrong number of positions! correct format is: {POSITION,POSITION,POSITION}");
+
+        try {
+            // Merge splitted substrings accordingly
+            return new Flower(Position.parsePosition(parts[0] + ',' + parts[1]),
+                    Position.parsePosition(parts[2] + ',' + parts[3]),
+                    Position.parsePosition(parts[4] + ',' + parts[5]));
+        } catch (PositionFormatException e) {
+            throw new FlowerFormatException("unable to parse flower positions", e);
+        }
+    }
+
     @Override
     public int hashCode() {
         // Distributes perfectly for valid moves. For arbitrary flowers of

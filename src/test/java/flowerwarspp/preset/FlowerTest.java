@@ -308,4 +308,46 @@ public class FlowerTest {
         assertNotNull(l.toString());
         assertNotEquals(l.toString(), "");
     }
+
+    // ------------------------------------------------------------
+    // * Parse *
+
+    @Test (expected = FlowerFormatException.class)
+    public void parseFlowerForNullStringThrowsException() {
+        Flower.parseFlower(null);
+    }
+
+    @Test (expected = FlowerFormatException.class)
+    public void parseFlowerForEmptyStringThrowsException() {
+        Flower.parseFlower("");
+    }
+
+    @Test (expected = FlowerFormatException.class)
+    public void parseFlowerForWrongFormatStringThrowsException() {
+        Flower.parseFlower("(1,2),(3,4),(5,6)");
+    }
+
+    @Test (expected = FlowerFormatException.class)
+    public void parseFlowerForWrongNumberOfArgumentsThrowsException() {
+        Flower.parseFlower("{(1,2),(3,4),(5,6),(7,8)}");
+    }
+
+    @Test (expected = FlowerFormatException.class)
+    public void parseFlowerForWrongColumnNumberInOnePositionFormatThrowsException() {
+        Flower.parseFlower("{(a,2),(3,4),(5,6)}");
+    }
+
+    @Test (expected = FlowerFormatException.class)
+    public void parseFlowerForWrongRowNumberInOnePositionFormatThrowsException() {
+        Flower.parseFlower("{(1,b),(3,4),(5,6)}");
+    }
+
+    @Test
+    public void parseFlowerCreatesCorrectFlower() {
+        Flower f = Flower.parseFlower("{(1,2),(3,4),(5,6)}");
+
+        assertEquals(new Position(1,2), f.getFirst());
+        assertEquals(new Position(3,4), f.getSecond());
+        assertEquals(new Position(5,6), f.getThird());
+    }
 }
