@@ -1,0 +1,104 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper,top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage[utf8]{inputenc} %Eingabecodierung
+\usepackage[ngerman]{babel} %Deutsche Sprache
+\usepackage[T1]{fontenc} %T1 Zeichenkodierung, fuer automatische Zeilenumbrueche nach Umlauten
+\usepackage[markup=nocolor]{changes}
+
+\usepackage{lmodern} %Moderner Zeichensatz
+\usepackage{textcomp}
+\usepackage{hyperref}
+
+\usepackage{graphicx} %Grafiken laden
+\usepackage{caption}
+
+\usepackage{tikz,pgf} % TikZ Grafiken
+\usepackage{pdfpages}
+\usepackage{pgffor}
+\usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+
+\usepackage{enumitem} %Manuelle Numerierungsoptionen
+\usepackage{float} % Figuren an der korrekten Quellcode Position anzeigen
+\usepackage{pdflscape} % Querlegen
+
+\usepackage{listings}
+\lstset{
+	basicstyle=\scriptsize\ttfamily,
+	breakatwhitespace=false,
+	commentstyle=\color{darkgray},
+	frame=lines,
+	framexleftmargin=1.5em,
+	language=Java,
+	numbers=left,
+	numbersep=10pt,
+	numberstyle=\tiny,
+	rulecolor=\color{black},
+	showstringspaces=true,
+	tabsize=4,
+	xleftmargin=1.5em
+}
+
+\usepackage{amsthm} %Mathematiksatz-Umgebung
+\usepackage{amssymb} %Mathematische Symbole
+\usepackage{amsmath}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[equation]{Theorem}
+\newtheorem{satz}[equation]{Satz}
+\newtheorem{lemma}[equation]{Lemma}
+\newtheorem{korollar}[equation]{Korollar}
+
+\theoremstyle{definition}
+\newtheorem{definition}[equation]{Definition}
+\newtheorem{aufgabe}{Aufgabe}
+\newtheorem*{behauptung}{Behauptung}
+\newtheorem{uebung}{Übung}
+\newtheorem*{loesung}{Lösung}
+
+\theoremstyle{remark}
+\newtheorem{beispiel}[equation]{Beispiel}
+\newtheorem{hinweis}{Hinweis}
+
+\newcommand{\ggT}{\textrm{ggT}}
+\newcommand{\kgV}{\textrm{kgV}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\examplegraphic}[3]{
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=#2]{#1} \\
+\smallskip
+{\footnotesize #3}
+\end{center}
+\end{figure}
+}
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}\medskipamount
+
+\begin{document}
+
+\textbf{Allgemeines Programmierpraktikum}\hfill \textbf{Sommersemester 2018} \\
+Dr. Henrik Brosenne\hfill Georg-August-Universität Göttingen \\
+Dominick Leppich\hfill Institut für Informatik\\
+\medskip
+\hrule
+\bigskip
+\begin{center}
+{\Large \textbf{Projekt}}
+\end{center} 
+\bigskip
+\textbf{Abgabe bis zum XX.XX.XXXX, 23:59 Uhr}. 
+
+\textbf{Prüfungen in der Zeit vom XX.XX. bis XX.XX.XXXX}.
+
+\input{chapter/organization} \newpage
+\input{chapter/git} \newpage
+\input{chapter/exam}
+\input{chapter/game} \newpage
+\input{chapter/implementation} \newpage
+\input{chapter/project-submission}
+
+\end{document}
