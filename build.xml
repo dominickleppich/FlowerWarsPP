@@ -19,6 +19,9 @@
     <property name="jar.dir" value="target" />
 	<property name="lib.dir" location="lib" />
 
+    <property name="yguard.path" value="tools/yguard-2.6/lib/yguard.jar" />
+    <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="${yguard.path}" />
+
 	<path id="library-path">
 		<fileset dir="${lib.dir}" includes="**/*.jar" />
 	</path>
@@ -55,8 +58,8 @@
         <mkdir dir="${source.viewer.dir}" />
 
         <!-- Copy viewer and preset classes -->
-        <copy todir="${source.viewer.dir}/flowerwarspp/simpleviewer">
-            <fileset dir="${project.source.dir}/flowerwarspp/simpleviewer" />
+        <copy todir="${source.viewer.dir}/flowerwarspp/boardviewer">
+            <fileset dir="src/main/java/flowerwarspp/boardviewer" />
         </copy>
         <copy todir="${source.viewer.dir}/flowerwarspp/preset">
             <fileset dir="${project.source.dir}/flowerwarspp/preset" />
@@ -64,7 +67,7 @@
     </target>
 
 	<!-- ************************ Create jar archive ************************ -->
-	<target description="create both jar files" depends="jar-tester, jar-viewer" name="jar-all" />
+	<target description="create both jar files" depends="jar-tester, jar-viewer-obfuscated" name="jar-all" />
 
     <target description="create tester jar file" depends="build-tester" name="jar-tester">
         <jar compress="true" destfile="${jar.dir}/${project.tester.name}.jar" basedir="${build.tester.dir}">
@@ -95,6 +98,25 @@
             <include name="**/*.java" />
             <classpath refid="library-path" />
         </javac>
+    </target>
+
+    <!-- ************************ Obfuscate ************************ -->
+    <target description="obfuscate viewer class files" depends="jar-viewer" name="jar-viewer-obfuscated">
+        <yguard>
+            <inoutpair in="${jar.dir}/${project.viewer.name}.jar" out="${jar.dir}/${project.viewer.name}-obfuscated.jar"/>
+
+            <obfuscate replaceclassnamestrings="false">
+                <property name="error-checking" value="pedantic"/>
+                <property name="naming-scheme" value="smallWill"/>
+                <property name="language-conformity" value="illegalWill"/>
+                <property name="overload-enabled" value="true"/>
+                <property name="digest" value="SHA-1"/>
+                <keep>
+                    <class name="flowerwarspp.preset.*" classes="private" methods="private" fields="private"/>
+                    <class name="flowerwarspp.boardviewer.*" classes="public" methods="public" fields="none"/>
+                </keep>
+            </obfuscate>
+        </yguard>
     </target>
 
 </project>

@@ -1,4 +1,4 @@
-package flowerwarspp.simpleviewer;
+package flowerwarspp.boardviewer;
 
 import flowerwarspp.preset.*;
 
@@ -13,7 +13,7 @@ public class BoardViewer extends JFrame {
     // ------------------------------------------------------------
 
     public BoardViewer() {
-        super("FlowerWarsPP v1.0");
+        super("FlowerWarsPP Board-Viewer (Dominick Leppich)");
 
         this.panel = new BoardViewerPanel(this);
 

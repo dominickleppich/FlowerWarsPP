@@ -1,4 +1,4 @@
-package flowerwarspp.simpleviewer;
+package flowerwarspp.boardviewer;
 
 import flowerwarspp.preset.*;
 
@@ -7,26 +7,14 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
 
-public class BoardViewerPanel extends JPanel {
+class BoardViewerPanel extends JPanel {
 
     // ------------------------------------------------------------
     // ------------------------------------------------------------
     // * Customizable settings *
 
-    private static final Color END_MOVE_COLOR = new Color(53, 11, 71);
-    private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
-    private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
-    private static final Color BACKGROUND_RED_COLOR_A = new Color(197, 110, 25);
-    private static final Color BACKGROUND_RED_COLOR_B = new Color(200, 73, 30);
-    private static final Color BACKGROUND_BLUE_COLOR_A = new Color(37, 166, 197);
-    private static final Color BACKGROUND_BLUE_COLOR_B = new Color(45, 73, 200);
     private static final double BORDER_SIZE = 0.2;
 
-    private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
-    private static final Color BLOCKED_FLOWER_COLOR = new Color(64, 93, 41);
-    private static final Color POSSIBLE_DITCH_COLOR = new Color(120, 157, 52);
-    private static final Color BOARD_GRID_LINE_COLOR = new Color(44, 44, 44);
-    private static final Color BOARD_GRID_POINT_COLOR = new Color(44, 44, 44);
     private static final double BOARD_GRID_POINT_SIZE = 0.3;
     private static final Color BOARD_GRID_POINT_LABEL_COLOR = new Color(255, 255, 255);
     private static final float BOARD_GRID_POINT_LABEL_FONT_SIZE = 0.1f;
@@ -37,20 +25,14 @@ public class BoardViewerPanel extends JPanel {
     private static final Color BLUE_PLAYER_COLOR = new Color(43, 43, 93);
     private static final Color RED_HIGHLIGHT_COLOR = new Color(255, 77, 85);
     private static final Color BLUE_HIGHLIGHT_COLOR = new Color(85, 85, 255);
-    private static final Color RED_HOVER_COLOR = new Color(215, 161, 165);
-    private static final Color BLUE_HOVER_COLOR = new Color(122, 122, 154);
-    private static final float HOVER_ALPHA = 0.8f;
 
     private static final Color STATUS_TEXT_COLOR_A = new Color(197, 177, 42);
     private static final Color STATUS_TEXT_COLOR_B = new Color(197, 88, 20);
     private static final float STATUS_TEXT_SIZE = 1.5f;
-    private static final Color TEXT_BOX_BACKGROUND_COLOR = new Color(200, 124, 25);
     private static final Color TEXT_BOX_BORDER_COLOR = new Color(70, 70, 70);
-    private static final float TEXT_FONT_SIZE = 0.3f;
     private static final float TEXT_MARGIN = 0.2f;
     private static final float TEXT_BORDER_SIZE = 0.05f;
     private static final float POINT_TEXT_SIZE = 0.5f;
-    private static final float END_TEXT_SIZE = 0.2f;
     private static final float TEXT_BACKGROUND_ARC = 0.3f;
 
     // ------------------------------------------------------------
@@ -282,21 +264,8 @@ public class BoardViewerPanel extends JPanel {
     }
 
     private synchronized void render(Graphics2D g) {
-        /*int midX = WIDTH / 2;
-        int midY = HEIGHT / 2;
         g.setColor(Color.WHITE);
-        g.fill(new Rectangle2D.Float(midX - 10, midY - 10, 20, 20));
-        g.setColor(Color.RED);
-        g.draw(new Rectangle2D.Float(10, 10, WIDTH - 20, HEIGHT - 20));*/
-
-        Color a = BACKGROUND_COLOR_A;
-        Color b = BACKGROUND_COLOR_B;
-
-        Paint backgroundPaint = new GradientPaint(0, 0, a, WIDTH, HEIGHT, b);
-        g.setPaint(backgroundPaint);
         g.fill(new Rectangle2D.Float(0, 0, WIDTH, HEIGHT));
-
-        // DO SOME GENERAL STUFF
 
         // CONTINUE, IF VIEWER IS SET
         if (viewer == null)
@@ -309,7 +278,7 @@ public class BoardViewerPanel extends JPanel {
         int boardSize = viewer.getSize();
 
         // Draw board background
-        g.setColor(BOARD_BACKGROUND_COLOR);
+        g.setColor(Color.WHITE);
         Point2D bottomLeft, bottomRight, top;
         bottomLeft = positionPoints.get(new Position(1, 1));
         bottomRight = positionPoints.get(new Position(boardSize + 1, 1));
@@ -347,7 +316,7 @@ public class BoardViewerPanel extends JPanel {
 
         // Draw grid
         g.setStroke(new BasicStroke(UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH));
-        g.setColor(BOARD_GRID_LINE_COLOR);
+        g.setColor(Color.GRAY);
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
             for (Position neighbor : getNeighborPositions(e.getKey(), boardSize)) {
                 g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
@@ -377,7 +346,7 @@ public class BoardViewerPanel extends JPanel {
             }
         }
 
-        g.setColor(BOARD_GRID_POINT_COLOR);
+        g.setColor(Color.GRAY);
         // Draw grid points
         double dotSize = UNIT * BOARD_GRID_POINT_SIZE;
         for (Point2D p : positionPoints.values()) {
@@ -406,11 +375,6 @@ public class BoardViewerPanel extends JPanel {
             }
         }
 
-        /*g.setColor(Color.RED);
-        g.setStroke(new BasicStroke(1.0f));
-        for (Polygon p : polygonDitchMap.keySet())
-            g.draw(p);*/
-
         Font backupFont = g.getFont();
 
         float uiScale = WIDTH / 10;
@@ -419,12 +383,12 @@ public class BoardViewerPanel extends JPanel {
         int bluePoints = viewer.getPoints(PlayerColor.Blue);
 
         // Red points
-        showTextBox(g, WIDTH - uiScale * 2.4f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null,
+        showTextBox(g, WIDTH - uiScale * 3.2f, uiScale * 0.2f, uiScale * 1.0f, uiScale, Color.WHITE, null,
                 TEXT_BOX_BORDER_COLOR, RED_PLAYER_COLOR,
                 backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + redPoints);
         // Blue points
-        showTextBox(g, WIDTH - uiScale * 1.2f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null,
+        showTextBox(g, WIDTH - uiScale * 1.6f, uiScale * 0.2f, uiScale * 1.0f, uiScale, Color.WHITE, null,
                 TEXT_BOX_BORDER_COLOR, BLUE_PLAYER_COLOR,
                 backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + bluePoints);

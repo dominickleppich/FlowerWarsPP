@@ -35,12 +35,16 @@ public class MyBoard implements Board {
 
             @Override
             public Collection<Flower> getFlowers(PlayerColor color) {
-                throw new UnsupportedOperationException();
+                List<Flower> list = new LinkedList<>();
+
+                return list;
             }
 
             @Override
             public Collection<Ditch> getDitches(PlayerColor color) {
-                throw new UnsupportedOperationException();
+                List<Ditch> list = new LinkedList<>();
+
+                return list;
             }
 
             @Override
@@ -50,7 +54,7 @@ public class MyBoard implements Board {
 
             @Override
             public int getPoints(PlayerColor color) {
-                return 0;
+                return color == PlayerColor.Red ? 2 : 1;
             }
         };
     }
