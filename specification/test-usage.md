@@ -28,7 +28,7 @@ sh run-tests.sh FULL_PATH_TO_BOARD_CLASS [PARAMETER]
 ### Beispiel
 Anhand einer einfachen [Beispielimplementation](../example-implementation) soll die Ausführung der Tests kurz gezeigt werden.
 
-1. Kompiliere die Spielbrettklasse `flowerwarspp.MyBoard`
+1. Kompiliere die Spielbrettklasse [`flowerwarspp.MyBoard`](../example-implementation/flowerwarspp/MyBoard.java)
 ```
 javac flowerwarspp/MyBoard.java
 ```
