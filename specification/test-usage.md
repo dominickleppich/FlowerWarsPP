@@ -17,7 +17,7 @@ Bei `mini` werden alle fehlgeschlagenen Testfälle mit ihrem Namen aufgelistet.
 Der Parameter `full` gibt vollständige Informationen über den fehlgeschlagenen Testfall inklusive vollem Stacktrace.
 
 ## Shell-Skript
-Zur einfachen Verwendung steht ein kleines Shell-Skript namens `run-tests.sh` zur Verfügung, welches in der [Beispielimplementation](../example-implementation)
+Zur einfachen Verwendung steht ein kleines Shell-Skript namens [`run-tests.sh`](../example-implementation/run-tests.sh) zur Verfügung, welches in der [Beispielimplementation](../example-implementation)
 zu finden ist. 
 
 Das Skript kompiliert die Board Klasse automatisch und führt danach die Tests aus. Ein Aufruf dieses Skripts funktioniert wie folgt:
