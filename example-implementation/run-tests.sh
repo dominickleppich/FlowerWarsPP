@@ -1,5 +1,5 @@
 #!/bin/bash
-echo -e "Compile ..."
+echo -e "Compile Board class"
 javac flowerwarspp/MyBoard.java
 
 echo -e "Run tests ..."
