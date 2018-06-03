@@ -5,7 +5,7 @@
 	<property name="source.jre" value="1.8" />
 
     <property name="project.tester.name" value="FlowerWarsPP-BoardTester" />
-    <property name="project.viewer.name" value="FlowerWarsPP-Viewer" />
+    <property name="project.display.name" value="FlowerWarsPP-Display" />
 
     <property name="test.source.dir" value="src/test/java" />
     <property name="project.source.dir" value="src/main/java" />
@@ -14,8 +14,8 @@
     <property name="source.tester.dir" value="src/board-test" />
     <property name="build.tester.dir" location="target/board-test" />
 
-    <property name="source.viewer.dir" value="src/board-viewer" />
-    <property name="build.viewer.dir" location="target/board-viewer" />
+    <property name="source.display.dir" value="src/board-display" />
+    <property name="build.display.dir" location="target/board-display" />
     <property name="jar.dir" value="target" />
 	<property name="lib.dir" location="lib" />
 
@@ -31,11 +31,11 @@
 	<!-- Clean -->
 	<target name="clean">
 		<delete dir="${build.tester.dir}" />
-		<delete dir="${build.viewer.dir}" />
+		<delete dir="${build.display.dir}" />
 	</target>
 
     <!-- Update files -->
-    <target depends="update-tester, update-viewer" name="update" />
+    <target depends="update-tester, update-display" name="update" />
 
 	<!-- Update tester files -->
     <target name="update-tester">
@@ -52,22 +52,22 @@
         </copy>
     </target>
 
-    <!-- Update viewer files -->
-    <target name="update-viewer">
-        <delete dir="${source.viewer.dir}" />
-        <mkdir dir="${source.viewer.dir}" />
+    <!-- Update display files -->
+    <target name="update-display">
+        <delete dir="${source.display.dir}" />
+        <mkdir dir="${source.display.dir}" />
 
-        <!-- Copy viewer and preset classes -->
-        <copy todir="${source.viewer.dir}/flowerwarspp/boarddisplay">
+        <!-- Copy display and preset classes -->
+        <copy todir="${source.display.dir}/flowerwarspp/boarddisplay">
             <fileset dir="src/main/java/flowerwarspp/boarddisplay" />
         </copy>
-        <copy todir="${source.viewer.dir}/flowerwarspp/preset">
+        <copy todir="${source.display.dir}/flowerwarspp/preset">
             <fileset dir="${project.source.dir}/flowerwarspp/preset" />
         </copy>
     </target>
 
 	<!-- ************************ Create jar archive ************************ -->
-	<target description="create both jar files" depends="jar-tester, jar-viewer-obfuscated" name="jar-all" />
+	<target description="create both jar files" depends="jar-tester, jar-display-obfuscated" name="jar-all" />
 
     <target description="create tester jar file" depends="build-tester" name="jar-tester">
         <jar compress="true" destfile="${jar.dir}/${project.tester.name}.jar" basedir="${build.tester.dir}">
@@ -79,8 +79,8 @@
         </jar>
     </target>
 
-    <target description="create viewer jar file" depends="build-viewer" name="jar-viewer">
-        <jar compress="true" destfile="${jar.dir}/${project.viewer.name}.jar" basedir="${build.viewer.dir}" />
+    <target description="create display jar file" depends="build-display" name="jar-display">
+        <jar compress="true" destfile="${jar.dir}/${project.display.name}.jar" basedir="${build.display.dir}" />
     </target>
 
 	<!-- ************************ Compile ************************ -->
@@ -92,18 +92,18 @@
         </javac>
     </target>
 
-    <target description="build the viewer project" name="build-viewer">
-        <mkdir dir="${build.viewer.dir}" />
-        <javac debug="true" destdir="${build.viewer.dir}" srcdir="${source.viewer.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
+    <target description="build the display project" name="build-display">
+        <mkdir dir="${build.display.dir}" />
+        <javac debug="true" destdir="${build.display.dir}" srcdir="${source.display.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
             <include name="**/*.java" />
             <classpath refid="library-path" />
         </javac>
     </target>
 
     <!-- ************************ Obfuscate ************************ -->
-    <target description="obfuscate viewer class files" depends="jar-viewer" name="jar-viewer-obfuscated">
+    <target description="obfuscate display class files" depends="jar-display" name="jar-display-obfuscated">
         <yguard>
-            <inoutpair in="${jar.dir}/${project.viewer.name}.jar" out="${jar.dir}/${project.viewer.name}-obfuscated.jar"/>
+            <inoutpair in="${jar.dir}/${project.display.name}.jar" out="${jar.dir}/${project.display.name}-obfuscated.jar"/>
 
             <obfuscate replaceclassnamestrings="false">
                 <property name="error-checking" value="pedantic"/>
