@@ -16,6 +16,8 @@
 
     <property name="source.display.dir" value="src/board-display" />
     <property name="build.display.dir" location="target/board-display" />
+
+    <property name="javadoc.dir" location="documentation" />
     <property name="jar.dir" value="target" />
 	<property name="lib.dir" location="lib" />
 
@@ -32,6 +34,7 @@
 	<target name="clean">
 		<delete dir="${build.tester.dir}" />
 		<delete dir="${build.display.dir}" />
+		<delete dir="${javadoc.dir}" />
 	</target>
 
     <!-- Update files -->
@@ -64,6 +67,17 @@
         <copy todir="${source.display.dir}/flowerwarspp/preset">
             <fileset dir="${project.source.dir}/flowerwarspp/preset" />
         </copy>
+    </target>
+
+    <!-- ************************ Create JavaDoc documentation ************************ -->
+    <target description="create javadoc documentation" name="javadoc">
+        <mkdir dir="${javadoc.dir}" />
+        <javadoc access="private" author="true" destdir="${javadoc.dir}" source="${source.jre}"
+                 version="true">
+            <fileset dir="${project.source.dir}" defaultexcludes="yes">
+                <include name="flowerwarspp/preset/*.java" />
+            </fileset>
+        </javadoc>
     </target>
 
 	<!-- ************************ Create jar archive ************************ -->
