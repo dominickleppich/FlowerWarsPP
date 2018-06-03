@@ -43,7 +43,7 @@ public class Position implements Serializable, Comparable<Position> {
 
     // ------------------------------------------------------------
 
-    public static Position parsePositions(String string) {
+    public static Position parsePosition(String string) {
         if (string == null || string.equals(""))
             throw new PositionFormatException("cannot parse empty string");
 

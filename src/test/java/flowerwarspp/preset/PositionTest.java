@@ -1,6 +1,5 @@
 package flowerwarspp.preset;
 
-import javafx.geometry.*;
 import org.junit.*;
 
 import java.util.*;
@@ -245,37 +244,37 @@ public class PositionTest {
 
     @Test (expected = PositionFormatException.class)
     public void parsePositionForNullStringThrowsException() {
-        Position.parsePositions(null);
+        Position.parsePosition(null);
     }
 
     @Test (expected = PositionFormatException.class)
     public void parsePositionForEmptyStringThrowsException() {
-        Position.parsePositions("");
+        Position.parsePosition("");
     }
 
     @Test (expected = PositionFormatException.class)
     public void parsePositionForWrongFormatStringThrowsException() {
-        Position.parsePositions("5,7");
+        Position.parsePosition("5,7");
     }
 
     @Test (expected = PositionFormatException.class)
     public void parsePositionForWrongNumberOfArgumentsThrowsException() {
-        Position.parsePositions("(1,2,3)");
+        Position.parsePosition("(1,2,3)");
     }
 
     @Test (expected = PositionFormatException.class)
     public void parsePositionForWrongColumnNumberFormatThrowsException() {
-        Position.parsePositions("(a,3)");
+        Position.parsePosition("(a,3)");
     }
 
     @Test (expected = PositionFormatException.class)
     public void parsePositionForWrongRowNumberFormatThrowsException() {
-        Position.parsePositions("(2,b)");
+        Position.parsePosition("(2,b)");
     }
 
     @Test
     public void parsePositionCreatesCorrectPosition() {
-        Position p = Position.parsePositions("(5,7)");
+        Position p = Position.parsePosition("(5,7)");
 
         assertEquals(5, p.getColumn());
         assertEquals(7, p.getRow());
