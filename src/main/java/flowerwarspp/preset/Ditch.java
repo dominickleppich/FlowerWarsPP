@@ -49,6 +49,30 @@ public class Ditch implements Serializable, Comparable<Ditch> {
 
     // ------------------------------------------------------------
 
+    public static Ditch parseDitch(String string) {
+        if (string == null || string.equals(""))
+            throw new DitchFormatException("cannot parse empty string");
+
+        if (!string.startsWith("{") || !string.endsWith("}"))
+            throw new DitchFormatException("wrong outer format! correct format is: {POSITION,POSITION}");
+
+        // The splitting needs to be merged afterwards
+        String[] parts = string.substring(1, string.length() - 1)
+                               .split(",");
+
+        if (parts.length != 4)
+            throw new DitchFormatException(
+                    "wrong number of positions! correct format is: {POSITION,POSITION}");
+
+        try {
+            // Merge splitted substrings accordingly
+            return new Ditch(Position.parsePosition(parts[0] + ',' + parts[1]),
+                    Position.parsePosition(parts[2] + ',' + parts[3]));
+        } catch (PositionFormatException e) {
+            throw new DitchFormatException("unable to parse ditch positions", e);
+        }
+    }
+
     @Override
     public int hashCode() {
         return getFirst().hashCode() * Position.COMBINATIONS + getSecond().hashCode();

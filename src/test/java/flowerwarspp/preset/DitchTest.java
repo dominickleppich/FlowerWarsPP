@@ -197,7 +197,7 @@ public class DitchTest {
     // * Other stuff *
 
     @Test
-    public void flowersAreCorrectlyCloneable() {
+    public void ditchesAreCorrectlyCloneable() {
         // This is sufficient, because preset classes are not mutable
         Ditch[] clone = ditchCompareArray.clone();
         clone[0] = null;
@@ -209,5 +209,46 @@ public class DitchTest {
         Ditch d = new Ditch(first, second);
         assertNotNull(d.toString());
         assertNotEquals(d.toString(), "");
+    }
+
+    // ------------------------------------------------------------
+    // * Parse *
+
+    @Test (expected = DitchFormatException.class)
+    public void parseDitchForNullStringThrowsException() {
+        Ditch.parseDitch(null);
+    }
+
+    @Test (expected = DitchFormatException.class)
+    public void parseDitchForEmptyStringThrowsException() {
+        Ditch.parseDitch("");
+    }
+
+    @Test (expected = DitchFormatException.class)
+    public void parseDitchForWrongFormatStringThrowsException() {
+        Ditch.parseDitch("(1,2),(3,4)");
+    }
+
+    @Test (expected = DitchFormatException.class)
+    public void parseDitchForWrongNumberOfArgumentsThrowsException() {
+        Ditch.parseDitch("{(1,2),(3,4),(5,6)}");
+    }
+
+    @Test (expected = DitchFormatException.class)
+    public void parseDitchForWrongColumnNumberInOnePositionFormatThrowsException() {
+        Ditch.parseDitch("{(a,2),(3,4)}");
+    }
+
+    @Test (expected = DitchFormatException.class)
+    public void parseDitchForWrongRowNumberInOnePositionFormatThrowsException() {
+        Ditch.parseDitch("{(1,b),(3,4)}");
+    }
+
+    @Test
+    public void parseDitchCreatesCorrectFlower() {
+        Ditch d = Ditch.parseDitch("{(1,2),(3,4)}");
+
+        assertEquals(new Position(1,2), d.getFirst());
+        assertEquals(new Position(3,4), d.getSecond());
     }
 }
