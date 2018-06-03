@@ -365,4 +365,93 @@ public class MoveTest {
         Move m = new Move(MoveType.End);
         assertEquals(m.toString(), "{End}");
     }
+
+    // ------------------------------------------------------------
+    // * Parse *
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForNullStringThrowsException() {
+        Move.parseMove(null);
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForEmptyStringThrowsException() {
+        Move.parseMove("");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForWrongFormatStringForFlowerMovesThrowsException() {
+        Move.parseMove("{(1,2),(3,4),(5,6)},{(7,8),(9,10),(11,12)}");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForWrongFormatStringForDitchMovesThrowsException() {
+        Move.parseMove("{(1,2),(3,4)}");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForWrongFormatStringForEndMoveThrowsException() {
+        Move.parseMove("End");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForWrongFormatStringForSurrenderMoveThrowsException() {
+        Move.parseMove("Surrender");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForUnknownFormatThrowsException() {
+        Move.parseMove("{Illegal}");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForWrongNumberOfArgumentsForFlowerMoveThrowsException() {
+        Move.parseMove("{{(1,2),(3,4),(5,6)},{(7,8),(9,10),(11,12)},{(13,14),(15,16),(17,18)}}");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForWrongNumberOfArgumentsForDitchMoveThrowsException() {
+        Move.parseMove("{{(1,2),(3,4)},{(5,6),(7,8)}}");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForWrongColumnNumberInOnePositionFormatThrowsException() {
+        Move.parseMove("{{(a,2),(3,4)}}");
+    }
+
+    @Test(expected = MoveFormatException.class)
+    public void parseMoveForWrongRowNumberInOnePositionFormatThrowsException() {
+        Move.parseMove("{{(1,b),(3,4)}}");
+    }
+
+    @Test
+    public void parseMoveParsesFlowerMovesCorrectly() {
+        Move m = Move.parseMove("{{(1,2),(3,4),(5,6)},{(7,8),(9,10),(11,12)}}");
+
+        assertEquals(MoveType.Flower, m.getType());
+        assertEquals(new Flower(new Position(1, 2), new Position(3, 4), new Position(5, 6)), m.getFirstFlower());
+        assertEquals(new Flower(new Position(7, 8), new Position(9, 10), new Position(11, 12)), m.getSecondFlower());
+    }
+
+    @Test
+    public void parseMoveParsesDitchMovesCorrectly() {
+        Move m = Move.parseMove("{{(1,2),(3,4)}}");
+
+        assertEquals(MoveType.Ditch, m.getType());
+        assertEquals(new Ditch(new Position(1, 2), new Position(3, 4)), m.getDitch());
+    }
+
+    @Test
+    public void parseMoveParsesEndMoveCorrectly() {
+        Move m = Move.parseMove("{End}");
+
+        assertEquals(MoveType.End, m.getType());
+    }
+
+    @Test
+    public void parseMoveParsesSurrenderMoveCorrectly() {
+        Move m = Move.parseMove("{Surrender}");
+
+        assertEquals(MoveType.Surrender, m.getType());
+    }
 }

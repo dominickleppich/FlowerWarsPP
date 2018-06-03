@@ -82,9 +82,51 @@ public class Move implements Serializable, Comparable<Move> {
 
     // ------------------------------------------------------------
 
-    /*public static Move parseMove(String str) {
-        return null;
-    }*/
+    public static Move parseMove(String string) {
+        if (string == null || string.equals(""))
+            throw new MoveFormatException("cannot parse empty string");
+
+        if (!string.startsWith("{") || !string.endsWith("}"))
+            throw new MoveFormatException(
+                    "wrong outer format! correct format is: {MOVE}\nMOVE can be one of the following: Flower, Ditch, \"End\", \"Surrender\"");
+
+        // The splitting needs to be merged afterwards
+        String[] parts = string.substring(1, string.length() - 1)
+                               .split(",");
+
+
+        try {
+            switch (parts.length) {
+                // Primitive move type
+                case 1:
+                    switch (parts[0]) {
+                        case "End":
+                            return new Move(MoveType.End);
+                        case "Surrender":
+                            return new Move(MoveType.Surrender);
+                        default:
+                            throw new MoveFormatException("unknown move type");
+                    }
+                    // Ditch move
+                case 4:
+                    return new Move(Ditch.parseDitch(string.substring(1, string.length() - 1)));
+                // Flower move
+                case 12:
+                    // Do some split merging here
+                    return new Move(Flower.parseFlower(
+                            parts[0] + ',' + parts[1] + ',' + parts[2] + ',' + parts[3] + ',' + parts[4] + ',' + parts[5]),
+                            Flower.parseFlower(
+                                    parts[6] + ',' + parts[7] + ',' + parts[8] + ',' + parts[9] + ',' + parts[10] + ',' + parts[11]));
+                default:
+                    throw new MoveFormatException(
+                            "Illegal number of arguments! correct format is: {MOVE}\nMOVE can be one of the following: Flower, Ditch, \"End\", \"Surrender\"");
+            }
+        } catch (FlowerFormatException e) {
+            throw new MoveFormatException("unable to parse flower", e);
+        } catch (DitchFormatException e) {
+            throw new MoveFormatException("unable to parse ditch", e);
+        }
+    }
 
     @Override
     public int hashCode() {
