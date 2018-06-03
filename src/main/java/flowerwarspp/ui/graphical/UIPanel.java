@@ -19,10 +19,10 @@ public class UIPanel extends JPanel {
     // * Customizable settings *
 
     private static final Color END_MOVE_COLOR = new Color(53, 11, 71);
-    private static final Color BACKGROUND_COLOR_A = new Color(197, 168, 40);
-    private static final Color BACKGROUND_COLOR_B = new Color(200, 124, 25);
-    private static final Color BACKGROUND_RED_COLOR_A = new Color(197, 110, 25);
-    private static final Color BACKGROUND_RED_COLOR_B = new Color(200, 73, 30);
+    private static final Color BACKGROUND_COLOR_A = new Color(187, 197, 27);
+    private static final Color BACKGROUND_COLOR_B = new Color(200, 176, 31);
+    private static final Color BACKGROUND_RED_COLOR_A = new Color(197, 110, 30);
+    private static final Color BACKGROUND_RED_COLOR_B = new Color(200, 34, 14);
     private static final Color BACKGROUND_BLUE_COLOR_A = new Color(37, 166, 197);
     private static final Color BACKGROUND_BLUE_COLOR_B = new Color(45, 73, 200);
     private static final double BORDER_SIZE = 0.2;
@@ -30,8 +30,8 @@ public class UIPanel extends JPanel {
     private static final Color BOARD_BACKGROUND_COLOR = new Color(120, 157, 52);
     private static final Color BLOCKED_FLOWER_COLOR = new Color(64, 93, 41);
     private static final Color POSSIBLE_DITCH_COLOR = new Color(120, 157, 52);
-    private static final Color BOARD_GRID_LINE_COLOR = new Color(44, 44, 44);
-    private static final Color BOARD_GRID_POINT_COLOR = new Color(44, 44, 44);
+    private static final Color BOARD_GRID_LINE_COLOR = new Color(75, 53, 34);
+    private static final Color BOARD_GRID_POINT_COLOR = new Color(75, 53, 34);
     private static final double BOARD_GRID_POINT_SIZE = 0.3;
     private static final Color BOARD_GRID_POINT_LABEL_COLOR = new Color(255, 255, 255);
     private static final float BOARD_GRID_POINT_LABEL_FONT_SIZE = 0.1f;
@@ -49,9 +49,7 @@ public class UIPanel extends JPanel {
     private static final Color STATUS_TEXT_COLOR_A = new Color(197, 177, 42);
     private static final Color STATUS_TEXT_COLOR_B = new Color(197, 88, 20);
     private static final float STATUS_TEXT_SIZE = 1.5f;
-    private static final Color TEXT_BOX_BACKGROUND_COLOR = new Color(200, 124, 25);
     private static final Color TEXT_BOX_BORDER_COLOR = new Color(70, 70, 70);
-    private static final float TEXT_FONT_SIZE = 0.3f;
     private static final float TEXT_MARGIN = 0.2f;
     private static final float TEXT_BORDER_SIZE = 0.05f;
     private static final float POINT_TEXT_SIZE = 0.5f;
@@ -710,12 +708,12 @@ public class UIPanel extends JPanel {
         int bluePoints = viewer.getPoints(PlayerColor.Blue);
 
         // Red points
-        showTextBox(g, WIDTH - uiScale * 2.4f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null,
+        showTextBox(g, WIDTH - uiScale * 3.2f, uiScale * 0.2f, uiScale * 1.0f, uiScale, Color.WHITE, null,
                 TEXT_BOX_BORDER_COLOR, RED_PLAYER_COLOR,
                 backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + redPoints);
         // Blue points
-        showTextBox(g, WIDTH - uiScale * 1.2f, uiScale * 0.2f, uiScale * 0.6f, uiScale, Color.WHITE, null,
+        showTextBox(g, WIDTH - uiScale * 1.6f, uiScale * 0.2f, uiScale * 1.0f, uiScale, Color.WHITE, null,
                 TEXT_BOX_BORDER_COLOR, BLUE_PLAYER_COLOR,
                 backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
                 "" + bluePoints);
