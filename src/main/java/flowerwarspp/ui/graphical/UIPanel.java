@@ -758,6 +758,9 @@ public class UIPanel extends JPanel {
     }
 
     private void drawStatus(Graphics2D g, Font font) {
+        if (status == null || status == Status.Ok)
+            return;
+
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
         g.setColor(Color.BLACK);
         g.fill(new Rectangle2D.Float(0, 0, WIDTH, HEIGHT));
