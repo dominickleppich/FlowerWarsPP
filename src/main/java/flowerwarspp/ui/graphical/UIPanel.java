@@ -15,7 +15,6 @@ public class UIPanel extends JPanel {
     private static final Logger logger = LoggerFactory.getLogger(UIPanel.class);
 
     // ------------------------------------------------------------
-    // ------------------------------------------------------------
     // * Customizable settings *
 
     private static final Color END_MOVE_COLOR = new Color(53, 11, 71);
@@ -56,7 +55,6 @@ public class UIPanel extends JPanel {
     private static final float END_TEXT_SIZE = 0.2f;
     private static final float TEXT_BACKGROUND_ARC = 0.3f;
 
-    // ------------------------------------------------------------
     // ------------------------------------------------------------
 
     private UIWindow parentWindow;
