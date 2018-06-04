@@ -26,6 +26,7 @@ Es ist allerdings erlaubt folgende Klassen zu erweitern (nähere Informationen s
 
 Ob Sie alles richtig gemacht haben können Sie leicht testen, indem Sie Ihre Implementation des Spielbretts testen lassen.
 \item Gültige Spielzüge und Spielzüge die zum Ende des Spiels führen werden erkannt.
+\item Wenn das Situation auf dem Spielbrett ungültig ist oder das Spiel bereits beendet ist, kann kein weiterer Zug entgegengenommen werden. Wird dennoch versucht einen Zug auszuführen, muss darauf mit einer \code{IllegalStateException} reagiert werden.
 \item Der erste entgegengenommene Spielzug gehört immer zum roten Spieler.
 \item Ein Spielzug ist ein Objekt der Klasse \code{flowerwarspp.preset.Move}. Ein Move hat immer eines der nachfolgenden Formate:
 \begin{itemize}
