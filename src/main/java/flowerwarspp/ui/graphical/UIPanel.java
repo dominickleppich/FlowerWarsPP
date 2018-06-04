@@ -544,7 +544,24 @@ public class UIPanel extends JPanel {
         // *********************************************
 
         int boardSize = viewer.getSize();
+        drawBackground(g, boardSize);
+        drawBlockedFields(g);
+        drawBoardFlowers(g);
+        drawHoverFlowers(g);
+        drawGrid(g, boardSize);
+        drawDitches(g, boardSize);
+        drawGridPoints(g);
+        drawGridNumbers(g);
+        Font backupFont = g.getFont();
+        float uiScale = WIDTH / 10;
+        drawEndButton(g, backupFont, uiScale);
+        drawPoints(g, backupFont, uiScale);
 
+        if (status != null)
+            drawStatus(g, backupFont.deriveFont(Font.BOLD, uiScale * STATUS_TEXT_SIZE));
+    }
+
+    private void drawBackground(Graphics2D g, int boardSize) {
         // Draw board background
         g.setColor(BOARD_BACKGROUND_COLOR);
         Point2D bottomLeft, bottomRight, top;
@@ -554,15 +571,18 @@ public class UIPanel extends JPanel {
         g.fill(new Polygon(new int[]{(int) bottomLeft.getX(), (int) bottomRight.getX(), (int) top.getX()}, new int[]{
                 (int) bottomLeft.getY(), (int) bottomRight.getY(), (int) top.getY()
         }, 3));
+    }
 
-
+    private void drawBlockedFields(Graphics2D g) {
         // Draw blocked fields
         if (blockedFlowers != null) {
             g.setColor(BLOCKED_FLOWER_COLOR);
             for (Flower f : blockedFlowers)
                 g.fill(flowerToPolygon(f));
         }
+    }
 
+    private void drawBoardFlowers(Graphics2D g) {
         // Show last performed move
         Flower lastFlower1 = null;
         Flower lastFlower2 = null;
@@ -588,7 +608,9 @@ public class UIPanel extends JPanel {
                 g.fill(flowerToPolygon(f));
             }
         }
+    }
 
+    private void drawHoverFlowers(Graphics2D g) {
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, HOVER_ALPHA));
 
         // Draw hover flower
@@ -603,16 +625,33 @@ public class UIPanel extends JPanel {
         }
 
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+    }
 
-        // Draw grid
+    private void drawGrid(Graphics2D g, int boardSize) {
+        /*// Draw grid
         g.setStroke(new BasicStroke(UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH));
         g.setColor(BOARD_GRID_LINE_COLOR);
         for (Map.Entry<Position, Point2D> e : positionPoints.entrySet()) {
             for (Position neighbor : BoardImpl.getNeighborPositions(e.getKey(), boardSize)) {
                 g.draw(new Line2D.Double(e.getValue(), positionPoints.get(neighbor)));
             }
+        }*/
+        g.setStroke(new BasicStroke(UNIT * BOARD_GRID_NEUTRAL_LINE_STRENGTH));
+        g.setColor(BOARD_GRID_LINE_COLOR);
+        for (int i = 1; i <= boardSize; i++) {
+            Position columnStart = new Position(i, 1);
+            Position rowStart = new Position(1, i);
+            Position columnEnd = new Position(i, boardSize - i + 2);
+            Position rowEnd = new Position(boardSize - i + 2, i);
+            Position diagStart = new Position(i + 1, 1);
+            Position diagEnd = new Position(1, i + 1);
+            g.draw(new Line2D.Double(positionPoints.get(columnStart), positionPoints.get(columnEnd)));
+            g.draw(new Line2D.Double(positionPoints.get(rowStart), positionPoints.get(rowEnd)));
+            g.draw(new Line2D.Double(positionPoints.get(diagStart), positionPoints.get(diagEnd)));
         }
+    }
 
+    private void drawDitches(Graphics2D g, int boardSize) {
         // Determine possible ditches
         Set<Ditch> possibleDitches = null;
         if (possibleMoves != null)
@@ -657,14 +696,33 @@ public class UIPanel extends JPanel {
                 }
             }
         }
+    }
 
-        g.setColor(BOARD_GRID_POINT_COLOR);
-        // Draw grid points
-        double dotSize = UNIT * BOARD_GRID_POINT_SIZE;
-        for (Point2D p : positionPoints.values()) {
-            g.fill(new Ellipse2D.Double(p.getX() - dotSize / 2, p.getY() - dotSize / 2, dotSize, dotSize));
-        }
+    private void drawPoints(Graphics2D g, Font backupFont, float uiScale) {
+        int redPoints = viewer.getPoints(PlayerColor.Red);
+        int bluePoints = viewer.getPoints(PlayerColor.Blue);
 
+        // Red points
+        showTextBox(g, WIDTH - uiScale * 3.2f, uiScale * 0.2f, uiScale * 1.0f, uiScale, Color.WHITE, null,
+                TEXT_BOX_BORDER_COLOR, RED_PLAYER_COLOR,
+                backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
+                "" + redPoints);
+        // Blue points
+        showTextBox(g, WIDTH - uiScale * 1.6f, uiScale * 0.2f, uiScale * 1.0f, uiScale, Color.WHITE, null,
+                TEXT_BOX_BORDER_COLOR, BLUE_PLAYER_COLOR,
+                backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
+                "" + bluePoints);
+    }
+
+    private void drawEndButton(Graphics2D g, Font backupFont, float uiScale) {
+        // End
+        if (possibleMoves != null && possibleMoves.contains(new Move(MoveType.End)))
+            showTextBox(g, (float) (uiScale * BORDER_SIZE), (float) (uiScale * BORDER_SIZE), 0.0f, uiScale, Color.WHITE,
+                    null, TEXT_BOX_BORDER_COLOR, END_MOVE_COLOR,
+                    backupFont.deriveFont(Font.ITALIC, uiScale * END_TEXT_SIZE), " Press SPACE to end ");
+    }
+
+    private void drawGridNumbers(Graphics2D g) {
         // Draw grid numbers
         g.setFont(g.getFont()
                    .deriveFont(Font.BOLD, UNIT * BOARD_GRID_POINT_LABEL_FONT_SIZE));
@@ -686,38 +744,15 @@ public class UIPanel extends JPanel {
                 g.drawString(s, x, y);
             }
         }
+    }
 
-        /*g.setColor(Color.RED);
-        g.setStroke(new BasicStroke(1.0f));
-        for (Polygon p : polygonDitchMap.keySet())
-            g.draw(p);*/
-
-        Font backupFont = g.getFont();
-
-        float uiScale = WIDTH / 10;
-
-        // End
-        if (possibleMoves != null && possibleMoves.contains(new Move(MoveType.End)))
-            showTextBox(g, (float) (uiScale * BORDER_SIZE), (float) (uiScale * BORDER_SIZE), 0.0f, uiScale, Color.WHITE,
-                    null, TEXT_BOX_BORDER_COLOR, END_MOVE_COLOR,
-                    backupFont.deriveFont(Font.ITALIC, uiScale * END_TEXT_SIZE), " Press SPACE to end ");
-
-        int redPoints = viewer.getPoints(PlayerColor.Red);
-        int bluePoints = viewer.getPoints(PlayerColor.Blue);
-
-        // Red points
-        showTextBox(g, WIDTH - uiScale * 3.2f, uiScale * 0.2f, uiScale * 1.0f, uiScale, Color.WHITE, null,
-                TEXT_BOX_BORDER_COLOR, RED_PLAYER_COLOR,
-                backupFont.deriveFont(redPoints > bluePoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
-                "" + redPoints);
-        // Blue points
-        showTextBox(g, WIDTH - uiScale * 1.6f, uiScale * 0.2f, uiScale * 1.0f, uiScale, Color.WHITE, null,
-                TEXT_BOX_BORDER_COLOR, BLUE_PLAYER_COLOR,
-                backupFont.deriveFont(bluePoints > redPoints ? Font.BOLD : Font.PLAIN, uiScale * POINT_TEXT_SIZE),
-                "" + bluePoints);
-
-        if (status != null)
-            drawStatus(g, backupFont.deriveFont(Font.BOLD, uiScale * STATUS_TEXT_SIZE));
+    private void drawGridPoints(Graphics2D g) {
+        g.setColor(BOARD_GRID_POINT_COLOR);
+        // Draw grid points
+        double dotSize = UNIT * BOARD_GRID_POINT_SIZE;
+        for (Point2D p : positionPoints.values()) {
+            g.fill(new Ellipse2D.Double(p.getX() - dotSize / 2, p.getY() - dotSize / 2, dotSize, dotSize));
+        }
     }
 
     private void showTextBox(Graphics2D g, float x, float y, float minWidth, float scale, Color textColor, Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
