@@ -18,6 +18,17 @@ aufgerufen werden. Die Anzeige wird dann aktualsieirt und der ausgeführte Zug w
 Zug aufgerufen werden, um den aktuellen Status anzuzeigen. Ist der Status `Ok`, passiert jedoch nichts.
 - `close()` Schließt das Fenster und beendet die grafische Anzeige.
 
+# Klassenpfad
+Beim Kompilieren muss natürlich dem Klassenpfad das Jar Archiv mitgeteilt werden:
+```
+javac -cp FlowerWarsPP-Display.jar:. flowerwarspp/Main.java
+```
+
+Auch beim Ausführen ist der Klassenpfad korrekt zu setzen:
+```
+java -cp FlowerWarsPP-Display.jar:. flowerwarspp.Main
+```
+
 # Vorschau
 So in etwa sieht die Spielbrettanzeige aus:
 ![Spielbrettanzeige](images/board-display-preview.png)
