@@ -48,6 +48,11 @@ diese Zahl in jedem dieser Felder.
 über eine gemeinsame Seite oder über Ecke) müssen leer sein. Ist das nicht der Fall, ist der Zug ungültig!
 - Ist keine der beiden zuvor genannten Bedingungen verletzt, war dies ein gültiger Zug.
 
+### Hinweis
+Die hier verwendeten Farben dienen nur der besseren Anschauung und haben keine Verbindung zu den Spielerfarben und deren
+gesetzten Blumen oder Gräben. Bei der Implementierung dieser Strategie sollten keinesfalls Farben zur Unterscheidung der
+zusammenhängenden Blumen verwendet werden, sondern eher einer Markierung durch beispielsweise fortlaufende Zahlen!
+
 ### Beispiel
 Diese Strategie soll an einem kurzen Beispiel illustriert werden...
 
