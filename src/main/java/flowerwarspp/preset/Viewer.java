@@ -38,7 +38,9 @@ public interface Viewer {
     /**
      * Gib alle gepflanzten Blumen eines bestimmten Spielers (durch seine Farbe) zurueck.
      *
-     * @param color Spielerfarbe, dessen Blumen abgefragt werden
+     * @param color
+     *         Spielerfarbe, dessen Blumen abgefragt werden
+     *
      * @return die Menge der gepflanzten Blumen dieses Spielers als {@link Collection}
      */
     Collection<Flower> getFlowers(final PlayerColor color);
@@ -46,7 +48,9 @@ public interface Viewer {
     /**
      * Gib alle gebauten Graeben eines bestimmten Spielers (durch seine Farbe) zurueck.
      *
-     * @param color Spielerfarbe, dessen Graeben abgefragt werden
+     * @param color
+     *         Spielerfarbe, dessen Graeben abgefragt werden
+     *
      * @return die Menge der gebauten Graeben dieses Spielers als {@link Collection}
      */
     Collection<Ditch> getDitches(final PlayerColor color);
@@ -61,7 +65,9 @@ public interface Viewer {
     /**
      * Gib die aktuelle Punktzahl eines bestimmten Spielers (durch seine Farbe) zurueck.
      *
-     * @param color Spielerfarbe, dessen Punktestand abgefragt wird
+     * @param color
+     *         Spielerfarbe, dessen Punktestand abgefragt wird
+     *
      * @return der aktuelle Punktestand des Spielers
      */
     int getPoints(final PlayerColor color);

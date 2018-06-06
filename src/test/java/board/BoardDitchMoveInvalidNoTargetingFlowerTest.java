@@ -18,6 +18,7 @@ public class BoardDitchMoveInvalidNoTargetingFlowerTest {
 
     // ------------------------------------------------------------
     private Status expectedStatus;
+
     public BoardDitchMoveInvalidNoTargetingFlowerTest(Ditch ditch, Status expected) {
         this.ditch = ditch;
         this.expectedStatus = expected;

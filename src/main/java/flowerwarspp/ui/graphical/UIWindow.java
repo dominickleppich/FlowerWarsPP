@@ -28,7 +28,7 @@ public class UIWindow extends JFrame implements Display, Requestable {
             }
         });
 
-//        setUndecorated(true);
+        //        setUndecorated(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(320, 240));
 

@@ -15,7 +15,8 @@ public class HashTest {
             Integer hash = m.hashCode();
             System.out.println(String.format("%20d %s", hash, m.toString()));
             if (hashMap.containsKey(hash))
-                hashMap.get(hash).add(m);
+                hashMap.get(hash)
+                       .add(m);
             else {
                 List<Move> flowerList = new LinkedList<>();
                 flowerList.add(m);
@@ -25,7 +26,8 @@ public class HashTest {
 
         System.out.println("\n\n\n");
         for (Map.Entry<Integer, List<Move>> e : hashMap.entrySet()) {
-            if (e.getValue().size() > 1) {
+            if (e.getValue()
+                 .size() > 1) {
                 System.out.println("Duplicates for hash: " + e.getKey());
                 for (Move m : e.getValue())
                     System.out.println(m);
@@ -63,13 +65,11 @@ public class HashTest {
         for (int c = 1; c <= Position.MAX_VALUE; c++) {
             for (int r = 1; r < Position.MAX_VALUE; r++) {
                 if (c + r <= Position.MAX_VALUE) {
-                    ditches.add(new Ditch(new Position(c,r), new Position(c+1, r)));
-                    ditches.add(new Ditch(new Position(c, r), new Position(c,
-                            r + 1)));
+                    ditches.add(new Ditch(new Position(c, r), new Position(c + 1, r)));
+                    ditches.add(new Ditch(new Position(c, r), new Position(c, r + 1)));
                 }
                 if (c > 1)
-                    ditches.add(new Ditch(new Position(c, r), new Position(c
-                            - 1, r + 1)));
+                    ditches.add(new Ditch(new Position(c, r), new Position(c - 1, r + 1)));
             }
         }
 
@@ -82,13 +82,10 @@ public class HashTest {
         for (int c = 1; c < Position.MAX_VALUE; c++) {
             for (int r = 1; r < Position.MAX_VALUE; r++) {
                 if (c + r <= Position.MAX_VALUE)
-                    flowers.add(new Flower(new Position(c, r), new Position(c
-                            + 1, r), new Position(c, r + 1)));
+                    flowers.add(new Flower(new Position(c, r), new Position(c + 1, r), new Position(c, r + 1)));
 
                 if (c + r < Position.MAX_VALUE) {
-                    flowers.add(new Flower(new Position(c + 1, r + 1), new
-                            Position(c
-                            + 1, r), new Position(c, r + 1)));
+                    flowers.add(new Flower(new Position(c + 1, r + 1), new Position(c + 1, r), new Position(c, r + 1)));
                 }
             }
         }

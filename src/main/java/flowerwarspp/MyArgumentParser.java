@@ -8,20 +8,17 @@ import flowerwarspp.preset.*;
  * @author dominick
  */
 public class MyArgumentParser extends ArgumentParser {
-    enum NetworkMode {
-        OFFER,
-        FIND
-    };
-
     public MyArgumentParser(String[] args) throws ArgumentParserException {
         super(args);
     }
 
-    // ------------------------------------------------------------
+    ;
 
     public boolean isHelp() throws ArgumentParserException {
         return getFlag("help");
     }
+
+    // ------------------------------------------------------------
 
     public String getHost() throws ArgumentParserException {
         return (String) getSetting("host");
@@ -41,5 +38,10 @@ public class MyArgumentParser extends ArgumentParser {
 
     public boolean isAiDebug() throws ArgumentParserException {
         return getFlag("aidebug");
+    }
+
+    enum NetworkMode {
+        OFFER,
+        FIND
     }
 }

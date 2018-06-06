@@ -5,7 +5,7 @@ package flowerwarspp.preset;
  *
  * @author Dominick Leppich
  */
-public class MoveFormatException extends IllegalArgumentException{
+public class MoveFormatException extends IllegalArgumentException {
     public MoveFormatException(String msg) {
         super(msg);
     }

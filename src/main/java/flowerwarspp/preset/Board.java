@@ -16,8 +16,11 @@ public interface Board extends Viewable {
     /**
      * Fuehre den uebergebenen Zug auf dem Spielbrett aus.
      *
-     * @param move auszufuehrender Zug
-     * @throws IllegalStateException falls das Spielbrett aufgrund der Spielsituation keine Zuege mehr entgegennehmen kann.
+     * @param move
+     *         auszufuehrender Zug
+     *
+     * @throws IllegalStateException
+     *         falls das Spielbrett aufgrund der Spielsituation keine Zuege mehr entgegennehmen kann.
      */
     void make(final Move move) throws IllegalStateException;
 }

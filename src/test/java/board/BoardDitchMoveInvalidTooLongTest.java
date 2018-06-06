@@ -18,6 +18,7 @@ public class BoardDitchMoveInvalidTooLongTest {
 
     // ------------------------------------------------------------
     private Status expectedStatus;
+
     public BoardDitchMoveInvalidTooLongTest(Ditch ditch, Status expected) {
         this.ditch = ditch;
         this.expectedStatus = expected;

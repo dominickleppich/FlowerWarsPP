@@ -26,7 +26,7 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
     private static final Color BOARD_GRID_LINE_COLOR = new Color(0, 0, 0);
     private static final Color BOARD_GRID_POINT_COLOR = new Color(0, 0, 0);
     private static final double BOARD_GRID_POINT_SIZE = 0.3;
-//    private static final Color BOARD_GRID_POINT_LABEL_COLOR = new Color(255, 255, 255);
+    //    private static final Color BOARD_GRID_POINT_LABEL_COLOR = new Color(255, 255, 255);
     private static final Color BOARD_GRID_POINT_LABEL_COLOR = null;
     private static final float BOARD_GRID_POINT_LABEL_FONT_SIZE = 0.1f;
     private static final float BOARD_GRID_NEUTRAL_LINE_STRENGTH = 0.1f;
@@ -40,40 +40,22 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
 
     // ------------------------------------------------------------
     // ------------------------------------------------------------
-
-    private SimpleBoardStateCreator parentWindow;
-    private final int BOARD_SIZE;
-    private int WIDTH, HEIGHT;
-    private float UNIT;
-
-    private Map<Position, Point2D> positionPoints;
-    private Map<Polygon, Flower> polygonFlowerMap;
-    private Map<Polygon, Ditch> polygonDitchMap;
-    private Flower hoverFlower;
-    private Ditch hoverDitch;
-
-    class Marker {
-        Flower flower;
-        Ditch ditch;
-        int colorIndex;
-
-        Marker(Flower flower, Ditch ditch, int colorIndex) {
-            this.flower = flower;
-            this.ditch = ditch;
-            this.colorIndex = colorIndex;
-        }
-    }
-
     private static final Color[] MARKER_COLORS = new Color[]{
             new Color(255, 0, 0), new Color(255, 190, 190), new Color(0, 0, 255), new Color(190, 190, 255),
             new Color(207, 199, 21), new Color(57, 177, 41), new Color(216, 65, 73), new Color(70, 70, 206),
             new Color(99, 99, 99)
     };
+    private final int BOARD_SIZE;
+    private SimpleBoardStateCreator parentWindow;
+    private int WIDTH, HEIGHT;
+    private float UNIT;
+    private Map<Position, Point2D> positionPoints;
+    private Map<Polygon, Flower> polygonFlowerMap;
+    private Map<Polygon, Ditch> polygonDitchMap;
+    private Flower hoverFlower;
+    private Ditch hoverDitch;
     private int selectedColor = 0;
-
     private List<Marker> markers;
-
-    // ------------------------------------------------------------
 
     public SimpleBoardStateCreatorPanel(SimpleBoardStateCreator parentWindow, int boardSize) {
         this.parentWindow = parentWindow;
@@ -127,12 +109,12 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         addMouseWheelListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-                selectedColor = (selectedColor + mouseWheelEvent.getWheelRotation() + MARKER_COLORS.length) % MARKER_COLORS.length;
+                selectedColor = (selectedColor + mouseWheelEvent.getWheelRotation() + MARKER_COLORS.length) %
+                                MARKER_COLORS.length;
                 updateHover(mouseWheelEvent.getPoint());
             }
         });
     }
-
 
     // ------------------------------------------------------------
 
@@ -150,6 +132,9 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         }
     }
 
+
+    // ------------------------------------------------------------
+
     private void updateHover(Point point) {
         clearHover();
 
@@ -162,8 +147,6 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         repaint((int) (point.getX() - UNIT), (int) (point.getY() - UNIT), (int) UNIT * 2, (int) UNIT * 2);
     }
 
-    // ------------------------------------------------------------
-
     public void update() {
         WIDTH = parentWindow.getContentPane()
                             .getWidth();
@@ -175,10 +158,12 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         updateUIPositions();
     }
 
+    // ------------------------------------------------------------
+
     private synchronized void updateUIPositions() {
         int boardSize = BOARD_SIZE;
-        double fieldWidth = Math.min(WIDTH / boardSize,
-                (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 - BORDER_SIZE);
+        double fieldWidth =
+                Math.min(WIDTH / boardSize, (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 - BORDER_SIZE);
         UNIT = (float) fieldWidth;
         double fieldHeight = Math.sin(Math.toRadians(60)) * fieldWidth;
 
@@ -232,8 +217,6 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         }
     }
 
-    // ------------------------------------------------------------
-
     private Polygon flowerToPolygon(Flower f) {
         Point2D p1, p2, p3;
         p1 = positionPoints.get(f.getFirst());
@@ -243,6 +226,8 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         int[] y = new int[]{(int) p1.getY(), (int) p2.getY(), (int) p3.getY()};
         return new Polygon(x, y, 3);
     }
+
+    // ------------------------------------------------------------
 
     private synchronized Flower pointToFlower(Point point) {
         for (Map.Entry<Polygon, Flower> e : polygonFlowerMap.entrySet()) {
@@ -324,8 +309,6 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
 
         return new Point2D.Double(newx + cx, newy + cy);
     }
-
-    // ------------------------------------------------------------
 
     private synchronized void render(Graphics2D g) {
         /*int midX = WIDTH / 2;
@@ -462,5 +445,19 @@ public class SimpleBoardStateCreatorPanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         render(g2d);
+    }
+
+    // ------------------------------------------------------------
+
+    class Marker {
+        Flower flower;
+        Ditch ditch;
+        int colorIndex;
+
+        Marker(Flower flower, Ditch ditch, int colorIndex) {
+            this.flower = flower;
+            this.ditch = ditch;
+            this.colorIndex = colorIndex;
+        }
     }
 }

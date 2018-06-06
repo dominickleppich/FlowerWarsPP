@@ -23,12 +23,13 @@ public class BoardFlowerMovePositionTest {
     // ** Flower inside or outside of the board **
 
     /**
-     * Create a flower move with given flower and another valid flower, use the given
-     * flower as first move parameter, if the {@code first} flag is set.
+     * Create a flower move with given flower and another valid flower, use the given flower as first move parameter, if
+     * the {@code first} flag is set.
      *
-     * @param first  - enable this flag, if the given {@code flower} should be
-     *               used as first move parameter flower
-     * @param flower - the flower to test in the move
+     * @param first
+     *         - enable this flag, if the given {@code flower} should be used as first move parameter flower
+     * @param flower
+     *         - the flower to test in the move
      */
     private Move createMove(boolean first, Flower flower) {
         Move m;

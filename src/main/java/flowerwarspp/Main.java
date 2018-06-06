@@ -95,7 +95,8 @@ public class Main {
 
     // ------------------------------------------------------------
 
-    private static Player createPlayer(PlayerColor color, PlayerType type, Requestable requestable) throws IOException, NotBoundException {
+    private static Player createPlayer(PlayerColor color, PlayerType type, Requestable requestable)
+            throws IOException, NotBoundException {
         switch (type) {
             case HUMAN:
                 return new InteractivePlayer(requestable);
@@ -105,7 +106,8 @@ public class Main {
                 return new SimpleAI();
             case REMOTE:
                 // List all Players
-                Set<Map.Entry<String, Player>> players = rmi.list().entrySet();
+                Set<Map.Entry<String, Player>> players = rmi.list()
+                                                            .entrySet();
                 if (!players.isEmpty()) {
                     Player p = null;
                     for (Map.Entry<String, Player> e : players) {
@@ -113,10 +115,13 @@ public class Main {
                         System.out.println("Found remote player: " + e.getKey());
                     }
                     if (players.size() > 1) {
-                        System.out.print("Which player do you want to use as " + (color == PlayerColor.Red ? "red" : "blue") + " player? Type full name: ");
+                        System.out.print(
+                                "Which player do you want to use as " + (color == PlayerColor.Red ? "red" : "blue") +
+                                " player? Type full name: ");
                         BufferedReader rd = new BufferedReader(new InputStreamReader(System.in));
                         return rmi.find(rd.readLine());
-                    } else return p;
+                    } else
+                        return p;
                 } else
                     throw new NotBoundException("No remote players available");
             default:

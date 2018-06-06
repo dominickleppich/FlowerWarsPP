@@ -18,6 +18,7 @@ public class BoardDitchMoveInvalidSameStartAndEndTest {
 
     // ------------------------------------------------------------
     private Status expectedStatus;
+
     public BoardDitchMoveInvalidSameStartAndEndTest(Ditch ditch, Status expected) {
         this.ditch = ditch;
         this.expectedStatus = expected;

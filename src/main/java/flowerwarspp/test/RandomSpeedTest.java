@@ -4,7 +4,6 @@ import ch.qos.logback.classic.*;
 import flowerwarspp.board.*;
 import flowerwarspp.preset.*;
 import org.slf4j.*;
-import org.slf4j.Logger;
 
 import java.util.*;
 
@@ -42,7 +41,7 @@ public class RandomSpeedTest {
 
         long end = System.currentTimeMillis();
 
-        System.out.println("Game endet with status [" + viewer.getStatus() + "] in " + String.format("%.3f",
-                (double) (end - start) / 1000));
+        System.out.println("Game endet with status [" + viewer.getStatus() + "] in " +
+                           String.format("%.3f", (double) (end - start) / 1000));
     }
 }

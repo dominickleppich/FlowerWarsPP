@@ -17,7 +17,6 @@ public class GUITest {
         List<Move> moves = new LinkedList<>();
 
 
-
         Thread.sleep(timeout);
         for (Move m : moves) {
             board.make(m);

@@ -5,10 +5,6 @@ import org.junit.runner.notification.*;
 public class BoardTester {
     private static int executedTestCounter = 0;
 
-    enum ResultInfo {
-        NONE, MINI, FULL;
-    }
-
     public static void main(String[] args) {
         ResultInfo info = ResultInfo.NONE;
 
@@ -55,8 +51,8 @@ public class BoardTester {
     }
 
     private static int printStatistics(Result result, ResultInfo info) {
-        System.out.println("\n\n" + result.getRunCount() + " tests executed in " + String.format("%5.3f s",
-                (double) result.getRunTime() / 1000));
+        System.out.println("\n\n" + result.getRunCount() + " tests executed in " +
+                           String.format("%5.3f s", (double) result.getRunTime() / 1000));
         System.out.println(String.format("Success: %4d (%5.1f", (result.getRunCount() - result.getFailureCount()),
                 (double) (result.getRunCount() - result.getFailureCount()) * 100.0 / result.getRunCount()) + "%)");
         System.out.println(String.format("Failed: %5d (%5.1f", result.getFailureCount(),
@@ -67,8 +63,9 @@ public class BoardTester {
 
             int counter = 1;
             for (Failure f : result.getFailures()) {
-                System.out.println(String.format("------------------------------------------------------------\nFailure #%03d:",
-                        counter++));
+                System.out.println(
+                        String.format("------------------------------------------------------------\nFailure #%03d:",
+                                counter++));
                 System.out.println(f);
                 if (info == ResultInfo.FULL) {
                     System.out.println();
@@ -79,5 +76,11 @@ public class BoardTester {
         }
 
         return result.getFailureCount();
+    }
+
+    enum ResultInfo {
+        NONE,
+        MINI,
+        FULL;
     }
 }

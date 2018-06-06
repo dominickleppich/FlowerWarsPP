@@ -8,5 +8,8 @@ import java.io.*;
  * @author Dominick Leppich
  */
 public enum MoveType implements Serializable {
-    Flower, Ditch, Surrender, End
+    Flower,
+    Ditch,
+    Surrender,
+    End
 }

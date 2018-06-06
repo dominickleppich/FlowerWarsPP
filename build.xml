@@ -1,123 +1,126 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project name="FlowerWarsPP-Addons" default="jar-all" basedir=".">
-	<!-- Settings -->
-	<property name="target.jre" value="1.8" />
-	<property name="source.jre" value="1.8" />
+    <!-- Settings -->
+    <property name="target.jre" value="1.8"/>
+    <property name="source.jre" value="1.8"/>
 
-    <property name="project.tester.name" value="FlowerWarsPP-Tester" />
-    <property name="project.display.name" value="FlowerWarsPP-Display" />
+    <property name="project.tester.name" value="FlowerWarsPP-Tester"/>
+    <property name="project.display.name" value="FlowerWarsPP-Display"/>
 
-    <property name="test.source.dir" value="src/test/java" />
-    <property name="project.source.dir" value="src/main/java" />
+    <property name="test.source.dir" value="src/test/java"/>
+    <property name="project.source.dir" value="src/main/java"/>
 
-    <property name="main.tester.class" value="BoardTester" />
-    <property name="source.tester.dir" value="src/board-test" />
-    <property name="build.tester.dir" location="target/board-test" />
+    <property name="main.tester.class" value="BoardTester"/>
+    <property name="source.tester.dir" value="src/board-test"/>
+    <property name="build.tester.dir" location="target/board-test"/>
 
-    <property name="source.display.dir" value="src/board-display" />
-    <property name="build.display.dir" location="target/board-display" />
+    <property name="source.display.dir" value="src/board-display"/>
+    <property name="build.display.dir" location="target/board-display"/>
 
-    <property name="javadoc.dir" location="documentation" />
-    <property name="jar.dir" value="target" />
-	<property name="lib.dir" location="lib" />
+    <property name="javadoc.dir" location="documentation"/>
+    <property name="jar.dir" value="target"/>
+    <property name="lib.dir" location="lib"/>
 
-    <property name="yguard.path" value="tools/yguard-2.6/lib/yguard.jar" />
-    <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="${yguard.path}" />
+    <property name="yguard.path" value="tools/yguard-2.6/lib/yguard.jar"/>
+    <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="${yguard.path}"/>
 
-	<path id="library-path">
-		<fileset dir="${lib.dir}" includes="**/*.jar" />
-	</path>
+    <path id="library-path">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
 
-	<!-- ************************ Init stuff ************************ -->
+    <!-- ************************ Init stuff ************************ -->
 
-	<!-- Clean -->
-	<target name="clean">
-		<delete dir="${build.tester.dir}" />
-		<delete dir="${build.display.dir}" />
-		<delete dir="${javadoc.dir}" />
-	</target>
+    <!-- Clean -->
+    <target name="clean">
+        <delete dir="${build.tester.dir}"/>
+        <delete dir="${build.display.dir}"/>
+        <delete dir="${javadoc.dir}"/>
+    </target>
 
     <!-- Update files -->
-    <target depends="update-tester, update-display" name="update" />
+    <target depends="update-tester, update-display" name="update"/>
 
-	<!-- Update tester files -->
+    <!-- Update tester files -->
     <target name="update-tester">
-        <delete dir="${source.tester.dir}" />
-        <mkdir dir="${source.tester.dir}" />
+        <delete dir="${source.tester.dir}"/>
+        <mkdir dir="${source.tester.dir}"/>
 
         <!-- Copy test and preset classes -->
-        <copy file="${test.source.dir}/BoardTester.java" todir="${source.tester.dir}" />
+        <copy file="${test.source.dir}/BoardTester.java" todir="${source.tester.dir}"/>
         <copy todir="${source.tester.dir}/board">
-            <fileset dir="${test.source.dir}/board" />
+            <fileset dir="${test.source.dir}/board"/>
         </copy>
         <copy todir="${source.tester.dir}/flowerwarspp/preset">
-            <fileset dir="${project.source.dir}/flowerwarspp/preset" />
+            <fileset dir="${project.source.dir}/flowerwarspp/preset"/>
         </copy>
     </target>
 
     <!-- Update display files -->
     <target name="update-display">
-        <delete dir="${source.display.dir}" />
-        <mkdir dir="${source.display.dir}" />
+        <delete dir="${source.display.dir}"/>
+        <mkdir dir="${source.display.dir}"/>
 
         <!-- Copy display and preset classes -->
         <copy todir="${source.display.dir}/flowerwarspp/boarddisplay">
-            <fileset dir="src/main/java/flowerwarspp/boarddisplay" />
+            <fileset dir="src/main/java/flowerwarspp/boarddisplay"/>
         </copy>
         <copy todir="${source.display.dir}/flowerwarspp/preset">
-            <fileset dir="${project.source.dir}/flowerwarspp/preset" />
+            <fileset dir="${project.source.dir}/flowerwarspp/preset"/>
         </copy>
     </target>
 
     <!-- ************************ Create JavaDoc documentation ************************ -->
     <target description="create javadoc documentation" name="javadoc">
-        <mkdir dir="${javadoc.dir}" />
+        <mkdir dir="${javadoc.dir}"/>
         <javadoc access="private" author="true" destdir="${javadoc.dir}" source="${source.jre}"
                  version="true">
             <fileset dir="${project.source.dir}" defaultexcludes="yes">
-                <include name="flowerwarspp/preset/*.java" />
+                <include name="flowerwarspp/preset/*.java"/>
             </fileset>
         </javadoc>
     </target>
 
-	<!-- ************************ Create jar archive ************************ -->
-	<target description="create both jar files" depends="jar-tester, jar-display-obfuscated" name="jar-all" />
+    <!-- ************************ Create jar archive ************************ -->
+    <target description="create both jar files" depends="jar-tester, jar-display-obfuscated" name="jar-all"/>
 
     <target description="create tester jar file" depends="build-tester" name="jar-tester">
         <jar compress="true" destfile="${jar.dir}/${project.tester.name}.jar" basedir="${build.tester.dir}">
-            <zipgroupfileset dir="${lib.dir}" includes="*.jar" />
+            <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
 
             <manifest>
-                <attribute name="Main-Class" value="${main.tester.class}" />
+                <attribute name="Main-Class" value="${main.tester.class}"/>
             </manifest>
         </jar>
     </target>
 
     <target description="create display jar file" depends="build-display" name="jar-display">
-        <jar compress="true" destfile="${jar.dir}/${project.display.name}.jar" basedir="${build.display.dir}" />
+        <jar compress="true" destfile="${jar.dir}/${project.display.name}.jar" basedir="${build.display.dir}"/>
     </target>
 
-	<!-- ************************ Compile ************************ -->
+    <!-- ************************ Compile ************************ -->
     <target description="build the tester project" name="build-tester">
-        <mkdir dir="${build.tester.dir}" />
-        <javac debug="true" destdir="${build.tester.dir}" srcdir="${source.tester.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
-            <include name="**/*.java" />
-            <classpath refid="library-path" />
+        <mkdir dir="${build.tester.dir}"/>
+        <javac debug="true" destdir="${build.tester.dir}" srcdir="${source.tester.dir}" includeantruntime="false"
+               source="${source.jre}" target="${target.jre}">
+            <include name="**/*.java"/>
+            <classpath refid="library-path"/>
         </javac>
     </target>
 
     <target description="build the display project" name="build-display">
-        <mkdir dir="${build.display.dir}" />
-        <javac debug="true" destdir="${build.display.dir}" srcdir="${source.display.dir}" includeantruntime="false" source="${source.jre}" target="${target.jre}">
-            <include name="**/*.java" />
-            <classpath refid="library-path" />
+        <mkdir dir="${build.display.dir}"/>
+        <javac debug="true" destdir="${build.display.dir}" srcdir="${source.display.dir}" includeantruntime="false"
+               source="${source.jre}" target="${target.jre}">
+            <include name="**/*.java"/>
+            <classpath refid="library-path"/>
         </javac>
     </target>
 
     <!-- ************************ Obfuscate ************************ -->
     <target description="obfuscate display class files" depends="jar-display" name="jar-display-obfuscated">
         <yguard>
-            <inoutpair in="${jar.dir}/${project.display.name}.jar" out="${jar.dir}/${project.display.name}-obfuscated.jar"/>
+            <inoutpair in="${jar.dir}/${project.display.name}.jar"
+                       out="${jar.dir}/${project.display.name}-obfuscated.jar"/>
 
             <obfuscate replaceclassnamestrings="false">
                 <property name="error-checking" value="pedantic"/>

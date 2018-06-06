@@ -12,7 +12,9 @@ public interface Requestable {
      * Fordere einen Spielzug an und liefere ihn zurueck.
      *
      * @return Spielzug als {@link Move}-Objekt
-     * @throws Exception falls das Anfordern eines Spielzuges fehlschlaegt
+     *
+     * @throws Exception
+     *         falls das Anfordern eines Spielzuges fehlschlaegt
      */
     Move request() throws Exception;
 }

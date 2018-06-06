@@ -5,8 +5,7 @@ import org.junit.runners.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        PresetTests.class,
-        BoardTests.class
-})
+                            PresetTests.class, BoardTests.class
+                    })
 public class AllTests {
 }

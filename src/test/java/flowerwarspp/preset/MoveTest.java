@@ -14,6 +14,29 @@ public class MoveTest {
 
     // ------------------------------------------------------------
 
+    public static Set<Move> createAllPossibleMoves() {
+        Set<Move> moves = new HashSet<>();
+
+        // All possible flower moves
+        Set<Flower> possibleFlowers = FlowerTest.createAllPossibleFlowers();
+        for (Flower f1 : possibleFlowers)
+            for (Flower f2 : possibleFlowers)
+                if (!f1.equals(f2))
+                    moves.add(new Move(f1, f2));
+
+        // All possible ditch moves
+        for (Ditch d : DitchTest.createAllPossibleDitches())
+            moves.add(new Move(d));
+
+        // Add special moves
+        moves.add(new Move(MoveType.Surrender));
+        moves.add(new Move(MoveType.End));
+
+        return moves;
+    }
+
+    // ------------------------------------------------------------
+
     @Before
     public void init() {
         flowerA = new Flower(new Position(2, 3), new Position(4, 5), new Position(6, 7));
@@ -43,8 +66,6 @@ public class MoveTest {
         };
     }
 
-    // ------------------------------------------------------------
-
     @Test
     public void creatingNewMoveWithValidFlowersWorks() {
         Move m = new Move(flowerA, flowerB);
@@ -72,13 +93,13 @@ public class MoveTest {
         new Move(MoveType.Flower);
     }
 
+    // ------------------------------------------------------------
+    // /* Getters */
+
     @Test(expected = IllegalArgumentException.class)
     public void createNewMoveWithDitchTypeThrowsException() {
         new Move(MoveType.Ditch);
     }
-
-    // ------------------------------------------------------------
-    // /* Getters */
 
     @Test
     public void getTypeForFlowerMoveReturnsCorrectType() {
@@ -134,34 +155,13 @@ public class MoveTest {
         assertEquals(ditch, m.getDitch());
     }
 
+    // ------------------------------------------------------------
+    // * Hash *
+
     @Test(expected = IllegalStateException.class)
     public void getBridgeForFlowerMoveThrowsException() {
         Move m = new Move(flowerA, flowerB);
         m.getDitch();
-    }
-
-    // ------------------------------------------------------------
-    // * Hash *
-
-    public static Set<Move> createAllPossibleMoves() {
-        Set<Move> moves = new HashSet<>();
-
-        // All possible flower moves
-        Set<Flower> possibleFlowers = FlowerTest.createAllPossibleFlowers();
-        for (Flower f1 : possibleFlowers)
-            for (Flower f2 : possibleFlowers)
-                if (!f1.equals(f2))
-                    moves.add(new Move(f1, f2));
-
-        // All possible ditch moves
-        for (Ditch d : DitchTest.createAllPossibleDitches())
-            moves.add(new Move(d));
-
-        // Add special moves
-        moves.add(new Move(MoveType.Surrender));
-        moves.add(new Move(MoveType.End));
-
-        return moves;
     }
 
     //    @Ignore("Too time consuming")

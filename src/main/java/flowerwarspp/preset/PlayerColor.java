@@ -8,5 +8,6 @@ import java.io.*;
  * @author Dominick Leppich
  */
 public enum PlayerColor implements Serializable {
-    Red, Blue
+    Red,
+    Blue
 }

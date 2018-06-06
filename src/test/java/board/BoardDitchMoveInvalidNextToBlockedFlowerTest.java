@@ -18,6 +18,7 @@ public class BoardDitchMoveInvalidNextToBlockedFlowerTest {
 
     // ------------------------------------------------------------
     private Status expectedStatus;
+
     public BoardDitchMoveInvalidNextToBlockedFlowerTest(Ditch ditch, Status expected) {
         this.ditch = ditch;
         this.expectedStatus = expected;

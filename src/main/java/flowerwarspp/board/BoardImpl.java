@@ -1,7 +1,6 @@
 package flowerwarspp.board;
 
 import flowerwarspp.preset.*;
-import javafx.scene.effect.*;
 import org.slf4j.*;
 
 import java.util.*;
@@ -25,90 +24,6 @@ public class BoardImpl implements Board {
     private int redPoints, bluePoints;
 
 
-    /**
-     * This class represents a flower bed. Flower beds can be added new flowers and merged together.
-     */
-    class FlowerBed {
-        private Set<Flower> flowers;
-        private Set<Position> positions;
-        private Set<Flower> boundingFlowers;
-
-        // ------------------------------------------------------------
-
-        /**
-         * Create a new flower bed. Flower beds contain always at least one flower.
-         *
-         * @param flower initial flower
-         */
-        FlowerBed(Flower flower) {
-            flowers = new HashSet<>();
-            positions = new HashSet<>();
-            boundingFlowers = new HashSet<>();
-
-            addFlower(flower, false);
-        }
-
-        FlowerBed(Set<FlowerBed> flowerBeds) {
-            flowers = new HashSet<>();
-            positions = new HashSet<>();
-            boundingFlowers = new HashSet<>();
-
-            for (FlowerBed fb : flowerBeds) {
-                flowers.addAll(fb.getFlowers());
-                positions.addAll(fb.positions);
-                boundingFlowers.addAll(fb.boundingFlowers);
-            }
-
-            boundingFlowers.removeAll(flowers);
-        }
-
-        // ------------------------------------------------------------
-
-        /**
-         * Get the number of containing flowers
-         *
-         * @return number of flowers
-         */
-        int size() {
-            return flowers.size();
-        }
-
-        Set<Position> getPositions() {
-            return new HashSet<>(positions);
-        }
-
-        Set<Flower> getBoundingFlowers() {
-            return new HashSet<>(boundingFlowers);
-        }
-
-        Set<Flower> getFlowers() {
-            return new HashSet<>(flowers);
-        }
-
-        // ------------------------------------------------------------
-
-        void addFlower(Flower flower) {
-            addFlower(flower, true);
-        }
-
-        private void addFlower(Flower flower, boolean check) {
-            if (check && !boundingFlowers.contains(flower))
-                throw new IllegalArgumentException("flower cannot be added to flowerbed");
-
-            flowers.add(flower);
-
-            positions.addAll(getFlowerPositionSet(flower));
-
-            boundingFlowers.remove(flower);
-
-            for (Flower f : getNeighborFlowers(flower))
-                if (!flowers.contains(f))
-                    boundingFlowers.add(f);
-        }
-    }
-
-    // ------------------------------------------------------------
-
     public BoardImpl(final int size) {
         this.size = size;
 
@@ -129,7 +44,124 @@ public class BoardImpl implements Board {
     }
 
     // ------------------------------------------------------------
+
+    public static Set<Flower> getAllPossibleFlowers(int boardSize) {
+        Set<Flower> flowers = new HashSet<>();
+
+        for (int c = 1; c <= boardSize; c++) {
+            for (int r = 1; r <= boardSize; r++) {
+                if (c + r <= boardSize + 1)
+                    flowers.add(new Flower(new Position(c, r), new Position(c + 1, r), new Position(c, r + 1)));
+                if (c + r <= boardSize)
+                    flowers.add(new Flower(new Position(c + 1, r + 1), new Position(c + 1, r), new Position(c, r + 1)));
+            }
+        }
+
+        return flowers;
+    }
+
+    // ------------------------------------------------------------
     // * Interface methods *
+
+    public static Set<Ditch> getAllPossibleDitches(int boardSize) {
+        Set<Ditch> ditches = new HashSet<>();
+
+        for (int c = 1; c <= boardSize + 1; c++) {
+            for (int r = 1; r <= boardSize; r++) {
+                // For each point create 3 ditches, if available
+                if (c + r <= boardSize + 1) {
+                    Ditch d1 = new Ditch(new Position(c, r), new Position(c, r + 1));
+                    Ditch d2 = new Ditch(new Position(c, r), new Position(c + 1, r));
+                    ditches.add(d1);
+                    ditches.add(d2);
+                }
+                if (c > 1 && c + r <= boardSize + 2) {
+                    Ditch d = new Ditch(new Position(c, r), new Position(c - 1, r + 1));
+                    ditches.add(d);
+                }
+            }
+        }
+
+        return ditches;
+    }
+
+    public static Set<Flower> getNeighborFlowers(Flower flower) {
+        Set<Flower> flowers = new HashSet<>();
+
+        Ditch[] flowerNeighboringDitches = new Ditch[3];
+        Position[] flowerPositions = new Position[]{flower.getFirst(), flower.getSecond(), flower.getThird()};
+
+        for (int i = 0; i < 3; i++)
+            flowerNeighboringDitches[i] = new Ditch(flowerPositions[i], flowerPositions[(i + 1) % 3]);
+
+        for (Ditch d : flowerNeighboringDitches)
+            flowers.addAll(getDitchBlockedFlowers(d));
+
+        flowers.remove(flower);
+
+        return flowers;
+    }
+
+    public static Set<Position> getNeighborPositions(Position position, int boardSize) {
+        int c = position.getColumn();
+        int r = position.getRow();
+        Set<Position> neighbors = new HashSet<>();
+        // Try to add all 6 neighbors, beginning with the neighbor to the right
+        // continuing counter clockwise
+        if (c + r <= boardSize + 1) {
+            neighbors.add(new Position(c + 1, r));
+            neighbors.add(new Position(c, r + 1));
+        }
+        if (c > 1) {
+            neighbors.add(new Position(c - 1, r));
+            neighbors.add(new Position(c - 1, r + 1));
+        }
+        if (r > 1) {
+            neighbors.add(new Position(c, r - 1));
+            neighbors.add(new Position(c + 1, r - 1));
+        }
+
+        return neighbors;
+    }
+
+    // ------------------------------------------------------------
+    // * Move making helper functions *
+
+    public static Set<Flower> getDitchBlockedFlowers(Ditch ditch) {
+        Position start, end;
+        start = ditch.getFirst();
+        end = ditch.getSecond();
+        int minCol, maxCol, minRow, maxRow;
+        minCol = Math.min(start.getColumn(), end.getColumn());
+        maxCol = Math.max(start.getColumn(), end.getColumn());
+        minRow = Math.min(start.getRow(), end.getRow());
+        maxRow = Math.max(start.getRow(), end.getRow());
+
+        Position posA = null, posB = null;
+
+        if (start.getColumn() == end.getColumn()) {
+            int col = minCol;
+            if (col > 1)
+                posA = new Position(col - 1, maxRow);
+            posB = new Position(col + 1, minRow);
+        } else if (start.getRow() == end.getRow()) {
+            int row = minRow;
+            posA = new Position(minCol, row + 1);
+            if (row > 1)
+                posB = new Position(maxCol, row - 1);
+        } else {
+            posA = new Position(minCol, minRow);
+            posB = new Position(maxCol, maxRow);
+        }
+
+        Set<Flower> resultFlowers = new HashSet<>();
+        if (posA != null)
+            resultFlowers.add(new Flower(start, end, posA));
+        if (posB != null)
+            resultFlowers.add(new Flower(start, end, posB));
+
+        return resultFlowers;
+    }
 
     @Override
     public void make(Move move) throws IllegalStateException {
@@ -221,6 +253,9 @@ public class BoardImpl implements Board {
         }*/
     }
 
+    // ------------------------------------------------------------
+    // * Move validation helpers *
+
     /**
      * Return a {@link Viewer} for this board.
      *
@@ -266,9 +301,6 @@ public class BoardImpl implements Board {
         };
     }
 
-    // ------------------------------------------------------------
-    // * Move making helper functions *
-
     /**
      * Change to next player.
      */
@@ -279,7 +311,8 @@ public class BoardImpl implements Board {
     /**
      * Set the move on the board. The move will not be checked for validity anymore, this has to be done beforehand.
      *
-     * @param move the move to set on the board
+     * @param move
+     *         the move to set on the board
      */
     private void setMoveOnBoard(Move move, PlayerColor color) {
         switch (move.getType()) {
@@ -337,14 +370,13 @@ public class BoardImpl implements Board {
         }
     }
 
-    // ------------------------------------------------------------
-    // * Move validation helpers *
-
     /**
      * Checks move format for validity. For moves with {@link MoveType#Flower} and {@link MoveType#Ditch} it is checked,
      * if the given positions describe a valid flower or ditch.
      *
-     * @param move the move to check
+     * @param move
+     *         the move to check
+     *
      * @return true, if the format of the move is valid
      */
     private boolean isValidMoveFormat(Move move) {
@@ -381,7 +413,9 @@ public class BoardImpl implements Board {
     /**
      * Checks move for validity. All game rules are checked in this method.
      *
-     * @param move the move to check
+     * @param move
+     *         the move to check
+     *
      * @return true, if the move is valid
      */
     private boolean isValidMove(Move move, PlayerColor color) {
@@ -429,7 +463,9 @@ public class BoardImpl implements Board {
     /**
      * Checks if the three positions of the flower describe a valid flower.
      *
-     * @param flower the flower to check
+     * @param flower
+     *         the flower to check
+     *
      * @return true, if the flower has a valid format
      */
     private boolean isValidFlowerFormat(Flower flower) {
@@ -441,17 +477,22 @@ public class BoardImpl implements Board {
         Set<Position> bNeighbors = getNeighborPositions(b);
         Set<Position> cNeighbors = getNeighborPositions(c);
 
-        if (!aNeighbors.contains(b) || !aNeighbors.contains(c) || !bNeighbors.contains(a) || !bNeighbors.contains(
-                c) || !cNeighbors.contains(a) || !cNeighbors.contains(b))
+        if (!aNeighbors.contains(b) || !aNeighbors.contains(c) || !bNeighbors.contains(a) || !bNeighbors.contains(c) ||
+            !cNeighbors.contains(a) || !cNeighbors.contains(b))
             return false;
 
         return true;
     }
 
+    // ------------------------------------------------------------
+    // * Basic board logic functionality *
+
     /**
      * Checks if the two positions of the ditch describe a valid ditch.
      *
-     * @param ditch the ditch to check
+     * @param ditch
+     *         the ditch to check
+     *
      * @return true, if the ditch has a valid format
      */
     private boolean isValidDitchFormat(Ditch ditch) {
@@ -461,12 +502,16 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * Checks if a flower is valid (can be set on the board). Garden rules are not fully checked in this method. To fully validate a flower move you need to call {@link #isValidFlowerCombination(Flower, Flower, PlayerColor)}.
+     * Checks if a flower is valid (can be set on the board). Garden rules are not fully checked in this method. To
+     * fully validate a flower move you need to call {@link #isValidFlowerCombination(Flower, Flower, PlayerColor)}.
      *
-     * @param flower the flower to check
+     * @param flower
+     *         the flower to check
+     *
      * @return true, if the flower is valid
      */
-    private boolean isValidFlower(Flower flower, Set<FlowerBed> flowerBeds, Set<Flower> invalidFlowers, Set<Position> gardenBlockedPositions) {
+    private boolean isValidFlower(Flower flower, Set<FlowerBed> flowerBeds, Set<Flower> invalidFlowers,
+                                  Set<Position> gardenBlockedPositions) {
         Set<Position> flowerPositions = getFlowerPositionSet(flower);
 
         // Flower needs to be on the board
@@ -518,8 +563,11 @@ public class BoardImpl implements Board {
     /**
      * Checks if a flower combination is valid (can be set together on the board)
      *
-     * @param a first flower to check
-     * @param b second flower to check
+     * @param a
+     *         first flower to check
+     * @param b
+     *         second flower to check
+     *
      * @return true, if the two flowers are a valid combination
      */
     private boolean isValidFlowerCombination(Flower a, Flower b, PlayerColor color) {
@@ -597,7 +645,9 @@ public class BoardImpl implements Board {
     /**
      * Checks if a ditch is valid (can be set on the board)
      *
-     * @param ditch the ditch to check
+     * @param ditch
+     *         the ditch to check
+     *
      * @return true, if the ditch is valid
      */
     private boolean isValidDitch(Ditch ditch, PlayerColor color) {
@@ -625,14 +675,13 @@ public class BoardImpl implements Board {
         return true;
     }
 
-    // ------------------------------------------------------------
-    // * Basic board logic functionality *
-
     /**
-     * Checks if a given {@link Position} is located on the board. A position
-     * is on the board if and only if {@code column + row <= 2 + size}
+     * Checks if a given {@link Position} is located on the board. A position is on the board if and only if {@code
+     * column + row <= 2 + size}
      *
-     * @param position - {@link Position} to test
+     * @param position
+     *         - {@link Position} to test
+     *
      * @return true, if the position is on the board
      */
     private boolean isPositionOnBoard(Position position) {
@@ -647,88 +696,12 @@ public class BoardImpl implements Board {
         }
     }
 
-    public static Set<Flower> getAllPossibleFlowers(int boardSize) {
-        Set<Flower> flowers = new HashSet<>();
-
-        for (int c = 1; c <= boardSize; c++) {
-            for (int r = 1; r <= boardSize; r++) {
-                if (c + r <= boardSize + 1)
-                    flowers.add(new Flower(new Position(c, r), new Position(c + 1, r), new Position(c, r + 1)));
-                if (c + r <= boardSize)
-                    flowers.add(new Flower(new Position(c + 1, r + 1), new Position(c + 1, r), new Position(c, r + 1)));
-            }
-        }
-
-        return flowers;
-    }
-
     public Set<Flower> getAllPossibleFlowers() {
         return getAllPossibleFlowers(size);
     }
 
-    public static Set<Ditch> getAllPossibleDitches(int boardSize) {
-        Set<Ditch> ditches = new HashSet<>();
-
-        for (int c = 1; c <= boardSize + 1; c++) {
-            for (int r = 1; r <= boardSize; r++) {
-                // For each point create 3 ditches, if available
-                if (c + r <= boardSize + 1) {
-                    Ditch d1 = new Ditch(new Position(c, r), new Position(c, r + 1));
-                    Ditch d2 = new Ditch(new Position(c, r), new Position(c + 1, r));
-                    ditches.add(d1);
-                    ditches.add(d2);
-                }
-                if (c > 1 && c + r <= boardSize + 2) {
-                    Ditch d = new Ditch(new Position(c, r), new Position(c - 1, r + 1));
-                    ditches.add(d);
-                }
-            }
-        }
-
-        return ditches;
-    }
-
     public Set<Ditch> getAllPossibleDitches() {
         return getAllPossibleDitches(size);
-    }
-
-    public static Set<Flower> getNeighborFlowers(Flower flower) {
-        Set<Flower> flowers = new HashSet<>();
-
-        Ditch[] flowerNeighboringDitches = new Ditch[3];
-        Position[] flowerPositions = new Position[]{flower.getFirst(), flower.getSecond(), flower.getThird()};
-
-        for (int i = 0; i < 3; i++)
-            flowerNeighboringDitches[i] = new Ditch(flowerPositions[i], flowerPositions[(i + 1) % 3]);
-
-        for (Ditch d : flowerNeighboringDitches)
-            flowers.addAll(getDitchBlockedFlowers(d));
-
-        flowers.remove(flower);
-
-        return flowers;
-    }
-
-    public static Set<Position> getNeighborPositions(Position position, int boardSize) {
-        int c = position.getColumn();
-        int r = position.getRow();
-        Set<Position> neighbors = new HashSet<>();
-        // Try to add all 6 neighbors, beginning with the neighbor to the right
-        // continuing counter clockwise
-        if (c + r <= boardSize + 1) {
-            neighbors.add(new Position(c + 1, r));
-            neighbors.add(new Position(c, r + 1));
-        }
-        if (c > 1) {
-            neighbors.add(new Position(c - 1, r));
-            neighbors.add(new Position(c - 1, r + 1));
-        }
-        if (r > 1) {
-            neighbors.add(new Position(c, r - 1));
-            neighbors.add(new Position(c + 1, r - 1));
-        }
-
-        return neighbors;
     }
 
     private Set<Position> getNeighborPositions(Position position) {
@@ -780,8 +753,9 @@ public class BoardImpl implements Board {
                                .getColumn() - f2.getFirst()
                                                 .getColumn()) <= maxDistance && Math.abs(f1.getFirst()
                                                                                            .getRow() - f2.getFirst()
-                                                                                                         .getRow()) <= maxDistance && !isValidFlowerCombination(
-                        m.getFirstFlower(), m.getSecondFlower(), color))
+                                                                                                         .getRow()) <=
+                                                                                maxDistance &&
+                    !isValidFlowerCombination(m.getFirstFlower(), m.getSecondFlower(), color))
                     invalidFlowerMoves.add(m);
             }
 
@@ -879,42 +853,6 @@ public class BoardImpl implements Board {
         return resultSet;
     }
 
-    public static Set<Flower> getDitchBlockedFlowers(Ditch ditch) {
-        Position start, end;
-        start = ditch.getFirst();
-        end = ditch.getSecond();
-        int minCol, maxCol, minRow, maxRow;
-        minCol = Math.min(start.getColumn(), end.getColumn());
-        maxCol = Math.max(start.getColumn(), end.getColumn());
-        minRow = Math.min(start.getRow(), end.getRow());
-        maxRow = Math.max(start.getRow(), end.getRow());
-
-        Position posA = null, posB = null;
-
-        if (start.getColumn() == end.getColumn()) {
-            int col = minCol;
-            if (col > 1)
-                posA = new Position(col - 1, maxRow);
-            posB = new Position(col + 1, minRow);
-        } else if (start.getRow() == end.getRow()) {
-            int row = minRow;
-            posA = new Position(minCol, row + 1);
-            if (row > 1)
-                posB = new Position(maxCol, row - 1);
-        } else {
-            posA = new Position(minCol, minRow);
-            posB = new Position(maxCol, maxRow);
-        }
-
-        Set<Flower> resultFlowers = new HashSet<>();
-        if (posA != null)
-            resultFlowers.add(new Flower(start, end, posA));
-        if (posB != null)
-            resultFlowers.add(new Flower(start, end, posB));
-
-        return resultFlowers;
-    }
-
     private Set<Flower> getAllDitchBlockedFlowers() {
         Set<Flower> ditchBlocked = new HashSet<>();
         for (Ditch b : getDitchSet(null))
@@ -970,7 +908,8 @@ public class BoardImpl implements Board {
             return bluePoints;
     }
 
-    private void findConnectedFlowerBeds(FlowerBed flowerBed, PlayerColor color, Set<FlowerBed> resultSet, Set<FlowerBed> visited) {
+    private void findConnectedFlowerBeds(FlowerBed flowerBed, PlayerColor color, Set<FlowerBed> resultSet,
+                                         Set<FlowerBed> visited) {
         // Visit current flower bed
         visited.add(flowerBed);
         resultSet.add(flowerBed);
@@ -982,8 +921,8 @@ public class BoardImpl implements Board {
                                                          .filter(ditch -> {
                                                              Position p1 = ditch.getFirst();
                                                              Position p2 = ditch.getSecond();
-                                                             return flowerBedPositions.contains(
-                                                                     p1) || flowerBedPositions.contains(p2);
+                                                             return flowerBedPositions.contains(p1) ||
+                                                                    flowerBedPositions.contains(p2);
                                                          })
                                                          .collect(toSet());
         Set<Position> connectionDitchPositions = new HashSet<>();
@@ -1013,8 +952,6 @@ public class BoardImpl implements Board {
             return 1;
         return n + calculateConnectionScore(n - 1);
     }
-
-    // ------------------------------------------------------------
 
     @Override
     public String toString() {
@@ -1100,5 +1037,90 @@ public class BoardImpl implements Board {
         }
         //        st.stream().forEach(s -> sb.append(s).append("\n"));
         return sb.toString();
+    }
+
+    // ------------------------------------------------------------
+
+    /**
+     * This class represents a flower bed. Flower beds can be added new flowers and merged together.
+     */
+    class FlowerBed {
+        private Set<Flower> flowers;
+        private Set<Position> positions;
+        private Set<Flower> boundingFlowers;
+
+        // ------------------------------------------------------------
+
+        /**
+         * Create a new flower bed. Flower beds contain always at least one flower.
+         *
+         * @param flower
+         *         initial flower
+         */
+        FlowerBed(Flower flower) {
+            flowers = new HashSet<>();
+            positions = new HashSet<>();
+            boundingFlowers = new HashSet<>();
+
+            addFlower(flower, false);
+        }
+
+        FlowerBed(Set<FlowerBed> flowerBeds) {
+            flowers = new HashSet<>();
+            positions = new HashSet<>();
+            boundingFlowers = new HashSet<>();
+
+            for (FlowerBed fb : flowerBeds) {
+                flowers.addAll(fb.getFlowers());
+                positions.addAll(fb.positions);
+                boundingFlowers.addAll(fb.boundingFlowers);
+            }
+
+            boundingFlowers.removeAll(flowers);
+        }
+
+        // ------------------------------------------------------------
+
+        /**
+         * Get the number of containing flowers
+         *
+         * @return number of flowers
+         */
+        int size() {
+            return flowers.size();
+        }
+
+        Set<Position> getPositions() {
+            return new HashSet<>(positions);
+        }
+
+        Set<Flower> getBoundingFlowers() {
+            return new HashSet<>(boundingFlowers);
+        }
+
+        Set<Flower> getFlowers() {
+            return new HashSet<>(flowers);
+        }
+
+        // ------------------------------------------------------------
+
+        void addFlower(Flower flower) {
+            addFlower(flower, true);
+        }
+
+        private void addFlower(Flower flower, boolean check) {
+            if (check && !boundingFlowers.contains(flower))
+                throw new IllegalArgumentException("flower cannot be added to flowerbed");
+
+            flowers.add(flower);
+
+            positions.addAll(getFlowerPositionSet(flower));
+
+            boundingFlowers.remove(flower);
+
+            for (Flower f : getNeighborFlowers(flower))
+                if (!flowers.contains(f))
+                    boundingFlowers.add(f);
+        }
     }
 }

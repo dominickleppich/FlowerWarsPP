@@ -112,8 +112,8 @@ class BoardDisplayPanel extends JPanel {
             return;
 
         int boardSize = viewer.getSize();
-        double fieldWidth = Math.min(WIDTH / boardSize,
-                (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 - BORDER_SIZE);
+        double fieldWidth =
+                Math.min(WIDTH / boardSize, (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 - BORDER_SIZE);
         UNIT = (float) fieldWidth;
         double fieldHeight = Math.sin(Math.toRadians(60)) * fieldWidth;
 
@@ -397,7 +397,8 @@ class BoardDisplayPanel extends JPanel {
             drawStatus(g, backupFont.deriveFont(Font.BOLD, uiScale * STATUS_TEXT_SIZE));
     }
 
-    private void showTextBox(Graphics2D g, float x, float y, float minWidth, float scale, Color textColor, Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
+    private void showTextBox(Graphics2D g, float x, float y, float minWidth, float scale, Color textColor,
+                             Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
         g.setFont(font);
 
         FontMetrics fm = g.getFontMetrics();

@@ -42,8 +42,8 @@ public class CodeGenerationUtil {
     }
 
     public static String newFlowerMoveString(Move move) {
-        return "new Move(" + newFlowerString(move.getFirstFlower()) + ", " + newFlowerString(
-                move.getSecondFlower()) + ")";
+        return "new Move(" + newFlowerString(move.getFirstFlower()) + ", " + newFlowerString(move.getSecondFlower()) +
+               ")";
     }
 
     public static String newDitchMoveString(Move move) {
@@ -51,8 +51,8 @@ public class CodeGenerationUtil {
     }
 
     public static String newFlowerString(Flower flower) {
-        return "new Flower(" + newPositionString(flower.getFirst()) + ", " + newPositionString(
-                flower.getSecond()) + ", " + newPositionString(flower.getThird()) + ")";
+        return "new Flower(" + newPositionString(flower.getFirst()) + ", " + newPositionString(flower.getSecond()) +
+               ", " + newPositionString(flower.getThird()) + ")";
     }
 
     public static String newDitchString(Ditch ditch) {

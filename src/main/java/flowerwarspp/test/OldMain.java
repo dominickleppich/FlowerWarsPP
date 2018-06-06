@@ -5,10 +5,8 @@ import flowerwarspp.preset.*;
 import flowerwarspp.ui.graphical.*;
 import org.slf4j.*;
 
-import java.nio.file.*;
+import java.io.*;
 import java.util.*;
-
-import static flowerwarspp.test.CodeGenerationUtil.*;
 
 public class OldMain {
     private static final Logger logger = LoggerFactory.getLogger(OldMain.class);
@@ -47,6 +45,18 @@ public class OldMain {
             //            moves.add(m);
         }
 
+        // Read moves from commandline
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                Move m = Move.parseMove(line);
+                board.make(m);
+                window.update(m);
+            }
+        } catch (IOException e) {}
+
         while (viewer.getStatus() == Status.Ok) {
 
             List<Move> possibleMoves = new LinkedList<>(viewer.getPossibleMoves());
@@ -55,16 +65,16 @@ public class OldMain {
             logger.debug("Possible moves [" + possibleMoves.size() + "]:");
             System.out.println(CodeGenerationUtil.createParameterArray(possibleMoves, false));*/
 
-            //            Move move = window.request();
-            Move move = possibleMoves.get(rnd.nextInt(possibleMoves.size()));
+            Move move = window.request();
+            //            Move move = possibleMoves.get(rnd.nextInt(possibleMoves.size()));
 
             board.make(move);
             window.update(move);
             //            System.out.println(board);
 
             //            if (viewer.getStatus() != Status.Illegal)
-            if (viewer.getStatus() != Status.RedWin && viewer.getStatus() != Status.BlueWin)
-                moves.add(move);
+            //            if (viewer.getStatus() != Status.RedWin && viewer.getStatus() != Status.BlueWin)
+            moves.add(move);
             //                        Thread.sleep(1000);
         }
 
@@ -72,12 +82,15 @@ public class OldMain {
 
         // Print code to replay game
 
-        //        System.out.println(createReplayList(moves));
+        //                System.out.println(createReplayList(moves));
 
         // Append code to a file
 
         //                new File("moves.txt").createNewFile();
-        Files.write(Paths.get("moves.txt"), createParameterArray(moves, false).getBytes(), StandardOpenOption.APPEND);
+        //        Files.write(Paths.get("moves.txt"), createParameterArray(moves, false).getBytes(), StandardOpenOption.APPEND);
+
+        for (Move m : moves)
+            System.out.println(m);
 
         //        window.close();
     }

@@ -4,12 +4,31 @@ import org.junit.*;
 
 import java.util.*;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class DitchTest {
     private Position first, second;
     private Ditch[] ditchCompareArray;
+
+    // ------------------------------------------------------------
+
+    public static Set<Ditch> createAllPossibleDitches() {
+        Set<Ditch> ditches = new HashSet<>();
+
+        for (int c = 1; c <= Position.MAX_VALUE; c++) {
+            for (int r = 1; r < Position.MAX_VALUE; r++) {
+                if (c + r <= Position.MAX_VALUE) {
+                    ditches.add(new Ditch(new Position(c, r), new Position(c + 1, r)));
+                    ditches.add(new Ditch(new Position(c, r), new Position(c, r + 1)));
+                }
+                if (c > 1)
+                    ditches.add(new Ditch(new Position(c, r), new Position(c - 1, r + 1)));
+            }
+        }
+
+        return ditches;
+    }
 
     // ------------------------------------------------------------
 
@@ -19,16 +38,11 @@ public class DitchTest {
         second = new Position(6, 6);
 
         ditchCompareArray = new Ditch[]{
-                new Ditch(new Position(3,3), new Position(3,2)),
-                new Ditch(new Position(4,2), new Position(3,3)),
-                new Ditch(new Position(2,3), new Position(3,3)),
-                new Ditch(new Position(3,3), new Position(2,4)),
-                new Ditch(new Position(3,3), new Position(3,4)),
-                new Ditch(new Position(3,3), new Position(4,3))
+                new Ditch(new Position(3, 3), new Position(3, 2)), new Ditch(new Position(4, 2), new Position(3, 3)),
+                new Ditch(new Position(2, 3), new Position(3, 3)), new Ditch(new Position(3, 3), new Position(2, 4)),
+                new Ditch(new Position(3, 3), new Position(3, 4)), new Ditch(new Position(3, 3), new Position(4, 3))
         };
     }
-
-    // ------------------------------------------------------------
 
     @Test
     public void creatingNewDitchWithValidValuesWorks() {
@@ -41,13 +55,13 @@ public class DitchTest {
         new Ditch(null, second);
     }
 
+    // ------------------------------------------------------------
+    // * Getters *
+
     @Test(expected = IllegalArgumentException.class)
     public void creatingNewDitchWithNullSecondThrowsException() {
         new Ditch(first, null);
     }
-
-    // ------------------------------------------------------------
-    // * Getters *
 
     @Test
     public void getFirstReturnsCorrectValue() {
@@ -67,32 +81,13 @@ public class DitchTest {
         assertEquals(first, d.getFirst());
     }
 
+    // ------------------------------------------------------------
+    // * Hash *
+
     @Test
     public void getSecondAfterAutomaticReorderingReturnsCorrectValue() {
         Ditch d = new Ditch(second, first);
         assertEquals(second, d.getSecond());
-    }
-
-    // ------------------------------------------------------------
-    // * Hash *
-
-    public static Set<Ditch> createAllPossibleDitches() {
-        Set<Ditch> ditches = new HashSet<>();
-
-        for (int c = 1; c <= Position.MAX_VALUE; c++) {
-            for (int r = 1; r < Position.MAX_VALUE; r++) {
-                if (c + r <= Position.MAX_VALUE) {
-                    ditches.add(new Ditch(new Position(c,r), new Position(c+1, r)));
-                    ditches.add(new Ditch(new Position(c, r), new Position(c,
-                            r + 1)));
-                }
-                if (c > 1)
-                    ditches.add(new Ditch(new Position(c, r), new Position(c
-                            - 1, r + 1)));
-            }
-        }
-
-        return ditches;
     }
 
     @Test
@@ -214,32 +209,32 @@ public class DitchTest {
     // ------------------------------------------------------------
     // * Parse *
 
-    @Test (expected = DitchFormatException.class)
+    @Test(expected = DitchFormatException.class)
     public void parseDitchForNullStringThrowsException() {
         Ditch.parseDitch(null);
     }
 
-    @Test (expected = DitchFormatException.class)
+    @Test(expected = DitchFormatException.class)
     public void parseDitchForEmptyStringThrowsException() {
         Ditch.parseDitch("");
     }
 
-    @Test (expected = DitchFormatException.class)
+    @Test(expected = DitchFormatException.class)
     public void parseDitchForWrongFormatStringThrowsException() {
         Ditch.parseDitch("(1,2),(3,4)");
     }
 
-    @Test (expected = DitchFormatException.class)
+    @Test(expected = DitchFormatException.class)
     public void parseDitchForWrongNumberOfArgumentsThrowsException() {
         Ditch.parseDitch("{(1,2),(3,4),(5,6)}");
     }
 
-    @Test (expected = DitchFormatException.class)
+    @Test(expected = DitchFormatException.class)
     public void parseDitchForWrongColumnNumberInOnePositionFormatThrowsException() {
         Ditch.parseDitch("{(a,2),(3,4)}");
     }
 
-    @Test (expected = DitchFormatException.class)
+    @Test(expected = DitchFormatException.class)
     public void parseDitchForWrongRowNumberInOnePositionFormatThrowsException() {
         Ditch.parseDitch("{(1,b),(3,4)}");
     }
@@ -248,7 +243,7 @@ public class DitchTest {
     public void parseDitchCreatesCorrectFlower() {
         Ditch d = Ditch.parseDitch("{(1,2),(3,4)}");
 
-        assertEquals(new Position(1,2), d.getFirst());
-        assertEquals(new Position(3,4), d.getSecond());
+        assertEquals(new Position(1, 2), d.getFirst());
+        assertEquals(new Position(3, 4), d.getSecond());
     }
 }

@@ -19,6 +19,7 @@ public class BoardFlowerMoveFormatTest {
 
     // ------------------------------------------------------------
     private Status expectedStatus;
+
     public BoardFlowerMoveFormatTest(Flower flower, Status expected) {
         this.flower = flower;
         this.expectedStatus = expected;

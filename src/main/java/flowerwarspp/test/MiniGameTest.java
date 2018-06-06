@@ -22,7 +22,7 @@ public class MiniGameTest {
 
             if (viewer.getStatus() != Status.Illegal)
                 moves.add(move);
-//            Thread.sleep(3000);
+            //            Thread.sleep(3000);
         }
 
         // Print code to replay game
@@ -53,8 +53,8 @@ public class MiniGameTest {
     }
 
     private static String newFlowerMoveString(Move move) {
-        return "new Move(" + newFlowerString(move.getFirstFlower()) + ", " +
-                newFlowerString(move.getSecondFlower()) + ")";
+        return "new Move(" + newFlowerString(move.getFirstFlower()) + ", " + newFlowerString(move.getSecondFlower()) +
+               ")";
     }
 
     private static String newDitchMoveString(Move move) {
@@ -62,18 +62,15 @@ public class MiniGameTest {
     }
 
     private static String newFlowerString(Flower flower) {
-        return "new Flower(" + newPositionString(flower.getFirst()) + ", " +
-                newPositionString(flower.getSecond()) + ", " +
-                newPositionString(flower.getThird()) + ")";
+        return "new Flower(" + newPositionString(flower.getFirst()) + ", " + newPositionString(flower.getSecond()) +
+               ", " + newPositionString(flower.getThird()) + ")";
     }
 
     private static String newDitchString(Ditch ditch) {
-        return "new Ditch(" + newPositionString(ditch.getFirst()) + ", " +
-                newPositionString(ditch.getSecond()) + ")";
+        return "new Ditch(" + newPositionString(ditch.getFirst()) + ", " + newPositionString(ditch.getSecond()) + ")";
     }
 
     private static String newPositionString(Position position) {
-        return "new Position(" + position.getColumn() + ", " + position
-                .getRow() + ")";
+        return "new Position(" + position.getColumn() + ", " + position.getRow() + ")";
     }
 }

@@ -1,7 +1,6 @@
 package flowerwarspp.player.ai.simple;
 
 import flowerwarspp.board.*;
-import flowerwarspp.player.*;
 import flowerwarspp.player.ai.rating.*;
 import flowerwarspp.preset.*;
 import org.slf4j.*;
@@ -30,10 +29,9 @@ public class SimpleStrategy implements Rating {
             Flower f2 = move.getSecondFlower();
 
 
-
             // Give a bonus for flowers, connecting existing flowers
             Collection<Flower> flowersOnBoard = viewer.getFlowers(color);
-//            logger.debug("Found " + flowersOnBoard.size() +" flowers for player " + color);
+            //            logger.debug("Found " + flowersOnBoard.size() +" flowers for player " + color);
 
             Set<Flower> f1Neighbors = BoardImpl.getNeighborFlowers(f1);
             Set<Flower> f2Neighbors = BoardImpl.getNeighborFlowers(f2);
@@ -44,7 +42,8 @@ public class SimpleStrategy implements Rating {
             score += (f1Neighbors.size() * 5 + 1) * (f2Neighbors.size() * 5 + 1);
 
             // Double score for connected flowers
-            if (BoardImpl.getNeighborFlowers(f1).contains(f2))
+            if (BoardImpl.getNeighborFlowers(f1)
+                         .contains(f2))
                 score += score;
         }
 

@@ -13,13 +13,33 @@ public class FlowerTest {
 
     // ------------------------------------------------------------
 
+    public static Set<Flower> createAllPossibleFlowers() {
+        Set<Flower> flowers = new HashSet<>();
+
+        for (int c = 1; c < Position.MAX_VALUE; c++) {
+            for (int r = 1; r < Position.MAX_VALUE; r++) {
+                if (c + r <= Position.MAX_VALUE)
+                    flowers.add(new Flower(new Position(c, r), new Position(c + 1, r), new Position(c, r + 1)));
+
+                if (c + r < Position.MAX_VALUE) {
+                    flowers.add(new Flower(new Position(c + 1, r + 1), new Position(c + 1, r), new Position(c, r + 1)));
+                }
+            }
+        }
+
+        return flowers;
+    }
+
+    // ------------------------------------------------------------
+    // * Constructors *
+
     @Before
     public void init() {
         first = new Position(2, 3);
         second = new Position(4, 5);
         third = new Position(6, 7);
 
-        flowerCompareArray = new Flower[] {
+        flowerCompareArray = new Flower[]{
                 new Flower(new Position(2, 2), new Position(3, 2), new Position(2, 3)),
                 new Flower(new Position(3, 2), new Position(2, 3), new Position(3, 3)),
                 new Flower(new Position(3, 2), new Position(4, 2), new Position(3, 3)),
@@ -30,9 +50,6 @@ public class FlowerTest {
                 new Flower(new Position(4, 3), new Position(3, 4), new Position(4, 4))
         };
     }
-
-    // ------------------------------------------------------------
-    // * Constructors *
 
     @Test
     public void creatingNewFlowerWithValidValuesWorks() {
@@ -50,13 +67,13 @@ public class FlowerTest {
         new Flower(first, null, third);
     }
 
+    // ------------------------------------------------------------
+    // * Getters *
+
     @Test(expected = IllegalArgumentException.class)
     public void creatingNewFlowerWithNullThirdThrowsException() {
         new Flower(first, second, null);
     }
-
-    // ------------------------------------------------------------
-    // * Getters *
 
     @Test
     public void getFirstReturnsCorrectValue() {
@@ -89,33 +106,13 @@ public class FlowerTest {
         assertEquals(second, f.getSecond());
     }
 
+    // ------------------------------------------------------------
+    // * Hash *
+
     @Test
     public void getThirdAfterAutomaticReorderingReturnsCorrectValue() {
         Flower f = new Flower(second, third, first);
         assertEquals(third, f.getThird());
-    }
-
-    // ------------------------------------------------------------
-    // * Hash *
-
-    public static Set<Flower> createAllPossibleFlowers() {
-        Set<Flower> flowers = new HashSet<>();
-
-        for (int c = 1; c < Position.MAX_VALUE; c++) {
-            for (int r = 1; r < Position.MAX_VALUE; r++) {
-                if (c + r <= Position.MAX_VALUE)
-                    flowers.add(new Flower(new Position(c, r), new Position(c
-                            + 1, r), new Position(c, r + 1)));
-
-                if (c + r < Position.MAX_VALUE) {
-                    flowers.add(new Flower(new Position(c + 1, r + 1), new
-                            Position(c
-                            + 1, r), new Position(c, r + 1)));
-                }
-            }
-        }
-
-        return flowers;
     }
 
     @Test
@@ -132,10 +129,8 @@ public class FlowerTest {
 
     @Test
     public void equalFlowersReturnSameHashCode() {
-        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
-        Flower b = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
+        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
+        Flower b = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
         assertEquals(a.hashCode(), b.hashCode());
     }
 
@@ -179,10 +174,8 @@ public class FlowerTest {
 
     @Test
     public void compareToOnEqualFlowersReturnsZero() {
-        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
-        Flower b = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
+        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
+        Flower b = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
         assertThat(a.compareTo(b), is(0));
     }
 
@@ -210,10 +203,8 @@ public class FlowerTest {
 
     @Test
     public void equalsOnEqualFlowersReturnsTrue() {
-        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
-        Flower b = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
+        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
+        Flower b = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
         assertEquals(a, b);
     }
 
@@ -254,28 +245,22 @@ public class FlowerTest {
 
     @Test
     public void equalsOnUnequalFirstPositionReturnsFalse() {
-        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
-        Flower b = new Flower(new Position(3, 5), new Position(5, 6), new
-                Position(7, 8));
+        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
+        Flower b = new Flower(new Position(3, 5), new Position(5, 6), new Position(7, 8));
         assertNotEquals(a, b);
     }
 
     @Test
     public void equalsOnUnequalSecondPositionReturnsFalse() {
-        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
-        Flower b = new Flower(new Position(3, 4), new Position(7, 6), new
-                Position(7, 8));
+        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
+        Flower b = new Flower(new Position(3, 4), new Position(7, 6), new Position(7, 8));
         assertNotEquals(a, b);
     }
 
     @Test
     public void equalsOnUnequalThirdPositionReturnsFalse() {
-        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(7, 8));
-        Flower b = new Flower(new Position(3, 4), new Position(5, 6), new
-                Position(8, 8));
+        Flower a = new Flower(new Position(3, 4), new Position(5, 6), new Position(7, 8));
+        Flower b = new Flower(new Position(3, 4), new Position(5, 6), new Position(8, 8));
         assertNotEquals(a, b);
     }
 
@@ -312,32 +297,32 @@ public class FlowerTest {
     // ------------------------------------------------------------
     // * Parse *
 
-    @Test (expected = FlowerFormatException.class)
+    @Test(expected = FlowerFormatException.class)
     public void parseFlowerForNullStringThrowsException() {
         Flower.parseFlower(null);
     }
 
-    @Test (expected = FlowerFormatException.class)
+    @Test(expected = FlowerFormatException.class)
     public void parseFlowerForEmptyStringThrowsException() {
         Flower.parseFlower("");
     }
 
-    @Test (expected = FlowerFormatException.class)
+    @Test(expected = FlowerFormatException.class)
     public void parseFlowerForWrongFormatStringThrowsException() {
         Flower.parseFlower("(1,2),(3,4),(5,6)");
     }
 
-    @Test (expected = FlowerFormatException.class)
+    @Test(expected = FlowerFormatException.class)
     public void parseFlowerForWrongNumberOfArgumentsThrowsException() {
         Flower.parseFlower("{(1,2),(3,4),(5,6),(7,8)}");
     }
 
-    @Test (expected = FlowerFormatException.class)
+    @Test(expected = FlowerFormatException.class)
     public void parseFlowerForWrongColumnNumberInOnePositionFormatThrowsException() {
         Flower.parseFlower("{(a,2),(3,4),(5,6)}");
     }
 
-    @Test (expected = FlowerFormatException.class)
+    @Test(expected = FlowerFormatException.class)
     public void parseFlowerForWrongRowNumberInOnePositionFormatThrowsException() {
         Flower.parseFlower("{(1,b),(3,4),(5,6)}");
     }
@@ -346,8 +331,8 @@ public class FlowerTest {
     public void parseFlowerCreatesCorrectFlower() {
         Flower f = Flower.parseFlower("{(1,2),(3,4),(5,6)}");
 
-        assertEquals(new Position(1,2), f.getFirst());
-        assertEquals(new Position(3,4), f.getSecond());
-        assertEquals(new Position(5,6), f.getThird());
+        assertEquals(new Position(1, 2), f.getFirst());
+        assertEquals(new Position(3, 4), f.getSecond());
+        assertEquals(new Position(5, 6), f.getThird());
     }
 }

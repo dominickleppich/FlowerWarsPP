@@ -162,8 +162,8 @@ public class UIPanel extends JPanel {
                     if (moveFirstFlower == null) {
                         if (possibleMoves.stream()
                                          .filter(move -> move.getType() == MoveType.Flower)
-                                         .filter(move -> hoverFlower.equals(
-                                                 move.getFirstFlower()) || hoverFlower.equals(move.getSecondFlower()))
+                                         .filter(move -> hoverFlower.equals(move.getFirstFlower()) ||
+                                                         hoverFlower.equals(move.getSecondFlower()))
                                          .count() == 0) {
                             hoverFlower = null;
                             return;
@@ -244,14 +244,14 @@ public class UIPanel extends JPanel {
 
     private synchronized void createMove() {
         clearHover();
-        if (moveFirstFlower != null && moveSecondFlower != null && !moveFirstFlower.equals(
-                moveSecondFlower) && moveDitch == null)
+        if (moveFirstFlower != null && moveSecondFlower != null && !moveFirstFlower.equals(moveSecondFlower) &&
+            moveDitch == null)
             move = new Move(moveFirstFlower, moveSecondFlower);
         else if (moveFirstFlower == null && moveSecondFlower == null && moveDitch != null)
             move = new Move(moveDitch);
 
-        logger.debug(
-                "moveFirstFlower: " + moveFirstFlower + ", " + "moveSecondFlower: " + moveSecondFlower + ", " + "moveDitch: " + moveDitch + ", move: " + move);
+        logger.debug("moveFirstFlower: " + moveFirstFlower + ", " + "moveSecondFlower: " + moveSecondFlower + ", " +
+                     "moveDitch: " + moveDitch + ", move: " + move);
 
         clearFlowerSelection();
         moveFirstFlower = null;
@@ -326,8 +326,8 @@ public class UIPanel extends JPanel {
             return;
 
         int boardSize = viewer.getSize();
-        double fieldWidth = Math.min(WIDTH / boardSize,
-                (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 - BORDER_SIZE);
+        double fieldWidth =
+                Math.min(WIDTH / boardSize, (HEIGHT / boardSize) / Math.sin(Math.toRadians(60))) * (1 - BORDER_SIZE);
         UNIT = (float) fieldWidth;
         double fieldHeight = Math.sin(Math.toRadians(60)) * fieldWidth;
 
@@ -755,7 +755,8 @@ public class UIPanel extends JPanel {
         }
     }
 
-    private void showTextBox(Graphics2D g, float x, float y, float minWidth, float scale, Color textColor, Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
+    private void showTextBox(Graphics2D g, float x, float y, float minWidth, float scale, Color textColor,
+                             Paint textPaint, Color borderColor, Color backgroundColor, Font font, String text) {
         g.setFont(font);
 
         FontMetrics fm = g.getFontMetrics();

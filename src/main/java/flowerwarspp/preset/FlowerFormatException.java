@@ -5,7 +5,7 @@ package flowerwarspp.preset;
  *
  * @author Dominick Leppich
  */
-public class FlowerFormatException extends IllegalArgumentException{
+public class FlowerFormatException extends IllegalArgumentException {
     public FlowerFormatException(String msg) {
         super(msg);
     }

@@ -53,9 +53,13 @@ public class RMIHandler {
     /**
      * Offer a player on the rmi registry.
      *
-     * @param p    Player
-     * @param name Name
-     * @throws RemoteException if connection fails
+     * @param p
+     *         Player
+     * @param name
+     *         Name
+     *
+     * @throws RemoteException
+     *         if connection fails
      */
     public void offer(RemotePlayer p, String name) throws RemoteException {
         registry.rebind(name, p);
@@ -64,10 +68,15 @@ public class RMIHandler {
     /**
      * Find a player with a given name.
      *
-     * @param name Name
+     * @param name
+     *         Name
+     *
      * @return Player
-     * @throws RemoteException   if connection fails
-     * @throws NotBoundException if no player with this name is bound
+     *
+     * @throws RemoteException
+     *         if connection fails
+     * @throws NotBoundException
+     *         if no player with this name is bound
      */
     public Player find(String name) throws RemoteException, NotBoundException {
         return (Player) registry.lookup(name);
@@ -77,8 +86,11 @@ public class RMIHandler {
      * Find all players.
      *
      * @return Map of all players and names.
-     * @throws RemoteException   if connection fails
-     * @throws NotBoundException if listing players fails
+     *
+     * @throws RemoteException
+     *         if connection fails
+     * @throws NotBoundException
+     *         if listing players fails
      */
     public Map<String, Player> list() throws RemoteException, NotBoundException {
         String[] list = registry.list();

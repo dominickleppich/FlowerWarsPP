@@ -8,5 +8,9 @@ import java.io.*;
  * @author Dominick Leppich
  */
 public enum Status implements Serializable {
-    Ok, RedWin, BlueWin, Draw, Illegal
+    Ok,
+    RedWin,
+    BlueWin,
+    Draw,
+    Illegal
 }

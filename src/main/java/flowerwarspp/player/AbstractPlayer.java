@@ -6,19 +6,11 @@ import org.slf4j.*;
 
 public abstract class AbstractPlayer implements Player {
     private static final Logger logger = LoggerFactory.getLogger(AbstractPlayer.class);
-
-    enum State {
-        INIT, REQUEST, CONFIRM, UPDATE;
-    }
-
     protected Board board;
     protected Viewer viewer;
     private State expectedState;
     private Move move;
     private PlayerColor color;
-
-    // ------------------------------------------------------------
-
     public AbstractPlayer() {
         expectedState = State.INIT;
     }
@@ -29,6 +21,8 @@ public abstract class AbstractPlayer implements Player {
         return color;
     }
 
+    // ------------------------------------------------------------
+
     public Viewer getViewer() {
         return viewer;
     }
@@ -37,8 +31,6 @@ public abstract class AbstractPlayer implements Player {
         if (expectedState != check)
             throw new Exception("Wrong player usage! Expected " + expectedState + " but tried " + check);
     }
-
-    // ------------------------------------------------------------
 
     @Override
     public Move request() throws Exception {
@@ -54,6 +46,8 @@ public abstract class AbstractPlayer implements Player {
 
         return move;
     }
+
+    // ------------------------------------------------------------
 
     protected abstract Move provideMove() throws Exception;
 
@@ -124,5 +118,12 @@ public abstract class AbstractPlayer implements Player {
             expectedState = State.UPDATE;
 
         logger.debug("Next expected call: " + expectedState);
+    }
+
+    enum State {
+        INIT,
+        REQUEST,
+        CONFIRM,
+        UPDATE;
     }
 }

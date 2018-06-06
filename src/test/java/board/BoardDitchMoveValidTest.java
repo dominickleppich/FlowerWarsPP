@@ -18,6 +18,7 @@ public class BoardDitchMoveValidTest {
 
     // ------------------------------------------------------------
     private Status expectedStatus;
+
     public BoardDitchMoveValidTest(Ditch ditch, Status expected) {
         this.ditch = ditch;
         this.expectedStatus = expected;

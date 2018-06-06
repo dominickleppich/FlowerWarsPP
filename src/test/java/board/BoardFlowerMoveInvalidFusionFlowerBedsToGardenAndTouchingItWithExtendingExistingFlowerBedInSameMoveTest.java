@@ -24,7 +24,8 @@ public class BoardFlowerMoveInvalidFusionFlowerBedsToGardenAndTouchingItWithExte
 
     // ------------------------------------------------------------
 
-    public BoardFlowerMoveInvalidFusionFlowerBedsToGardenAndTouchingItWithExtendingExistingFlowerBedInSameMoveTest(Move move, Status expected) {
+    public BoardFlowerMoveInvalidFusionFlowerBedsToGardenAndTouchingItWithExtendingExistingFlowerBedInSameMoveTest(
+            Move move, Status expected) {
         this.move = move;
         this.expectedStatus = expected;
     }

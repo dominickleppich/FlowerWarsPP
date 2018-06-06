@@ -16,14 +16,9 @@ public class PositionTest {
 
     @Before
     public void init() {
-        positionCompareArray = new Position[] {
-                new Position(3,2),
-                new Position(4,2),
-                new Position(2,3),
-                new Position(3,3),
-                new Position(4,3),
-                new Position(2,4),
-                new Position(3,4)
+        positionCompareArray = new Position[]{
+                new Position(3, 2), new Position(4, 2), new Position(2, 3), new Position(3, 3), new Position(4, 3),
+                new Position(2, 4), new Position(3, 4)
         };
     }
 
@@ -229,45 +224,47 @@ public class PositionTest {
     public void toStringMethodContainsColumn() {
         Position p = new Position(3, 7);
         assertNotNull(p.toString());
-        assertTrue(p.toString().contains("3"));
+        assertTrue(p.toString()
+                    .contains("3"));
     }
 
     @Test
     public void toStringMethodContainsRow() {
         Position p = new Position(3, 7);
         assertNotNull(p.toString());
-        assertTrue(p.toString().contains("7"));
+        assertTrue(p.toString()
+                    .contains("7"));
     }
 
     // ------------------------------------------------------------
     // * Parse *
 
-    @Test (expected = PositionFormatException.class)
+    @Test(expected = PositionFormatException.class)
     public void parsePositionForNullStringThrowsException() {
         Position.parsePosition(null);
     }
 
-    @Test (expected = PositionFormatException.class)
+    @Test(expected = PositionFormatException.class)
     public void parsePositionForEmptyStringThrowsException() {
         Position.parsePosition("");
     }
 
-    @Test (expected = PositionFormatException.class)
+    @Test(expected = PositionFormatException.class)
     public void parsePositionForWrongFormatStringThrowsException() {
         Position.parsePosition("5,7");
     }
 
-    @Test (expected = PositionFormatException.class)
+    @Test(expected = PositionFormatException.class)
     public void parsePositionForWrongNumberOfArgumentsThrowsException() {
         Position.parsePosition("(1,2,3)");
     }
 
-    @Test (expected = PositionFormatException.class)
+    @Test(expected = PositionFormatException.class)
     public void parsePositionForWrongColumnNumberFormatThrowsException() {
         Position.parsePosition("(a,3)");
     }
 
-    @Test (expected = PositionFormatException.class)
+    @Test(expected = PositionFormatException.class)
     public void parsePositionForWrongRowNumberFormatThrowsException() {
         Position.parsePosition("(2,b)");
     }
