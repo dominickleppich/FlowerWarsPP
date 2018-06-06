@@ -1,8 +1,5 @@
 package flowerwarspp;
 
-import java.util.*;
-import flowerwarspp.preset.*;
-
 public class MyBoard implements Board {
     private int size;
 
