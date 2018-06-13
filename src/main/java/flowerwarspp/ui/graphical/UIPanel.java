@@ -18,8 +18,8 @@ public class UIPanel extends JPanel {
     // * Customizable settings *
 
     private static final Color END_MOVE_COLOR = new Color(53, 11, 71);
-    private static final Color BACKGROUND_COLOR_A = new Color(187, 197, 27);
-    private static final Color BACKGROUND_COLOR_B = new Color(200, 176, 31);
+    private static final Color BACKGROUND_COLOR_A = new Color(116, 116, 116);
+    private static final Color BACKGROUND_COLOR_B = new Color(67, 67, 67);
     private static final Color BACKGROUND_RED_COLOR_A = new Color(197, 110, 30);
     private static final Color BACKGROUND_RED_COLOR_B = new Color(200, 34, 14);
     private static final Color BACKGROUND_BLUE_COLOR_A = new Color(37, 166, 197);
