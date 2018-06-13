@@ -76,7 +76,8 @@ public class Main {
 
             Thread.sleep(5000);
 
-            window.close();
+			window.reset();
+            // window.close();
         } catch (ArgumentParserException e) {
             StringBuilder sb = new StringBuilder();
             sb.append("Something went wrong with your parameters: " + e.getMessage() + "\n");
